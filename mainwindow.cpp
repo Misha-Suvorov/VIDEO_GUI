@@ -1,0 +1,120 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include <QDebug>
+#include <opencv2/opencv.hpp>
+
+// Function to draw a crosshair on the frame
+void DrawCrosshair(cv::InputOutputArray frame, cv::Point center, const cv::Scalar& color, int thickness) {
+    int size = 20;  // Length of the crosshair lines
+    cv::line(frame, cv::Point(center.x - size, center.y), cv::Point(center.x + size, center.y), color, thickness);
+    cv::line(frame, cv::Point(center.x, center.y - size), cv::Point(center.x, center.y + size), color, thickness);
+}
+
+VideoThread::VideoThread(QObject *parent) : QThread(parent), running(false) {}
+
+VideoThread::~VideoThread() {
+    stop();
+}
+
+void VideoThread::setPipeline(const std::string &pipeline) {
+    gstPipeline = pipeline;
+}
+
+void VideoThread::run() {
+    running = true;
+
+    cap.open(gstPipeline, cv::CAP_GSTREAMER);
+    if (!cap.isOpened()) {
+        qDebug() << "Can not open the stream";
+        emit frameReady(QImage());
+        return;
+    }
+
+    cv::Mat frame;
+    while (running) {
+        cap >> frame; // Capture a frame
+        if (frame.empty()) continue;
+
+        // Calculate the center of the video frame
+        int centerX = frame.cols / 2;
+        int centerY = frame.rows / 2;
+        cv::Point center = cv::Point(centerX, centerY);
+
+        // Draw a crosshair
+        DrawCrosshair(frame, center, cv::Scalar(255, 255, 0), 2);  // Yellow crosshair with thickness 2
+
+        // Convert frame to RGB for Qt
+        cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+
+        // Convert the frame to QImage
+        QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+
+        // Emit the frameReady signal with the updated frame
+        emit frameReady(image.copy());
+    }
+
+    cap.release();
+}
+
+
+void VideoThread::stop() {
+    running = false;
+    wait();
+}
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr) {
+    ui->setupUi(this);
+
+    // Connect the buttons to start and stop both video streams
+    connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::startBothVideos);
+    connect(ui->stopButton, &QPushButton::clicked, this, &MainWindow::stopBothVideos);
+}
+
+MainWindow::~MainWindow() {
+    stopBothVideos();
+    delete ui;
+}
+
+void MainWindow::startBothVideos() {
+    // Stop any running video threads before starting new ones
+    stopBothVideos();
+
+    // Set up the first video stream for the first QLabel
+    videoThread1 = new VideoThread(this);
+    videoThread1->setPipeline("udpsrc port=5601 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw, format=BGR ! appsink sync=false");
+    connect(videoThread1, &VideoThread::frameReady, this, &MainWindow::displayFrame1);
+    videoThread1->start();
+
+    // Set up the second video stream for the second QLabel
+    videoThread2 = new VideoThread(this);
+    videoThread2->setPipeline("udpsrc port=5600 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! videoconvert ! video/x-raw, format=BGR ! appsink sync=false");
+    connect(videoThread2, &VideoThread::frameReady, this, &MainWindow::displayFrame2);
+    videoThread2->start();
+}
+
+void MainWindow::stopBothVideos() {
+    if (videoThread1) {
+        videoThread1->stop();
+        videoThread1->deleteLater();
+        videoThread1 = nullptr;
+    }
+
+    if (videoThread2) {
+        videoThread2->stop();
+        videoThread2->deleteLater();
+        videoThread2 = nullptr;
+    }
+}
+
+void MainWindow::displayFrame1(const QImage &image) {
+    if (!image.isNull()) {
+        ui->videoLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+    }
+}
+
+void MainWindow::displayFrame2(const QImage &image) {
+    if (!image.isNull()) {
+        ui->videoLabel2->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel2->size(), Qt::KeepAspectRatio));
+    }
+}

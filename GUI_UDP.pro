@@ -23,11 +23,13 @@ unix {
 }
 
 SOURCES += \
+    clickable.cpp \
     drawsymbols.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    clickable.h \
     drawsymbols.h \
     mainwindow.h
 

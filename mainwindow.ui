@@ -113,8 +113,11 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <layout class="QGridLayout" name="gridLayout_3">
-            <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_3" rowstretch="0">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
+            <item row="0" column="0" alignment="Qt::AlignTop">
              <widget class="QLabel" name="videoLabel">
               <property name="enabled">
                <bool>true</bool>
@@ -127,8 +130,8 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>0</width>
-                <height>0</height>
+                <width>720</width>
+                <height>576</height>
                </size>
               </property>
               <property name="autoFillBackground">
@@ -139,8 +142,26 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item row="0" column="1" alignment="Qt::AlignTop">
              <widget class="QLabel" name="videoLabel2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>240</width>
+                <height>192</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="text">
                <string/>
               </property>

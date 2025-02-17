@@ -5,6 +5,8 @@
 #include <QThread>
 #include <QImage>
 #include <opencv2/opencv.hpp>
+//#include "clickable.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,6 +44,7 @@ private slots:
     void stopBothVideos();
     void displayFrame1(const QImage &image);
     void displayFrame2(const QImage &image);
+    //void LabelClick();
 
 private:
     Ui::MainWindow *ui;

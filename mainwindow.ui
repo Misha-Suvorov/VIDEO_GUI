@@ -51,7 +51,7 @@
            <widget class="QPushButton" name="startButton">
             <property name="minimumSize">
              <size>
-              <width>200</width>
+              <width>100</width>
               <height>0</height>
              </size>
             </property>
@@ -70,7 +70,7 @@
            <widget class="QPushButton" name="stopButton">
             <property name="minimumSize">
              <size>
-              <width>200</width>
+              <width>100</width>
               <height>50</height>
              </size>
             </property>

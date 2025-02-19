@@ -10,22 +10,26 @@ void DrawCrosshair(cv::InputOutputArray frame, cv::Point center, const cv::Scala
     cv::line(frame, cv::Point(center.x, center.y - size), cv::Point(center.x, center.y + size), color, thickness);
 }
 
+// VideoThread constructor
 VideoThread::VideoThread(QObject *parent) : QThread(parent), running(false) {}
 
+// VideoThread destructor
 VideoThread::~VideoThread() {
     stop();
 }
 
+// Set GStreamer pipeline
 void VideoThread::setPipeline(const std::string &pipeline) {
     gstPipeline = pipeline;
 }
 
+// Video processing loop
 void VideoThread::run() {
     running = true;
 
     cap.open(gstPipeline, cv::CAP_GSTREAMER);
     if (!cap.isOpened()) {
-        qDebug() << "Can not open the stream";
+        qDebug() << "Cannot open the stream";
         emit frameReady(QImage());
         return;
     }
@@ -56,26 +60,28 @@ void VideoThread::run() {
     cap.release();
 }
 
-
+// Stop the video thread
 void VideoThread::stop() {
     running = false;
     wait();
 }
 
+// MainWindow constructor
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr) {
     ui->setupUi(this);
 
-    // Connect the buttons to start and stop both video streams
-    connect(ui->startButton, &QPushButton::clicked, this, &MainWindow::startBothVideos);
-    connect(ui->stopButton, &QPushButton::clicked, this, &MainWindow::stopBothVideos);
+    // Automatically start video streams
+    startBothVideos();
 }
 
+// MainWindow destructor
 MainWindow::~MainWindow() {
     stopBothVideos();
     delete ui;
 }
 
+// Start both video streams
 void MainWindow::startBothVideos() {
     // Stop any running video threads before starting new ones
     stopBothVideos();
@@ -93,6 +99,7 @@ void MainWindow::startBothVideos() {
     videoThread2->start();
 }
 
+// Stop both video streams
 void MainWindow::stopBothVideos() {
     if (videoThread1) {
         videoThread1->stop();
@@ -107,14 +114,17 @@ void MainWindow::stopBothVideos() {
     }
 }
 
+// Display the first video stream
 void MainWindow::displayFrame1(const QImage &image) {
     if (!image.isNull()) {
         ui->videoLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
     }
 }
 
+// Display the second video stream
 void MainWindow::displayFrame2(const QImage &image) {
     if (!image.isNull()) {
         ui->videoLabel2->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel2->size(), Qt::KeepAspectRatio));
     }
 }
+

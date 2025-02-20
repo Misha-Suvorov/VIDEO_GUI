@@ -166,3 +166,22 @@ void MainWindow::on_r_vid_turn_clicked()
     if (rotationAngle >= 360) rotationAngle -= 360;  // Keep within 0-360 degrees
 }
 
+
+bool isSwitched = false;  // Track which video is displayed where
+
+void MainWindow::on_switch_vid_clicked()
+{
+    isSwitched = !isSwitched; // Toggle state
+
+    disconnect(videoThread1, &VideoThread::frameReady, this, nullptr);
+    disconnect(videoThread2, &VideoThread::frameReady, this, nullptr);
+
+    if (isSwitched) {
+        connect(videoThread1, &VideoThread::frameReady, this, &MainWindow::displayFrame2);
+        connect(videoThread2, &VideoThread::frameReady, this, &MainWindow::displayFrame1);
+    } else {
+        connect(videoThread1, &VideoThread::frameReady, this, &MainWindow::displayFrame1);
+        connect(videoThread2, &VideoThread::frameReady, this, &MainWindow::displayFrame2);
+    }
+}
+

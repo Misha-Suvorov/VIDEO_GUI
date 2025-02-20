@@ -52,6 +52,8 @@ private slots:
 
     void on_r_vid_turn_clicked();
 
+    void on_switch_vid_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

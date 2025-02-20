@@ -18,6 +18,8 @@ VideoThread::~VideoThread() {
     stop();
 }
 
+
+
 // Set GStreamer pipeline
 void VideoThread::setPipeline(const std::string &pipeline) {
     gstPipeline = pipeline;
@@ -127,4 +129,11 @@ void MainWindow::displayFrame2(const QImage &image) {
         ui->videoLabel2->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel2->size(), Qt::KeepAspectRatio));
     }
 }
+
+
+void MainWindow::on_up_2_b_clicked()
+{
+
+}
+
 

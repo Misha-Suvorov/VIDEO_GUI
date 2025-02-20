@@ -46,6 +46,8 @@ private slots:
     void displayFrame2(const QImage &image);
     //void LabelClick();
 
+    void on_up_2_b_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

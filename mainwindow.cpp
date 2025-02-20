@@ -115,13 +115,28 @@ void MainWindow::stopBothVideos() {
         videoThread2 = nullptr;
     }
 }
+int rotationAngle = 0;
 
 // Display the first video stream
+//void MainWindow::displayFrame1(const QImage &image) {
+//    if (!image.isNull()) {
+//        ui->videoLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+//    }
+//}
+
+
 void MainWindow::displayFrame1(const QImage &image) {
     if (!image.isNull()) {
-        ui->videoLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+        QTransform transform;
+        transform.rotate(rotationAngle);
+
+        QPixmap rotatedPixmap = QPixmap::fromImage(image).transformed(transform, Qt::SmoothTransformation);
+        ui->videoLabel->setPixmap(rotatedPixmap.scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
     }
 }
+
+
+
 
 // Display the second video stream
 void MainWindow::displayFrame2(const QImage &image) {
@@ -136,4 +151,18 @@ void MainWindow::on_up_2_b_clicked()
 
 }
 
+
+
+void MainWindow::on_l_vid_turn_clicked()
+{
+    rotationAngle -= 90;  // Rotate left by 90 degrees
+    if (rotationAngle < 0) rotationAngle += 360;  // Keep within 0-360 degrees
+}
+
+
+void MainWindow::on_r_vid_turn_clicked()
+{
+    rotationAngle += 90;  // Rotate right by 90 degrees
+    if (rotationAngle >= 360) rotationAngle -= 360;  // Keep within 0-360 degrees
+}
 

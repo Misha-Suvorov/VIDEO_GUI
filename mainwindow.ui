@@ -116,6 +116,11 @@
                <height>16777215</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>⟲</string>
              </property>
@@ -304,21 +309,21 @@
          <item>
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="1">
-            <widget class="QPushButton" name="pushButton_5">
+            <widget class="QPushButton" name="break_range">
              <property name="text">
               <string>Break range</string>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QPushButton" name="pushButton_4">
+            <widget class="QPushButton" name="start_range">
              <property name="text">
               <string>start range</string>
              </property>
             </widget>
            </item>
            <item row="0" column="2">
-            <widget class="QPushButton" name="pushButton_7">
+            <widget class="QPushButton" name="pointer">
              <property name="text">
               <string>Pointer</string>
              </property>
@@ -332,7 +337,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QComboBox" name="comboBox">
+            <widget class="QComboBox" name="measure_mode">
              <item>
               <property name="text">
                <string>SMM</string>

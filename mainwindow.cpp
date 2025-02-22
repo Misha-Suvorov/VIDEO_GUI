@@ -185,3 +185,15 @@ void MainWindow::on_switch_vid_clicked()
     }
 }
 
+
+void MainWindow::on_pushButton_clicked()
+{
+
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+
+}
+

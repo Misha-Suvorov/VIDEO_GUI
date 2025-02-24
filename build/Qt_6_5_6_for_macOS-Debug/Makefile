@@ -52,12 +52,16 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../../drawsymbols.cpp \
+SOURCES       = ../../clickable.cpp \
+		../../drawsymbols.cpp \
 		../../main.cpp \
-		../../mainwindow.cpp moc_mainwindow.cpp
-OBJECTS       = drawsymbols.o \
+		../../mainwindow.cpp moc_clickable.cpp \
+		moc_mainwindow.cpp
+OBJECTS       = clickable.o \
+		drawsymbols.o \
 		main.o \
 		mainwindow.o \
+		moc_clickable.o \
 		moc_mainwindow.o
 DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.5.6/macos/mkspecs/features/device_config.prf \
@@ -373,8 +377,10 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.5.6/macos/mkspecs/features/exceptions.prf \
 		/Qt/6.5.6/macos/mkspecs/features/yacc.prf \
 		/Qt/6.5.6/macos/mkspecs/features/lex.prf \
-		../../../../GUI_UDP.pro ../../drawsymbols.h \
-		../../mainwindow.h ../../drawsymbols.cpp \
+		../../../../GUI_UDP.pro ../../clickable.h \
+		../../drawsymbols.h \
+		../../mainwindow.h ../../clickable.cpp \
+		../../drawsymbols.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp
 QMAKE_TARGET  = GUI_UDP
@@ -1062,8 +1068,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../drawsymbols.h ../../mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../clickable.h ../../drawsymbols.h ../../mainwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1093,9 +1099,19 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_clickable.cpp moc_mainwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_clickable.cpp moc_mainwindow.cpp
+moc_clickable.cpp: ../../clickable.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QWidget \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/libexec/moc
+	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../clickable.h -o moc_clickable.cpp
+
 moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
@@ -1103,8 +1119,6 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qthread.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QImage \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qimage.h \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QProcess \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qprocess.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
@@ -1244,6 +1258,15 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 
 ####### Compile
 
+clickable.o: ../../clickable.cpp ../../clickable.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QWidget \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o clickable.o ../../clickable.cpp
+
 drawsymbols.o: ../../drawsymbols.cpp ../../drawsymbols.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvdef.h \
@@ -1367,8 +1390,6 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qthread.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QImage \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qimage.h \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QProcess \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qprocess.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
@@ -1493,8 +1514,6 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qthread.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QImage \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qimage.h \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QProcess \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qprocess.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
@@ -1609,10 +1628,12 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/tracking.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp \
 		ui_mainwindow.h \
-		../../drawsymbols.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
+
+moc_clickable.o: moc_clickable.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_clickable.o moc_clickable.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

@@ -186,14 +186,14 @@ void MainWindow::on_switch_vid_clicked()
 }
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_start_b_clicked()
 {
-
+    startBothVideos();
 }
 
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_stop_b_2_clicked()
 {
-
+    stopBothVideos();
 }
 

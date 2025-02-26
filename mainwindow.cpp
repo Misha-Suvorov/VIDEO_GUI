@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <opencv2/opencv.hpp>
+#include "drawsymbols.h"
+
 
 // Function to draw a crosshair on the frame
 void DrawCrosshair(cv::InputOutputArray frame, cv::Point center, const cv::Scalar& color, int thickness) {
@@ -119,14 +121,18 @@ int rotationAngle = 0;
 
 // Display the first video stream
 //void MainWindow::displayFrame1(const QImage &image) {
-//    if (!image.isNull()) {
-//        ui->videoLabel->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+//   if (!image.isNull()) {
+//        QTransform transform;
+//        transform.rotate(rotationAngle);
+//
+//        QPixmap rotatedPixmap = QPixmap::fromImage(image).transformed(transform, Qt::SmoothTransformation);
+//        ui->videoLabel->setPixmap(rotatedPixmap.scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
 //    }
 //}
 
-
+//Display the first video stream
 void MainWindow::displayFrame1(const QImage &image) {
-    if (!image.isNull()) {
+   if (!image.isNull()) {
         QTransform transform;
         transform.rotate(rotationAngle);
 
@@ -134,6 +140,7 @@ void MainWindow::displayFrame1(const QImage &image) {
         ui->videoLabel->setPixmap(rotatedPixmap.scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
     }
 }
+
 
 
 

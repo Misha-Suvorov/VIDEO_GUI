@@ -23,15 +23,19 @@ unix {
 }
 
 SOURCES += \
+    base.cpp \
     clickable.cpp \
     drawsymbols.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    scalingfactor.cpp
 
 HEADERS += \
+    base.h \
     clickable.h \
     drawsymbols.h \
-    mainwindow.h
+    mainwindow.h \
+    scalingfactor.h
 
 FORMS += \
     mainwindow.ui

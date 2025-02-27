@@ -1,6 +1,7 @@
 #ifndef SCALINGFACTOR_H
 #define SCALINGFACTOR_H
-#include <opencv2/opencv.hpp>>
+#pragma once
+#include <opencv2/opencv.hpp>
 class scalingFactor
 {
 public:

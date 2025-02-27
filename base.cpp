@@ -1,5 +1,5 @@
 #include "base.h"
-
+#include "scalingfactor.h"
 //base::base(){}
 
 void base::setRect(cv::InputOutputArray img, cv::Rect2d rect)
@@ -18,4 +18,18 @@ void base::setRect(cv::InputOutputArray img, cv::Rect2d rect)
     rect.height = std::min(rect.height, windowSize.height - rect.y);
 
     this->rect = rect;
+}
+
+
+void base::setFontScale(cv::InputOutputArray img, double fontScale){
+    double averageScale = (scalingFactor::getScaleX(img) + scalingFactor::getScaleY(img)) / 2.0;
+    fontScale *= averageScale;
+    if (fontScale >= 0.1 && fontScale <= 2.0)
+    {
+        this->fontScale = fontScale;
+    }
+    else
+    {
+        this->fontScale = 1.0; // Default value
+    }
 }

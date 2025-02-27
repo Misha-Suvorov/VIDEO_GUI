@@ -28,6 +28,7 @@ SOURCES += \
     drawsymbols.cpp \
     main.cpp \
     mainwindow.cpp \
+    scalevertical.cpp \
     scalingfactor.cpp
 
 HEADERS += \
@@ -35,6 +36,7 @@ HEADERS += \
     clickable.h \
     drawsymbols.h \
     mainwindow.h \
+    scalevertical.h \
     scalingfactor.h
 
 FORMS += \

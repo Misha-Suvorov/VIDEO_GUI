@@ -2,7 +2,7 @@
 #include "scalingfactor.h"
 //base::base(){}
 
-void base::setRect(cv::InputOutputArray img, cv::Rect2d rect)
+void baseElement::setRect(cv::InputOutputArray img, cv::Rect2d rect)
 {
     //rect = ScalingFactor::getScaledRect(img, rect);
 
@@ -21,7 +21,7 @@ void base::setRect(cv::InputOutputArray img, cv::Rect2d rect)
 }
 
 
-void base::setFontScale(cv::InputOutputArray img, double fontScale){
+void baseElement::setFontScale(cv::InputOutputArray img, double fontScale){
     double averageScale = (scalingFactor::getScaleX(img) + scalingFactor::getScaleY(img)) / 2.0;
     fontScale *= averageScale;
     if (fontScale >= 0.1 && fontScale <= 2.0)

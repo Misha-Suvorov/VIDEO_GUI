@@ -3,7 +3,9 @@
 #include <QDebug>
 #include <opencv2/opencv.hpp>
 #include "drawsymbols.h"
+#include "scalevertical.h"
 
+ScaleVertical *scaleVertical;
 
 // Function to draw a crosshair on the frame
 void DrawCrosshair(cv::InputOutputArray frame, cv::Point center, const cv::Scalar& color, int thickness) {
@@ -37,6 +39,7 @@ void VideoThread::run() {
         emit frameReady(QImage());
         return;
     }
+    scaleVertical = new ScaleVertical();
 
     cv::Mat frame;
     while (running) {
@@ -50,6 +53,7 @@ void VideoThread::run() {
 
         // Draw a crosshair
         DrawCrosshair(frame, center, cv::Scalar(255, 255, 0), 2);  // Yellow crosshair with thickness 2
+        scaleVertical->drawScale(frame, cv::Scalar(255, 255, 0), 2, 1, 1);
 
         // Convert frame to RGB for Qt
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);

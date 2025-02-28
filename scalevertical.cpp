@@ -103,6 +103,8 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const cv::Scalar& color,
     //cv::rectangle(img, rect, cv::Scalar(255, 0, 0));
     //cv::line(roi, center1, Point(center1.x + 100, center1.y), cv::Scalar(255, 0, 0));
     cv::line(img, Point(0,0), Point(100,100), cv::Scalar(255, 0, 0));
+    cv::line(img, center1, Point(center1.x + 100, center1.y), cv::Scalar(255, 0, 0));
+
 }
 
 

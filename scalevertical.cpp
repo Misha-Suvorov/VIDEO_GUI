@@ -38,9 +38,9 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const cv::Scalar& color,
     const float stepSize = rect.height / countSteps;
 
     //Length of big and small dashes
-    const float lineLength = lineLengthForVerticalScale * scalingFactor::getScaleX(img);
-    const int lineLengthSmall = lineLength / 2;
-    const float offsetTextPositionFromDash = 5 * scalingFactor::getScaleX(img);
+    //const float lineLength = lineLengthForVerticalScale * scalingFactor::getScaleX(img);
+    //const int lineLengthSmall = lineLength / 2;
+    //const float offsetTextPositionFromDash = 5 * scalingFactor::getScaleX(img);
 
 
     fractPx = fractpart * stepSize;
@@ -102,8 +102,49 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const cv::Scalar& color,
     }*/
     //cv::rectangle(img, rect, cv::Scalar(255, 0, 0));
     //cv::line(roi, center1, Point(center1.x + 100, center1.y), cv::Scalar(255, 0, 0));
-    cv::line(img, Point(0,0), Point(100,100), cv::Scalar(255, 0, 0));
-    cv::line(img, center1, Point(center1.x + 100, center1.y), cv::Scalar(255, 0, 0));
+    cv::line(img, Point(100,60), Point(620,60), cv::Scalar(255, 0, 0),2);
+
+
+
+
+    // Main line coordinates
+    int startX = 100;  // Start X coordinate of the main line
+    int startY = 60;   // Y coordinate of the main line
+    int endX = 620;    // End X coordinate of the main line
+    int endY = 60;     // Y coordinate of the main line (same as startY for horizontal line)
+
+    // Constants for the scale
+    const int startTick = -30; // Starting from -30
+    const int endTick = 30;    // Going up to +30
+    const int tickStep = 10;   // Tick step is 10
+
+    // Length of the line
+    int lineLength = endX - startX;
+
+    // Number of ticks we need based on the range and the tick step
+    int numTicks = (endTick - startTick) / tickStep + 1;
+    float tickSpacing = static_cast<float>(lineLength) / (numTicks - 1);  // Spacing between ticks
+
+    // Loop through the range from -30 to +30
+    for (int i = startTick; i <= endTick; i += tickStep)
+    {
+        // Calculate the position for each tick along the horizontal line
+        int tickPosX = startX + (i - startTick) * tickSpacing;
+
+        // Draw the vertical tick (perpendicular to the main line)
+        Point ptStart = Point(tickPosX, startY);
+        Point ptEnd = Point(tickPosX, startY - 10); // Length of the small tick (can be adjusted)
+        cv::line(img, ptStart, ptEnd, color, thickness, lineType);
+
+        // Draw the text for the tick
+        std::string text = std::to_string(i);
+        cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, nullptr);
+        int textHalfHeight = textSize.height / 2;
+
+        // Position the text below the tick
+        Point ptText = Point(tickPosX - textSize.width / 2, ptEnd.y - 5);
+        cv::putText(img, text, ptText, fontFace, fontScale, color, thickness, lineType);
+    }
 
 }
 

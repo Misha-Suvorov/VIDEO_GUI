@@ -170,10 +170,8 @@ namespace {
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::stringData(
     "MainWindow",
-    "startBothVideos",
-    "",
-    "stopBothVideos",
     "displayFrame1",
+    "",
     "image",
     "displayFrame2",
     "on_up_2_b_clicked",
@@ -185,44 +183,38 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
-    uint offsetsAndSizes[26];
+    uint offsetsAndSizes[22];
     char stringdata0[11];
-    char stringdata1[16];
+    char stringdata1[14];
     char stringdata2[1];
-    char stringdata3[15];
+    char stringdata3[6];
     char stringdata4[14];
-    char stringdata5[6];
-    char stringdata6[14];
-    char stringdata7[18];
+    char stringdata5[18];
+    char stringdata6[22];
+    char stringdata7[22];
     char stringdata8[22];
-    char stringdata9[22];
-    char stringdata10[22];
-    char stringdata11[19];
-    char stringdata12[20];
+    char stringdata9[19];
+    char stringdata10[20];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSMainWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
 Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_stringdata_CLASSMainWindowENDCLASS = {
     {
         QT_MOC_LITERAL(0, 10),  // "MainWindow"
-        QT_MOC_LITERAL(11, 15),  // "startBothVideos"
-        QT_MOC_LITERAL(27, 0),  // ""
-        QT_MOC_LITERAL(28, 14),  // "stopBothVideos"
-        QT_MOC_LITERAL(43, 13),  // "displayFrame1"
-        QT_MOC_LITERAL(57, 5),  // "image"
-        QT_MOC_LITERAL(63, 13),  // "displayFrame2"
-        QT_MOC_LITERAL(77, 17),  // "on_up_2_b_clicked"
-        QT_MOC_LITERAL(95, 21),  // "on_l_vid_turn_clicked"
-        QT_MOC_LITERAL(117, 21),  // "on_r_vid_turn_clicked"
-        QT_MOC_LITERAL(139, 21),  // "on_switch_vid_clicked"
-        QT_MOC_LITERAL(161, 18),  // "on_start_b_clicked"
-        QT_MOC_LITERAL(180, 19)   // "on_stop_b_2_clicked"
+        QT_MOC_LITERAL(11, 13),  // "displayFrame1"
+        QT_MOC_LITERAL(25, 0),  // ""
+        QT_MOC_LITERAL(26, 5),  // "image"
+        QT_MOC_LITERAL(32, 13),  // "displayFrame2"
+        QT_MOC_LITERAL(46, 17),  // "on_up_2_b_clicked"
+        QT_MOC_LITERAL(64, 21),  // "on_l_vid_turn_clicked"
+        QT_MOC_LITERAL(86, 21),  // "on_r_vid_turn_clicked"
+        QT_MOC_LITERAL(108, 21),  // "on_switch_vid_clicked"
+        QT_MOC_LITERAL(130, 18),  // "on_start_b_clicked"
+        QT_MOC_LITERAL(149, 19)   // "on_stop_b_2_clicked"
     },
     "MainWindow",
-    "startBothVideos",
-    "",
-    "stopBothVideos",
     "displayFrame1",
+    "",
     "image",
     "displayFrame2",
     "on_up_2_b_clicked",
@@ -242,7 +234,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -250,22 +242,18 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   74,    2, 0x08,    1 /* Private */,
-       3,    0,   75,    2, 0x08,    2 /* Private */,
-       4,    1,   76,    2, 0x08,    3 /* Private */,
-       6,    1,   79,    2, 0x08,    5 /* Private */,
-       7,    0,   82,    2, 0x08,    7 /* Private */,
-       8,    0,   83,    2, 0x08,    8 /* Private */,
-       9,    0,   84,    2, 0x08,    9 /* Private */,
-      10,    0,   85,    2, 0x08,   10 /* Private */,
-      11,    0,   86,    2, 0x08,   11 /* Private */,
-      12,    0,   87,    2, 0x08,   12 /* Private */,
+       1,    1,   62,    2, 0x08,    1 /* Private */,
+       4,    1,   65,    2, 0x08,    3 /* Private */,
+       5,    0,   68,    2, 0x08,    5 /* Private */,
+       6,    0,   69,    2, 0x08,    6 /* Private */,
+       7,    0,   70,    2, 0x08,    7 /* Private */,
+       8,    0,   71,    2, 0x08,    8 /* Private */,
+       9,    0,   72,    2, 0x08,    9 /* Private */,
+      10,    0,   73,    2, 0x08,   10 /* Private */,
 
  // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QImage,    5,
-    QMetaType::Void, QMetaType::QImage,    5,
+    QMetaType::Void, QMetaType::QImage,    3,
+    QMetaType::Void, QMetaType::QImage,    3,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -285,10 +273,6 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSMainWindowENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
-        // method 'startBothVideos'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'stopBothVideos'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'displayFrame1'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QImage &, std::false_type>,
@@ -317,16 +301,14 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->startBothVideos(); break;
-        case 1: _t->stopBothVideos(); break;
-        case 2: _t->displayFrame1((*reinterpret_cast< std::add_pointer_t<QImage>>(_a[1]))); break;
-        case 3: _t->displayFrame2((*reinterpret_cast< std::add_pointer_t<QImage>>(_a[1]))); break;
-        case 4: _t->on_up_2_b_clicked(); break;
-        case 5: _t->on_l_vid_turn_clicked(); break;
-        case 6: _t->on_r_vid_turn_clicked(); break;
-        case 7: _t->on_switch_vid_clicked(); break;
-        case 8: _t->on_start_b_clicked(); break;
-        case 9: _t->on_stop_b_2_clicked(); break;
+        case 0: _t->displayFrame1((*reinterpret_cast< std::add_pointer_t<QImage>>(_a[1]))); break;
+        case 1: _t->displayFrame2((*reinterpret_cast< std::add_pointer_t<QImage>>(_a[1]))); break;
+        case 2: _t->on_up_2_b_clicked(); break;
+        case 3: _t->on_l_vid_turn_clicked(); break;
+        case 4: _t->on_r_vid_turn_clicked(); break;
+        case 5: _t->on_switch_vid_clicked(); break;
+        case 6: _t->on_start_b_clicked(); break;
+        case 7: _t->on_stop_b_2_clicked(); break;
         default: ;
         }
     }
@@ -351,13 +333,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 8)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 10;
+        _id -= 8;
     }
     return _id;
 }

@@ -40,8 +40,8 @@ public:
     ~MainWindow();
 
 private slots:
-    void startBothVideos();
-    void stopBothVideos();
+    //void startBothVideos();
+    //void stopBothVideos();
     void displayFrame1(const QImage &image);
     void displayFrame2(const QImage &image);
     //void LabelClick();
@@ -54,8 +54,6 @@ private slots:
 
     void on_switch_vid_clicked();
 
-
-
     void on_start_b_clicked();
 
     void on_stop_b_2_clicked();
@@ -64,6 +62,11 @@ private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;
     VideoThread *videoThread2;
+    int rotationAngle = 0;
+    bool isSwitched = false;  // Track which video is displayed where
+
+    void startBothVideos();
+    void stopBothVideos();
 };
 
 #endif // MAINWINDOW_H

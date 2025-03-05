@@ -57,6 +57,7 @@ SOURCES       = ../../base.cpp \
 		../../drawsymbols.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
+		../../scalehorizontal.cpp \
 		../../scalevertical.cpp \
 		../../scalingfactor.cpp moc_clickable.cpp \
 		moc_mainwindow.cpp
@@ -65,6 +66,7 @@ OBJECTS       = base.o \
 		drawsymbols.o \
 		main.o \
 		mainwindow.o \
+		scalehorizontal.o \
 		scalevertical.o \
 		scalingfactor.o \
 		moc_clickable.o \
@@ -387,12 +389,14 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../clickable.h \
 		../../drawsymbols.h \
 		../../mainwindow.h \
+		../../scalehorizontal.h \
 		../../scalevertical.h \
 		../../scalingfactor.h ../../base.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
+		../../scalehorizontal.cpp \
 		../../scalevertical.cpp \
 		../../scalingfactor.cpp
 QMAKE_TARGET  = GUI_UDP
@@ -1080,8 +1084,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalevertical.h ../../scalingfactor.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1763,6 +1767,123 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../scalevertical.h \
 		../../base.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
+
+scalehorizontal.o: ../../scalehorizontal.cpp ../../scalehorizontal.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvdef.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/version.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/hal/interface.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cv_cpu_dispatch.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cv_cpu_helper.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/hal/msa_macros.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/fast_math.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/base.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvstd.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvstd_wrapper.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/neon_utils.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/vsx_utils.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/check.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/traits.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/matx.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/saturate.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/matx.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/types.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/mat.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/bufferpool.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/mat.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/persistence.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/operations.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvstd.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utility.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/instrumentation.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/tls.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/optim.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/ovx.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/calib3d.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/features2d.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/miniflann.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/defines.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/config.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/affine.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/logger.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/logger.defines.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/logtag.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/dnn.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/async.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/version.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/dict.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/layer.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/dnn.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/utils/inference_engine.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/flann_base.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/general.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/matrix.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/params.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/any.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/saving.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/nn_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/result_set.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/all_indices.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/kdtree_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/dynamic_bitset.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/dist.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/heap.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/allocator.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/random.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/kdtree_single_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/kmeans_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/logger.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/composite_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/linear_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/hierarchical_clustering_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/lsh_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/lsh_table.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/autotuned_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/ground_truth.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/index_testing.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/timer.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/sampling.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/highgui.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/imgcodecs.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/videoio.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/imgproc.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/imgproc/segmentation.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/ml.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/ml/ml.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/aruco_detector.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/aruco_dictionary.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/aruco_board.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/graphical_code_detector.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/face.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/charuco_detector.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/barcode.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/photo.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/warpers.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cuda.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cuda_types.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cuda.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/util.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/util_inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/camera.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/seam_finders.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/blenders.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/tracking.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp \
+		../../base.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scalehorizontal.o ../../scalehorizontal.cpp
 
 scalevertical.o: ../../scalevertical.cpp ../../scalevertical.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \

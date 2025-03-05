@@ -50,9 +50,14 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
 
         int tickValue = startTick + (i * tickStep);
         std::string text = std::to_string(tickValue);
-        Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
+        // Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
+        // Point ptText = Point(tickPosX - textSize.width / 2, startY - 15);
+        // putText(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , purple, 1, lineType);
+        Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5 , 3, nullptr);
         Point ptText = Point(tickPosX - textSize.width / 2, startY - 15);
         putText(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , purple, 1, lineType);
+
+
     }
 
     // Маленькі мітки між десятками (кожні 5 одиниць)

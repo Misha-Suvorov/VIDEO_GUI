@@ -46,31 +46,27 @@ void VideoThread::run() {
 
     cv::Mat frame;
     while (running) {
-        cap >> frame; // Capture a frame
+        cap >> frame;
         if (frame.empty()) continue;
 
-        // Calculate the center of the video frame
         int centerX = frame.cols / 2;
         int centerY = frame.rows / 2;
         cv::Point center = cv::Point(centerX, centerY);
 
         // Draw a crosshair
-        DrawCrosshair(frame, center, cv::Scalar(255, 255, 0), 2);  // Yellow crosshair with thickness 2
+        DrawCrosshair(frame, center, cv::Scalar(255, 255, 0), 2);
         scaleVertical->drawScale(frame, cv::Scalar(255, 255, 0), 2, 1, 1);
         scaleHorizontal->drawScale(frame, cv::Scalar(255, 255, 0), 2, 1, 1);
 
-        // Draw a square guidance marker at the center
-        int squareSize = std::min(frame.cols, frame.rows) / 8; // 1/5 of the smaller dimension
+        // Draw a square guidance marker
+        int squareSize = std::min(frame.cols, frame.rows) / 8;
         cv::Rect2d rect(centerX - squareSize / 2, centerY - squareSize / 2, squareSize, squareSize);
-        drawGuidanceMarker(frame, rect, cv::Scalar(255, 255, 0), 2, 20, 8); // Green marker
+        drawGuidanceMarker(frame, rect, cv::Scalar(255, 255, 0), 2, 20, 8);
 
-        // Convert frame to RGB for Qt
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
 
-        // Convert the frame to QImage
         QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
 
-        // Emit the frameReady signal with the updated frame
         emit frameReady(image.copy());
     }
 

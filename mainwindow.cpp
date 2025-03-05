@@ -6,6 +6,7 @@
 #include "scalevertical.h"
 #include "scalehorizontal.h"
 
+
 ScaleVertical *scaleVertical;
 ScaleHorizontal *scaleHorizontal;
 
@@ -31,7 +32,6 @@ void VideoThread::setPipeline(const std::string &pipeline) {
     gstPipeline = pipeline;
 }
 
-// Video processing loop
 void VideoThread::run() {
     running = true;
 
@@ -58,6 +58,11 @@ void VideoThread::run() {
         DrawCrosshair(frame, center, cv::Scalar(255, 255, 0), 2);  // Yellow crosshair with thickness 2
         scaleVertical->drawScale(frame, cv::Scalar(255, 255, 0), 2, 1, 1);
         scaleHorizontal->drawScale(frame, cv::Scalar(255, 255, 0), 2, 1, 1);
+
+        // Draw a square guidance marker at the center
+        int squareSize = std::min(frame.cols, frame.rows) / 8; // 1/5 of the smaller dimension
+        cv::Rect2d rect(centerX - squareSize / 2, centerY - squareSize / 2, squareSize, squareSize);
+        drawGuidanceMarker(frame, rect, cv::Scalar(255, 255, 0), 2, 20, 8); // Green marker
 
         // Convert frame to RGB for Qt
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);

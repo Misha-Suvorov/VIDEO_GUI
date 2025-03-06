@@ -16,6 +16,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -41,6 +42,11 @@ public:
     QPushButton *start_b;
     QPushButton *stop_b_2;
     QPushButton *switch_vid;
+    QGridLayout *gridLayout;
+    QLabel *label_2;
+    QLineEdit *horizont_marker_input;
+    QLineEdit *vertical_marker_input;
+    QLabel *label_3;
     QGridLayout *gridLayout_3;
     QPushButton *up_b;
     QPushButton *d_2_b;
@@ -125,7 +131,7 @@ public:
         r_vid_turn->setObjectName("r_vid_turn");
         r_vid_turn->setMaximumSize(QSize(50, 16777215));
 
-        horizontalLayout_2->addWidget(r_vid_turn, 0, Qt::AlignTop);
+        horizontalLayout_2->addWidget(r_vid_turn, 0, Qt::AlignLeft|Qt::AlignTop);
 
         start_b = new QPushButton(frame);
         start_b->setObjectName("start_b");
@@ -144,6 +150,31 @@ public:
 
 
         verticalLayout->addLayout(horizontalLayout_2);
+
+        gridLayout = new QGridLayout();
+        gridLayout->setObjectName("gridLayout");
+        label_2 = new QLabel(frame);
+        label_2->setObjectName("label_2");
+
+        gridLayout->addWidget(label_2, 1, 0, 1, 1);
+
+        horizont_marker_input = new QLineEdit(frame);
+        horizont_marker_input->setObjectName("horizont_marker_input");
+
+        gridLayout->addWidget(horizont_marker_input, 1, 1, 1, 1, Qt::AlignRight);
+
+        vertical_marker_input = new QLineEdit(frame);
+        vertical_marker_input->setObjectName("vertical_marker_input");
+
+        gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignRight);
+
+        label_3 = new QLabel(frame);
+        label_3->setObjectName("label_3");
+
+        gridLayout->addWidget(label_3, 2, 0, 1, 1);
+
+
+        verticalLayout->addLayout(gridLayout);
 
         gridLayout_3 = new QGridLayout();
         gridLayout_3->setObjectName("gridLayout_3");
@@ -284,6 +315,8 @@ public:
         start_b->setText(QCoreApplication::translate("MainWindow", "start", nullptr));
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
         up_b->setText(QCoreApplication::translate("MainWindow", "\342\206\221", nullptr));
         d_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\212", nullptr));
         l_l->setText(QCoreApplication::translate("MainWindow", "\342\206\220", nullptr));

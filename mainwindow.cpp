@@ -86,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Automatically start video streams
     startBothVideos();
+
+    connect(ui->horizont_marker_input, &QLineEdit::textChanged, this, &MainWindow::updateHorizontalMarkerPosition);
+
 }
 
 // MainWindow destructor
@@ -158,6 +161,27 @@ void MainWindow::displayFrame1(const QImage &image) {
 void MainWindow::displayFrame2(const QImage &image) {
     if (!image.isNull()) {
         ui->videoLabel2->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel2->size(), Qt::KeepAspectRatio));
+    }
+}
+
+
+
+
+// Slot to update the horizontal marker position
+void MainWindow::updateHorizontalMarkerPosition() {
+    // Get the input value from the QLineEdit
+    bool ok;
+    int newMarkerPosition = ui->horizont_marker_input->text().toInt(&ok);
+
+    if (ok) {
+        // If the input is a valid integer, update the horizontal marker
+        scaleHorizontal->setMarkerPosition(newMarkerPosition);
+
+        // Optionally, you can update the display or take any other action
+        qDebug() << "Horizontal Marker Position updated to: " << newMarkerPosition;
+    } else {
+        // Handle invalid input if needed
+        qDebug() << "Invalid input for horizontal marker position!";
     }
 }
 

@@ -58,6 +58,9 @@ private slots:
 
     void on_stop_b_2_clicked();
 
+    // Slot to update the horizontal marker position
+    void updateHorizontalMarkerPosition();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

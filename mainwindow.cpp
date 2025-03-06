@@ -55,8 +55,8 @@ void VideoThread::run() {
 
         // Draw a crosshair
         DrawCrosshair(frame, center, cv::Scalar(255, 255, 0), 2);
-        scaleVertical->drawScale(frame, cv::Scalar(255, 255, 0), 2, 1, 1);
-        scaleHorizontal->drawScale(frame, cv::Scalar(255, 255, 0), 2, 1, 1);
+        scaleVertical->drawScale(frame, cv::Scalar(0, 0, 0), 2 , STROKED, 1);
+        scaleHorizontal->drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, 1);
 
         // Draw a square guidance marker
         int squareSize = std::min(frame.cols, frame.rows) / 8;

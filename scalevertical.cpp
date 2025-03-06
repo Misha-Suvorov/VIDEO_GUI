@@ -26,12 +26,10 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
     int endX = 620;
     int endY = 60;
 
-    // Фіолетовий колір
-    Scalar purple(255, 0, 255);
 
     // Малюємо головну лінію
-    line(img, Point(startX, startY), Point(endX, endY), purple, thickness, lineType);
-
+    //line(img, Point(startX, startY), Point(endX, endY), purple, thickness, lineType);
+    cv::drawLineStroked(img, Point(startX, startY), Point(endX, endY), cv::Scalar(255, 255, 255), thickness, lineType);
     // Параметри шкали
     const int startTick = -30;
     const int endTick = 30;
@@ -46,7 +44,10 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
     for (int i = 0; i < numTicks; i++)
     {
         int tickPosX = startX + static_cast<int>(i * tickSpacing);
-        line(img, Point(tickPosX, startY), Point(tickPosX, startY - 10), purple, thickness, lineType);
+        //line(img, Point(tickPosX, startY), Point(tickPosX, startY - 10), purple, thickness, lineType);
+        cv::drawLineStroked(img, Point(tickPosX, startY), Point(tickPosX, startY - 10), cv::Scalar(255, 255, 255), thickness, lineType);
+
+
 
         int tickValue = startTick + (i * tickStep);
         std::string text = std::to_string(tickValue);
@@ -55,8 +56,8 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
         // putText(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , purple, 1, lineType);
         Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5 , 3, nullptr);
         Point ptText = Point(tickPosX - textSize.width / 2, startY - 15);
-        putText(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , purple, 1, lineType);
-
+        //putText(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , purple, 1, lineType);
+        cv::putTextStroked(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , cv::Scalar(255, 255, 255), 1, lineType);
 
     }
 
@@ -64,6 +65,10 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
     for (int i = 0; i < numTicks - 1; i++)
     {
         int smallTickPosX = startX + static_cast<int>(i * tickSpacing + smallTickSpacing);
-        line(img, Point(smallTickPosX, startY), Point(smallTickPosX, startY - 5), purple, thickness, lineType);
+        //line(img, Point(smallTickPosX, startY), Point(smallTickPosX, startY - 5), purple, thickness, lineType);
+        cv::drawLineStroked(img, Point(smallTickPosX, startY), Point(smallTickPosX, startY - 5), cv::Scalar(255, 255, 255), thickness, lineType);
     }
 }
+
+
+

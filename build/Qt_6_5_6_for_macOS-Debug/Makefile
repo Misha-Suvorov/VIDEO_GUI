@@ -391,7 +391,8 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../mainwindow.h \
 		../../scalehorizontal.h \
 		../../scalevertical.h \
-		../../scalingfactor.h ../../base.cpp \
+		../../scalingfactor.h \
+		../../structs.h ../../base.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
 		../../main.cpp \
@@ -1084,7 +1085,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../structs.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../../base.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
@@ -1432,6 +1433,7 @@ drawsymbols.o: ../../drawsymbols.cpp ../../drawsymbols.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/tls.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/optim.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/ovx.hpp \
+		../../structs.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/calib3d.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/features2d.hpp \
@@ -1764,8 +1766,10 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h \
 		../../drawsymbols.h \
+		../../structs.h \
 		../../scalevertical.h \
-		../../base.h
+		../../base.h \
+		../../scalehorizontal.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
 scalehorizontal.o: ../../scalehorizontal.cpp ../../scalehorizontal.h \
@@ -2001,6 +2005,7 @@ scalevertical.o: ../../scalevertical.cpp ../../scalevertical.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp \
 		../../base.h \
 		../../drawsymbols.h \
+		../../structs.h \
 		../../scalingfactor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scalevertical.o ../../scalevertical.cpp
 

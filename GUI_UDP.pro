@@ -39,7 +39,8 @@ HEADERS += \
     mainwindow.h \
     scalehorizontal.h \
     scalevertical.h \
-    scalingfactor.h
+    scalingfactor.h \
+    structs.h
 
 FORMS += \
     mainwindow.ui

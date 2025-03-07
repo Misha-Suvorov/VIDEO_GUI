@@ -25,7 +25,10 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
     int startY = 60;
     int endX = 620;
     int endY = 60;
+    int centerX = (startX + endX)/2;
+    float coefX = ((endX - startX)/2)/30.0;
 
+    // Draw the main line (horizontal in this case)
     cv::drawLineStroked(img, Point(startX, startY), Point(endX, endY), cv::Scalar(255, 255, 255), thickness, lineType);
 
     const int startTick = -30;
@@ -38,6 +41,7 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
     float tickSpacing = static_cast<float>(lineLength) / (numTicks - 1);
     float smallTickSpacing = tickSpacing / 2;
 
+    // Draw the ticks and their labels
     for (int i = 0; i < numTicks; i++)
     {
         int tickPosX = startX + static_cast<int>(i * tickSpacing);
@@ -45,19 +49,28 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
 
         int tickValue = startTick + (i * tickStep);
         std::string text = std::to_string(tickValue);
-        Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5 , 3, nullptr);
+        Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
         Point ptText = Point(tickPosX - textSize.width / 2, startY - 15);
-        cv::putTextStroked(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , cv::Scalar(255, 255, 255), 1, lineType);
+        cv::putTextStroked(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
     }
 
+    // Draw small ticks between the main ticks
     for (int i = 0; i < numTicks - 1; i++)
     {
         int smallTickPosX = startX + static_cast<int>(i * tickSpacing + smallTickSpacing);
         cv::drawLineStroked(img, Point(smallTickPosX, startY), Point(smallTickPosX, startY - 5), cv::Scalar(255, 255, 255), thickness, lineType);
     }
 
-    // Задаємо позицію червоного маркера як вертикальну лінію
-    int centerPosX = startX + lineLength / 2;
-    int markerHeight = 10; // Висота маркера
-    cv::drawLineStroked(img, Point(centerPosX, startY), Point(centerPosX, startY - markerHeight), cv::Scalar(0, 0, 255), thickness + 1, lineType);
+    // Calculate the position of the red marker based on the 'value' parameter
+    //float markerPosX = startX + (value + 30) * tickSpacing / (endTick - startTick);
+    float markerPosX = value*coefX + centerX;
+    // Debugging output
+    //qDebug() << "Marker position: " << markerPosX;
+
+    // Clamp the marker position to make sure it stays within bounds
+    //markerPosX = std::max(static_cast<float>(startX), std::min(markerPosX, static_cast<float>(endX)));
+    Point pt1 =  Point(markerPosX, startY);
+    Point pt2 = Point(markerPosX, startY - 10);
+    // Draw the red marker at the calculated position
+    cv::drawLineStroked(img, pt1, pt2, cv::Scalar(0, 0, 255), thickness + 1, lineType);
 }

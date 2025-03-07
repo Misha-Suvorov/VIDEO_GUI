@@ -22,7 +22,8 @@ public:
     void run() override;
     void stop();
 
-    void setHorizontMarkerValue(float value);  // New function to update marker position
+    void setHorizontMarkerValue(float value);
+    void setVerticalMarkerValue(float value);
 
 signals:
     void frameReady(const QImage &image);
@@ -31,7 +32,8 @@ private:
     bool running;
     cv::VideoCapture cap;
     std::string gstPipeline;
-    float horizontMarkerValue = 0;  // Default value, controlled by QLineEdit
+    float horizontMarkerValue = 0;
+    float verticalMarkerValue = 0;
 };
 
 class MainWindow : public QMainWindow {
@@ -54,6 +56,7 @@ private slots:
 
     // Slot to update the horizontal marker position
     void onHorizontMarkerChanged(const QString &text);
+    void onVerticalMarkerChanged(const QString &text);
 
 private:
     Ui::MainWindow *ui;

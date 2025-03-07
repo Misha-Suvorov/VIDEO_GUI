@@ -19,59 +19,59 @@ std::string ScaleHorizontal::convertValueToText(float value)
     return textValue;
 }
 
-
-
 void ScaleHorizontal::drawScale(cv::InputOutputArray img, const Scalar& color, int thickness, int lineType, float value)
 {
-    int startX = 650;   // Початкова точка по X
-    int startY = 440;    // Початкова точка по Y
-    int endX = 650;     // Кінцева точка по X (залишаємо той самий)
-    int endY = 100;     // Кінцева точка по Y (міняємо, щоб лінія була вертикальною)
+    int startX = 100;
+    int startY = 60;
+    int endX = 620;
+    int endY = 60;
+    int centerX = (startX + endX) / 2;  // Center of the entire scale
+    float coefX = ((endX - startX) / 2) / 30.0;
 
-    // Фіолетовий колір
-    Scalar purple(255, 0, 255);
-
-    // Малюємо головну вертикальну лінію
-    //line(img, Point(startX, startY), Point(endX, endY), purple, thickness, lineType);
+    // Draw the main line (horizontal in this case)
     cv::drawLineStroked(img, Point(startX, startY), Point(endX, endY), cv::Scalar(255, 255, 255), thickness, lineType);
 
-
-    // Параметри шкали
     const int startTick = -30;
     const int endTick = 30;
     const int tickStep = 10;
     const int smallTickStep = 5;
 
-    int lineLength = endY - startY;  // Для вертикальної шкали
+    int lineLength = endX - startX;
     int numTicks = (endTick - startTick) / tickStep + 1;
     float tickSpacing = static_cast<float>(lineLength) / (numTicks - 1);
-    float smallTickSpacing = tickSpacing / 2; // Кожні 5 одиниць
+    float smallTickSpacing = tickSpacing / 2;
 
-    // Малюємо основні поділки та цифри
+    // Draw the ticks and their labels
     for (int i = 0; i < numTicks; i++)
     {
-        int tickPosY = startY + static_cast<int>(i * tickSpacing);
+        int tickPosX = startX + static_cast<int>(i * tickSpacing);
+        cv::drawLineStroked(img, Point(tickPosX, startY), Point(tickPosX, startY - 10), cv::Scalar(255, 255, 255), thickness, lineType);
 
-        // Малюємо основні поділки
-        //line(img, Point(startX, tickPosY), Point(startX + 10, tickPosY), purple, thickness, lineType);
-        cv::drawLineStroked(img, Point(startX, tickPosY), Point(startX + 10, tickPosY), cv::Scalar(255, 255, 255), thickness, lineType);
-
-        // Текст для основних міток
         int tickValue = startTick + (i * tickStep);
         std::string text = std::to_string(tickValue);
         Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
-        Point ptText = Point(startX + 10, tickPosY + textSize.height / 2);  // Текст розташовуємо праворуч
-        //putText(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5, purple, 1, lineType);
-        cv::putTextStroked(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5 , cv::Scalar(255, 255, 255), 1, lineType);
-
+        Point ptText = Point(tickPosX - textSize.width / 2, startY - 15);
+        cv::putTextStroked(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
     }
 
-    // Малюємо маленькі поділки між десятками (кожні 5 одиниць)
+    // Draw small ticks between the main ticks
     for (int i = 0; i < numTicks - 1; i++)
     {
-        int smallTickPosY = startY + static_cast<int>(i * tickSpacing + smallTickSpacing);
-        //line(img, Point(startX, smallTickPosY), Point(startX + 5, smallTickPosY), purple, thickness, lineType);
-        cv::drawLineStroked(img, Point(startX, smallTickPosY), Point(startX + 5, smallTickPosY), cv::Scalar(255, 255, 255), thickness, lineType);
-
+        int smallTickPosX = startX + static_cast<int>(i * tickSpacing + smallTickSpacing);
+        cv::drawLineStroked(img, Point(smallTickPosX, startY), Point(smallTickPosX, startY - 5), cv::Scalar(255, 255, 255), thickness, lineType);
     }
+
+    // Calculate the static position for the text
+    std::string textValue = convertValueToText(value);
+    Size textSize = getTextSize(textValue, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
+    Point textPosition = Point(centerX - textSize.width , startY - 30);  // Static position based on centerX
+
+    // Draw the text at the calculated static position
+    cv::putTextStroked(img, textValue, textPosition, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
+
+    // Draw the marker based on the value
+    float markerPosX = value * coefX + centerX;
+    Point pt1 = Point(markerPosX, startY);
+    Point pt2 = Point(markerPosX, startY - 10);
+    cv::drawLineStroked(img, pt1, pt2, cv::Scalar(0, 0, 255), thickness + 1, lineType);
 }

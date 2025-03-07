@@ -17,8 +17,27 @@ void VideoThread::setPipeline(const std::string &pipeline) {
     gstPipeline = pipeline;
 }
 
+
 void VideoThread::setHorizontMarkerValue(float value) {
-    horizontMarkerValue = value;}
+    if (value > 30) {
+        horizontMarkerValue = 30;
+    } else if (value < -30) {
+        horizontMarkerValue = -30;
+    } else {
+        horizontMarkerValue = value;
+    }
+}
+
+void VideoThread::setVerticalMarkerValue(float value){
+    if (value > 30) {
+        verticalMarkerValue = 30;
+    } else if (value < -30) {
+        verticalMarkerValue = -30;
+    } else {
+        verticalMarkerValue = value;
+    }
+}
+
 
 void VideoThread::run() {
     running = true;
@@ -38,8 +57,8 @@ void VideoThread::run() {
         cap >> frame;
         if (frame.empty()) continue;
 
-        scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
-        scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, 1);
+        scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
+        scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
 
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
         QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
@@ -60,6 +79,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connect QLineEdit to slot
     connect(ui->horizont_marker_input, &QLineEdit::textChanged, this, &MainWindow::onHorizontMarkerChanged);
+    connect(ui->vertical_marker_input, &QLineEdit::textChanged, this, &MainWindow::onVerticalMarkerChanged);
+
 
     on_start_b_clicked();  // Start video on launch
 }
@@ -86,12 +107,25 @@ void MainWindow::onHorizontMarkerChanged(const QString &text) {
     bool ok;
     float value = text.toFloat(&ok);
 
-    // Validate input range
-    if (ok && value >= -30 && value <= 30) {
+    if(ok){
         ui->horizont_marker_input->setStyleSheet("");  // Reset border if valid
         if (videoThread1) videoThread1->setHorizontMarkerValue(value);
     } else {
         ui->horizont_marker_input->setStyleSheet("border: 2px solid red;");  // Highlight invalid input
+    }
+}
+
+void MainWindow::onVerticalMarkerChanged(const QString &text) {
+    bool ok;
+    float value = text.toFloat(&ok);
+
+    if(ok){
+        ui->vertical_marker_input->setStyleSheet("");  // Reset border if valid
+        value = -value;
+
+        if (videoThread1) videoThread1->setVerticalMarkerValue(value);
+    } else {
+        ui->vertical_marker_input->setStyleSheet("border: 2px solid red;");  // Highlight invalid input
     }
 }
 

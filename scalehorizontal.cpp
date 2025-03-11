@@ -1,4 +1,4 @@
-#include "scalehorizontal.h""
+#include "scalehorizontal.h"
 #include "drawsymbols.h"
 #include "scalingfactor.h"
 #include <opencv2/opencv.hpp>
@@ -14,7 +14,7 @@ std::string ScaleHorizontal::convertValueToText(float value)
     int width = (value < 10) ? 3 : (value < 100) ? 2 : (value < 1000) ? 1 : 0;
     for (int i = 0; i < width; i++)
     {
-        textValue.insert(i, " ");
+        textValue.insert(0, " "); // Insert spaces at the beginning
     }
     return textValue;
 }
@@ -64,7 +64,7 @@ void ScaleHorizontal::drawScale(cv::InputOutputArray img, const Scalar& color, i
     // Calculate the static position for the text
     std::string textValue = convertValueToText(value);
     Size textSize = getTextSize(textValue, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
-    Point textPosition = Point(centerX - textSize.width , startY - 30);  // Static position based on centerX
+    Point textPosition = Point(centerX - textSize.width / 2, startY - 30);  // Center-aligned text, static position
 
     // Draw the text at the calculated static position
     cv::putTextStroked(img, textValue, textPosition, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);

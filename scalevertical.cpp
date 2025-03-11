@@ -58,6 +58,13 @@ void ScaleVertical::drawScale(cv::InputOutputArray img, const Scalar& color, int
         int smallTickPosY = startY - static_cast<int>(i * tickSpacing + smallTickSpacing);
         cv::drawLineStroked(img, Point(startX, smallTickPosY), Point(startX + 5, smallTickPosY), cv::Scalar(255, 255, 255), thickness, lineType);
     }
+    std::string textValue = convertValueToText(-value);
+    Size textSize = getTextSize(textValue, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
+    Point textPosition = Point(startX + 20, centerY);  // Center-aligned text, static position
+
+    // Draw the text at the calculated static position
+    cv::putTextStroked(img, textValue, textPosition, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
+
 
     float markerPosY = value * coefY + centerY;
 

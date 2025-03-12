@@ -107,11 +107,16 @@ void MainWindow::onHorizontMarkerChanged(const QString &text) {
     bool ok;
     float value = text.toFloat(&ok);
 
-    if(ok){
-        ui->horizont_marker_input->setStyleSheet("");  // Reset border if valid
+    if (text.isEmpty()) {
+        value = 0;
+        ok = true;
+    }
+
+    if (ok) {
+        ui->horizont_marker_input->setStyleSheet("");
         if (videoThread1) videoThread1->setHorizontMarkerValue(value);
     } else {
-        ui->horizont_marker_input->setStyleSheet("border: 2px solid red;");  // Highlight invalid input
+        ui->horizont_marker_input->setStyleSheet("border: 2px solid red;");
     }
 }
 
@@ -119,13 +124,18 @@ void MainWindow::onVerticalMarkerChanged(const QString &text) {
     bool ok;
     float value = text.toFloat(&ok);
 
-    if(ok){
-        ui->vertical_marker_input->setStyleSheet("");  // Reset border if valid
+    if (text.isEmpty()) {
+        value = 0;
+        ok = true;
+    }
+
+    if (ok) {
+        ui->vertical_marker_input->setStyleSheet("");
         value = -value;
 
         if (videoThread1) videoThread1->setVerticalMarkerValue(value);
     } else {
-        ui->vertical_marker_input->setStyleSheet("border: 2px solid red;");  // Highlight invalid input
+        ui->vertical_marker_input->setStyleSheet("border: 2px solid red;");
     }
 }
 

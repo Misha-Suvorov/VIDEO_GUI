@@ -43,10 +43,12 @@ public:
     QPushButton *stop_b_2;
     QPushButton *switch_vid;
     QGridLayout *gridLayout;
-    QLabel *label_2;
+    QLabel *multi_label_2;
     QLineEdit *horizont_marker_input;
-    QLineEdit *vertical_marker_input;
+    QLabel *label_2;
     QLabel *label_3;
+    QLineEdit *vertical_marker_input;
+    QLabel *multi_label_1;
     QGridLayout *gridLayout_3;
     QPushButton *up_b;
     QPushButton *d_2_b;
@@ -125,53 +127,65 @@ public:
         l_vid_turn->setObjectName("l_vid_turn");
         l_vid_turn->setMaximumSize(QSize(50, 16777215));
 
-        horizontalLayout_2->addWidget(l_vid_turn, 0, Qt::AlignTop);
+        horizontalLayout_2->addWidget(l_vid_turn);
 
         r_vid_turn = new QPushButton(frame);
         r_vid_turn->setObjectName("r_vid_turn");
         r_vid_turn->setMaximumSize(QSize(50, 16777215));
 
-        horizontalLayout_2->addWidget(r_vid_turn, 0, Qt::AlignLeft|Qt::AlignTop);
+        horizontalLayout_2->addWidget(r_vid_turn);
 
         start_b = new QPushButton(frame);
         start_b->setObjectName("start_b");
 
-        horizontalLayout_2->addWidget(start_b, 0, Qt::AlignTop);
+        horizontalLayout_2->addWidget(start_b);
 
         stop_b_2 = new QPushButton(frame);
         stop_b_2->setObjectName("stop_b_2");
 
-        horizontalLayout_2->addWidget(stop_b_2, 0, Qt::AlignTop);
+        horizontalLayout_2->addWidget(stop_b_2);
 
         switch_vid = new QPushButton(frame);
         switch_vid->setObjectName("switch_vid");
 
-        horizontalLayout_2->addWidget(switch_vid, 0, Qt::AlignTop);
+        horizontalLayout_2->addWidget(switch_vid);
 
 
         verticalLayout->addLayout(horizontalLayout_2);
 
         gridLayout = new QGridLayout();
         gridLayout->setObjectName("gridLayout");
-        label_2 = new QLabel(frame);
-        label_2->setObjectName("label_2");
+        multi_label_2 = new QLabel(frame);
+        multi_label_2->setObjectName("multi_label_2");
+        multi_label_2->setFrameShape(QFrame::Box);
 
-        gridLayout->addWidget(label_2, 1, 0, 1, 1);
+        gridLayout->addWidget(multi_label_2, 3, 1, 1, 1);
 
         horizont_marker_input = new QLineEdit(frame);
         horizont_marker_input->setObjectName("horizont_marker_input");
 
         gridLayout->addWidget(horizont_marker_input, 1, 1, 1, 1, Qt::AlignRight);
 
-        vertical_marker_input = new QLineEdit(frame);
-        vertical_marker_input->setObjectName("vertical_marker_input");
+        label_2 = new QLabel(frame);
+        label_2->setObjectName("label_2");
 
-        gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignRight);
+        gridLayout->addWidget(label_2, 1, 0, 1, 1);
 
         label_3 = new QLabel(frame);
         label_3->setObjectName("label_3");
 
         gridLayout->addWidget(label_3, 2, 0, 1, 1);
+
+        vertical_marker_input = new QLineEdit(frame);
+        vertical_marker_input->setObjectName("vertical_marker_input");
+
+        gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignRight);
+
+        multi_label_1 = new QLabel(frame);
+        multi_label_1->setObjectName("multi_label_1");
+        multi_label_1->setFrameShape(QFrame::Box);
+
+        gridLayout->addWidget(multi_label_1, 3, 0, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout);
@@ -315,8 +329,10 @@ public:
         start_b->setText(QCoreApplication::translate("MainWindow", "start", nullptr));
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));
+        multi_label_2->setText(QCoreApplication::translate("MainWindow", "Multilabel_2", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
+        multi_label_1->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Multilabel_1</p><p>line_2</p><p>line_3</p></body></html>", nullptr));
         up_b->setText(QCoreApplication::translate("MainWindow", "\342\206\221", nullptr));
         d_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\212", nullptr));
         l_l->setText(QCoreApplication::translate("MainWindow", "\342\206\220", nullptr));

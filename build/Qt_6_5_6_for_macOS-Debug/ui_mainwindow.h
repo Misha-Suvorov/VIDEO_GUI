@@ -159,7 +159,7 @@ public:
         multi_label_2->setObjectName("multi_label_2");
         multi_label_2->setFrameShape(QFrame::Box);
 
-        gridLayout->addWidget(multi_label_2, 3, 1, 1, 1);
+        gridLayout->addWidget(multi_label_2, 3, 1, 1, 1, Qt::AlignLeft|Qt::AlignTop);
 
         horizont_marker_input = new QLineEdit(frame);
         horizont_marker_input->setObjectName("horizont_marker_input");
@@ -184,8 +184,9 @@ public:
         multi_label_1 = new QLabel(frame);
         multi_label_1->setObjectName("multi_label_1");
         multi_label_1->setFrameShape(QFrame::Box);
+        multi_label_1->setWordWrap(true);
 
-        gridLayout->addWidget(multi_label_1, 3, 0, 1, 1);
+        gridLayout->addWidget(multi_label_1, 3, 0, 1, 1, Qt::AlignLeft|Qt::AlignTop);
 
 
         verticalLayout->addLayout(gridLayout);
@@ -329,10 +330,32 @@ public:
         start_b->setText(QCoreApplication::translate("MainWindow", "start", nullptr));
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));
-        multi_label_2->setText(QCoreApplication::translate("MainWindow", "Multilabel_2", nullptr));
+        multi_label_2->setText(QCoreApplication::translate("MainWindow", "<html>\n"
+"  <head/>\n"
+"  <body>\n"
+"    <p>Multilabel_2</p>\n"
+"    <p>line_2</p>\n"
+"    <p>line_3</p>\n"
+"    <p>line_4</p>\n"
+"    <p>line_5</p>\n"
+"    <p>line_6</p>\n"
+"  </body>\n"
+"</html>\n"
+"", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
-        multi_label_1->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Multilabel_1</p><p>line_2</p><p>line_3</p></body></html>", nullptr));
+        multi_label_1->setText(QCoreApplication::translate("MainWindow", "<html>\n"
+"  <head/>\n"
+"  <body>\n"
+"    <p>Multilabel_1</p>\n"
+"    <p>line_2</p>\n"
+"    <p>line_3</p>\n"
+"    <p>line_4</p>\n"
+"    <p>line_5</p>\n"
+"    <p>line_6</p>\n"
+"  </body>\n"
+"</html>\n"
+"", nullptr));
         up_b->setText(QCoreApplication::translate("MainWindow", "\342\206\221", nullptr));
         d_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\212", nullptr));
         l_l->setText(QCoreApplication::translate("MainWindow", "\342\206\220", nullptr));

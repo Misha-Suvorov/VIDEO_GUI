@@ -24,6 +24,8 @@ public:
 
     void setHorizontMarkerValue(float value);
     void setVerticalMarkerValue(float value);
+    void setRotationAngle(int angle);
+
 
 signals:
     void frameReady(const QImage &image);
@@ -34,6 +36,8 @@ private:
     std::string gstPipeline;
     float horizontMarkerValue = 0;
     float verticalMarkerValue = 0;
+    int rotationAngle = 0;
+
 };
 
 class MainWindow : public QMainWindow {

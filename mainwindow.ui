@@ -169,11 +169,11 @@
   &lt;head/&gt;
   &lt;body&gt;
     &lt;p&gt;Multilabel_2&lt;/p&gt;
-    &lt;p&gt;line_2&lt;/p&gt;
-    &lt;p&gt;line_3&lt;/p&gt;
-    &lt;p&gt;line_4&lt;/p&gt;
-    &lt;p&gt;line_5&lt;/p&gt;
-    &lt;p&gt;line_6&lt;/p&gt;
+    &lt;p&gt;l23798&lt;/p&gt;
+    &lt;p&gt;89087&lt;/p&gt;
+    &lt;p&gt;l32168&lt;/p&gt;
+    &lt;p&gt;l79832&lt;/p&gt;
+    &lt;p&gt;l80234&lt;/p&gt;
   &lt;/body&gt;
 &lt;/html&gt;
 </string>
@@ -202,8 +202,16 @@
            </item>
            <item row="3" column="0" alignment="Qt::AlignLeft|Qt::AlignTop">
             <widget class="QLabel" name="multi_label_1">
+             <property name="font">
+              <font>
+               <bold>false</bold>
+              </font>
+             </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
+             </property>
+             <property name="lineWidth">
+              <number>1</number>
              </property>
              <property name="text">
               <string>&lt;html&gt;

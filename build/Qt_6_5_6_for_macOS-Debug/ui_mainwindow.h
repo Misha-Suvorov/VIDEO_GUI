@@ -183,7 +183,11 @@ public:
 
         multi_label_1 = new QLabel(frame);
         multi_label_1->setObjectName("multi_label_1");
+        QFont font;
+        font.setBold(false);
+        multi_label_1->setFont(font);
         multi_label_1->setFrameShape(QFrame::Box);
+        multi_label_1->setLineWidth(1);
         multi_label_1->setWordWrap(true);
 
         gridLayout->addWidget(multi_label_1, 3, 0, 1, 1, Qt::AlignLeft|Qt::AlignTop);
@@ -334,11 +338,11 @@ public:
 "  <head/>\n"
 "  <body>\n"
 "    <p>Multilabel_2</p>\n"
-"    <p>line_2</p>\n"
-"    <p>line_3</p>\n"
-"    <p>line_4</p>\n"
-"    <p>line_5</p>\n"
-"    <p>line_6</p>\n"
+"    <p>l23798</p>\n"
+"    <p>89087</p>\n"
+"    <p>l32168</p>\n"
+"    <p>l79832</p>\n"
+"    <p>l80234</p>\n"
 "  </body>\n"
 "</html>\n"
 "", nullptr));

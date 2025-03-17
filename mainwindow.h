@@ -26,7 +26,6 @@ public:
     void setVerticalMarkerValue(float value);
     void setRotationAngle(int angle);
 
-
 signals:
     void frameReady(const QImage &image);
 
@@ -44,14 +43,13 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
     void displayFrame1(const QImage &image);
     void displayFrame2(const QImage &image);
 
-    //void on_up_2_b_clicked();
     void on_l_vid_turn_clicked();
     void on_r_vid_turn_clicked();
     void on_switch_vid_clicked();
@@ -68,6 +66,10 @@ private:
     VideoThread *videoThread2;
     int rotationAngle = 0;
     bool isSwitched = false;
+
+    // New variables for marker values
+    float horizontMarkerValue = 0;
+    float verticalMarkerValue = 0;
 
     void startBothVideos();
     void stopBothVideos();

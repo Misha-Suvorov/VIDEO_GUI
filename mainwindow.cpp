@@ -7,7 +7,7 @@
 #include "scalehorizontal.h"
 
 VideoThread::VideoThread(QObject *parent)
-    : QThread(parent), running(false), horizontMarkerValue(0) {}
+    : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
 
 VideoThread::~VideoThread() {
     stop();
@@ -16,7 +16,6 @@ VideoThread::~VideoThread() {
 void VideoThread::setPipeline(const std::string &pipeline) {
     gstPipeline = pipeline;
 }
-
 
 void VideoThread::setHorizontMarkerValue(float value) {
     if (value > 30) {
@@ -38,7 +37,6 @@ void VideoThread::setVerticalMarkerValue(float value){
     }
 }
 
-
 void VideoThread::run() {
     running = true;
     cap.open(gstPipeline, cv::CAP_GSTREAMER);
@@ -57,6 +55,7 @@ void VideoThread::run() {
         cap >> frame;
         if (frame.empty()) continue;
 
+        // Draw the scale and markers
         scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
         scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
 
@@ -77,10 +76,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0) {
     ui->setupUi(this);
 
-    // Connect QLineEdit to slot
+    // Connect QLineEdit to slots for marker changes
     connect(ui->horizont_marker_input, &QLineEdit::textChanged, this, &MainWindow::onHorizontMarkerChanged);
     connect(ui->vertical_marker_input, &QLineEdit::textChanged, this, &MainWindow::onVerticalMarkerChanged);
-
 
     on_start_b_clicked();  // Start video on launch
 }
@@ -114,7 +112,11 @@ void MainWindow::onHorizontMarkerChanged(const QString &text) {
 
     if (ok) {
         ui->horizont_marker_input->setStyleSheet("");
+        horizontMarkerValue = value;
+
+        // Update marker values for both video threads
         if (videoThread1) videoThread1->setHorizontMarkerValue(value);
+        if (videoThread2) videoThread2->setHorizontMarkerValue(value);
     } else {
         ui->horizont_marker_input->setStyleSheet("border: 2px solid red;");
     }
@@ -133,14 +135,15 @@ void MainWindow::onVerticalMarkerChanged(const QString &text) {
         ui->vertical_marker_input->setStyleSheet("");
         value = -value;
 
+        verticalMarkerValue = value;
+
+        // Update marker values for both video threads
         if (videoThread1) videoThread1->setVerticalMarkerValue(value);
+        if (videoThread2) videoThread2->setVerticalMarkerValue(value);
     } else {
         ui->vertical_marker_input->setStyleSheet("border: 2px solid red;");
     }
 }
-
-
-
 
 void MainWindow::on_start_b_clicked() {
     if (videoThread1) videoThread1->stop();

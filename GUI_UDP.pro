@@ -24,6 +24,7 @@ unix {
 
 SOURCES += \
     base.cpp \
+    canbus.cpp \
     clickable.cpp \
     drawsymbols.cpp \
     main.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 
 HEADERS += \
     base.h \
+    canbus.h \
     clickable.h \
     drawsymbols.h \
     mainwindow.h \

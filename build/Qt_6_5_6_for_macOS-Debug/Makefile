@@ -53,6 +53,7 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../../base.cpp \
+		../../canbus.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
 		../../main.cpp \
@@ -62,6 +63,7 @@ SOURCES       = ../../base.cpp \
 		../../scalingfactor.cpp moc_clickable.cpp \
 		moc_mainwindow.cpp
 OBJECTS       = base.o \
+		canbus.o \
 		clickable.o \
 		drawsymbols.o \
 		main.o \
@@ -386,6 +388,7 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.5.6/macos/mkspecs/features/yacc.prf \
 		/Qt/6.5.6/macos/mkspecs/features/lex.prf \
 		../../../../GUI_UDP.pro ../../base.h \
+		../../canbus.h \
 		../../clickable.h \
 		../../drawsymbols.h \
 		../../mainwindow.h \
@@ -393,6 +396,7 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../scalevertical.h \
 		../../scalingfactor.h \
 		../../structs.h ../../base.cpp \
+		../../canbus.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
 		../../main.cpp \
@@ -1085,8 +1089,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../structs.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.h ../../canbus.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../structs.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.cpp ../../canbus.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1136,6 +1140,8 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qthread.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QImage \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLineEdit \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlineedit.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
@@ -1392,6 +1398,9 @@ base.o: ../../base.cpp ../../base.h \
 		../../scalingfactor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o base.o ../../base.cpp
 
+canbus.o: ../../canbus.cpp ../../canbus.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canbus.o ../../canbus.cpp
+
 clickable.o: ../../clickable.cpp ../../clickable.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
@@ -1525,6 +1534,8 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qthread.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QImage \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLineEdit \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlineedit.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
@@ -1649,6 +1660,8 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qthread.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QImage \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLineEdit \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlineedit.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
@@ -1886,7 +1899,10 @@ scalehorizontal.o: ../../scalehorizontal.cpp ../../scalehorizontal.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/tracking.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp \
-		../../base.h
+		../../base.h \
+		../../drawsymbols.h \
+		../../structs.h \
+		../../scalingfactor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scalehorizontal.o ../../scalehorizontal.cpp
 
 scalevertical.o: ../../scalevertical.cpp ../../scalevertical.h \

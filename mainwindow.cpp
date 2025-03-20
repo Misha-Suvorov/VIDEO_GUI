@@ -6,6 +6,8 @@
 #include "scalevertical.h"
 #include "scalehorizontal.h"
 
+
+
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
 

@@ -14,10 +14,10 @@ EQ            = =
 
 CC            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
 CXX           = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
-DEFINES       = -DFFMPEG_PATH=\"/opt/homebrew/bin/ffplay\" -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DFFMPEG_PATH=\"/opt/homebrew/bin/ffplay\" -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALBUS_LIB -DQT_NETWORK_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=11.0 -Wall -Wextra $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -g -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=11.0 -Wall -Wextra $(DEFINES)
-INCPATH       = -I../../../GUI_UDP -I. -I../../../Downloads/opencv-4.10.0/build/install/include/opencv4 -I../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers -I../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/AGL.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/AGL.framework/Headers -I../../../Qt/6.5.6/macos/mkspecs/macx-clang -F/Users/mac/Qt/6.5.6/macos/lib
+INCPATH       = -I../../../GUI_UDP -I. -I../../../Downloads/opencv-4.10.0/build/install/include/opencv4 -I../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers -I../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I../../../Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/AGL.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/Library/Frameworks/AGL.framework/Headers -I../../../Qt/6.5.6/macos/mkspecs/macx-clang -F/Users/mac/Qt/6.5.6/macos/lib
 QMAKE         = /Users/mac/Qt/6.5.6/macos/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = GUI_UDP1.0.0
 DISTDIR = /Users/mac/GUI_UDP/build/Qt_6_5_6_for_macOS-Debug/.tmp/GUI_UDP1.0.0
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=11.0 -Wl,-rpath,@executable_path/../Frameworks -Wl,-rpath,/Users/mac/Qt/6.5.6/macos/lib
-LIBS          = $(SUBLIBS) -F/Users/mac/Qt/6.5.6/macos/lib -L/Users/mac/Downloads/opencv-4.10.0/build/install/lib -lopencv_world -framework QtWidgets -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtCore -framework IOKit -framework DiskArbitration -framework AGL -framework OpenGL   
+LIBS          = $(SUBLIBS) -F/Users/mac/Qt/6.5.6/macos/lib -L/Users/mac/Downloads/opencv-4.10.0/build/install/lib -lopencv_world -framework QtWidgets -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtSerialBus -framework QtNetwork -framework QtSerialPort -framework QtCore -framework IOKit -framework DiskArbitration -framework AGL -framework OpenGL   
 AR            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 SED           = sed
@@ -60,7 +60,8 @@ SOURCES       = ../../base.cpp \
 		../../mainwindow.cpp \
 		../../scalehorizontal.cpp \
 		../../scalevertical.cpp \
-		../../scalingfactor.cpp moc_clickable.cpp \
+		../../scalingfactor.cpp moc_canbus.cpp \
+		moc_clickable.cpp \
 		moc_mainwindow.cpp
 OBJECTS       = base.o \
 		canbus.o \
@@ -71,6 +72,7 @@ OBJECTS       = base.o \
 		scalehorizontal.o \
 		scalevertical.o \
 		scalingfactor.o \
+		moc_canbus.o \
 		moc_clickable.o \
 		moc_mainwindow.o
 DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
@@ -745,6 +747,9 @@ Makefile: ../../GUI_UDP.pro ../../../Qt/6.5.6/macos/mkspecs/features/spec_pre.pr
 		../../GUI_UDP.pro \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Resources/QtWidgets.prl \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Resources/QtGui.prl \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Resources/QtSerialBus.prl \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Resources/QtNetwork.prl \
+		../../../Qt/6.5.6/macos/lib/QtSerialPort.framework/Resources/QtSerialPort.prl \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Resources/QtCore.prl
 	$(QMAKE) -o Makefile ../../GUI_UDP.pro -spec macx-clang CONFIG+=debug CONFIG+=qml_debug
 ../../../Qt/6.5.6/macos/mkspecs/features/spec_pre.prf:
@@ -1064,6 +1069,9 @@ Makefile: ../../GUI_UDP.pro ../../../Qt/6.5.6/macos/mkspecs/features/spec_pre.pr
 ../../GUI_UDP.pro:
 ../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Resources/QtWidgets.prl:
 ../../../Qt/6.5.6/macos/lib/QtGui.framework/Resources/QtGui.prl:
+../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Resources/QtSerialBus.prl:
+../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Resources/QtNetwork.prl:
+../../../Qt/6.5.6/macos/lib/QtSerialPort.framework/Resources/QtSerialPort.prl:
 ../../../Qt/6.5.6/macos/lib/QtCore.framework/Resources/QtCore.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../../GUI_UDP.pro -spec macx-clang CONFIG+=debug CONFIG+=qml_debug
@@ -1120,9 +1128,40 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_clickable.cpp moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_clickable.cpp moc_mainwindow.cpp
+	-$(DEL_FILE) moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp
+moc_canbus.cpp: ../../canbus.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/QtSerialBus \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qtserialbusglobal.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbus.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusdevice.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusdeviceinfo.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusfactory.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusframe.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcancommondefinitions.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcandbcfileparser.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanframeprocessor.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanmessagedescription.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcansignaldescription.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanuniqueiddescription.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusclient.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusdataunit.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusdevice.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusdeviceidentification.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbuspdu.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusreply.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusrtuserialclient.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusrtuserialserver.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusserver.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbustcpclient.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbustcpserver.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qtserialbusversion.h \
+		../../../Qt/6.5.6/macos/libexec/moc
+	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../canbus.h -o moc_canbus.cpp
+
 moc_clickable.cpp: ../../clickable.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
@@ -1131,7 +1170,7 @@ moc_clickable.cpp: ../../clickable.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
 		../../../Qt/6.5.6/macos/libexec/moc
-	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../clickable.h -o moc_clickable.cpp
+	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../clickable.h -o moc_clickable.cpp
 
 moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QMainWindow \
@@ -1256,7 +1295,7 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/tracking.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp \
 		../../../Qt/6.5.6/macos/libexec/moc
-	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../mainwindow.h -o moc_mainwindow.cpp
+	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1398,7 +1437,34 @@ base.o: ../../base.cpp ../../base.h \
 		../../scalingfactor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o base.o ../../base.cpp
 
-canbus.o: ../../canbus.cpp ../../canbus.h
+canbus.o: ../../canbus.cpp ../../canbus.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/QtSerialBus \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qtserialbusglobal.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbus.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusdevice.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusdeviceinfo.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusfactory.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanbusframe.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcancommondefinitions.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcandbcfileparser.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanframeprocessor.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanmessagedescription.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcansignaldescription.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qcanuniqueiddescription.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusclient.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusdataunit.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusdevice.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusdeviceidentification.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbuspdu.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusreply.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusrtuserialclient.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusrtuserialserver.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbusserver.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbustcpclient.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qmodbustcpserver.h \
+		../../../Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers/qtserialbusversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canbus.o ../../canbus.cpp
 
 clickable.o: ../../clickable.cpp ../../clickable.h \
@@ -2140,6 +2206,9 @@ scalingfactor.o: ../../scalingfactor.cpp ../../scalingfactor.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/tracking.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scalingfactor.o ../../scalingfactor.cpp
+
+moc_canbus.o: moc_canbus.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_canbus.o moc_canbus.cpp
 
 moc_clickable.o: moc_clickable.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_clickable.o moc_clickable.cpp

@@ -6,6 +6,8 @@
 #include <QImage>
 #include <QLineEdit>
 #include <opencv2/opencv.hpp>
+#include "canbus.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -73,6 +75,9 @@ private:
 
     void startBothVideos();
     void stopBothVideos();
+    CanBus *canBus;
+
+
 };
 
 #endif // MAINWINDOW_H

@@ -1,10 +1,22 @@
 #ifndef CANBUS_H
 #define CANBUS_H
 
-class canbus
-{
+#include <QObject>
+#include <QUdpSocket>
+
+class CanBus : public QObject {
+    Q_OBJECT
+
 public:
-    canbus();
+    explicit CanBus(QObject *parent = nullptr);
+    ~CanBus();
+
+private:
+    QUdpSocket *socket;
+    void setupSocket();
+
+private slots:
+    void readPacket();
 };
 
 #endif // CANBUS_H

@@ -1,30 +1,43 @@
 #include "canbus.h"
+#include <QUdpSocket>
+#include <QHostAddress>
 #include <QDebug>
 
-CanBus::CanBus(QObject *parent) : QObject(parent), socket(new QUdpSocket(this)) {
-    setupSocket();
+CanBus::CanBus(QObject *parent)
+    : QObject(parent), udpSocket(new QUdpSocket(this))
+{
+    // Тут можна налаштувати сокет для отримання даних
 }
 
 CanBus::~CanBus() {
-    delete socket;
+    stopReceiving();
 }
 
-void CanBus::setupSocket() {
-    if (!socket->bind(QHostAddress::Any, 0, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
-        qWarning() << "Failed to bind socket";
-        return;
-    }
+void CanBus::startReceiving() {
+    // Відкриваємо порт для отримання пакетів
+    if (udpSocket->bind(QHostAddress::Any, 14500)) {  // Вказати правильний порт
+        connect(udpSocket, &QUdpSocket::readyRead, this, [this]() {
+            while (udpSocket->hasPendingDatagrams()) {
+                QByteArray datagram;
+                datagram.resize(udpSocket->pendingDatagramSize());
+                udpSocket->readDatagram(datagram.data(), datagram.size());
 
-    connect(socket, &QUdpSocket::readyRead, this, &CanBus::readPacket);
+                // Тут обробка отриманого пакету
+                emit packetReceived(datagram);  // Сигнал, який повідомляє про отриманий пакет
+            }
+        });
+    }
 }
 
-void CanBus::readPacket() {
-    while (socket->hasPendingDatagrams()) {
-        QByteArray datagram;
-        datagram.resize(socket->pendingDatagramSize());
-        socket->readDatagram(datagram.data(), datagram.size());
+void CanBus::stopReceiving() {
+    // Закриваємо сокет
+    udpSocket->close();
+}
 
-        qDebug() << "Received packet of size:" << datagram.size();
-        qDebug() << datagram.toHex();  // Виводимо дані у вигляді HEX
+QString CanBus::toHexString(const QByteArray &data) {
+    QString hexString;
+    for (int i = 0; i < data.size(); ++i) {
+        hexString.append(QString::asprintf("%02X ", static_cast<unsigned char>(data[i])));
     }
+    return hexString.trimmed();
 }

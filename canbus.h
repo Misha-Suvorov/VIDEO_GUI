@@ -3,20 +3,30 @@
 
 #include <QObject>
 #include <QUdpSocket>
+#include <QByteArray>
+#include <QString>
 
-class CanBus : public QObject {
+class CanBus : public QObject
+{
     Q_OBJECT
 
 public:
     explicit CanBus(QObject *parent = nullptr);
     ~CanBus();
 
-private:
-    QUdpSocket *socket;
-    void setupSocket();
+    void startReceiving();
+    void stopReceiving();
 
-private slots:
-    void readPacket();
+    // Зробити метод публічним
+    QString toHexString(const QByteArray &data);  // Перетворення байтового масиву в формат hex
+
+signals:
+    void packetReceived(const QByteArray &data);  // Сигнал для повідомлення про отриманий пакет
+
+
+
+private:
+    QUdpSocket *udpSocket;
 };
 
 #endif // CANBUS_H

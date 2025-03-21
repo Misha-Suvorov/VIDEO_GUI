@@ -5,8 +5,7 @@
 #include "drawsymbols.h"
 #include "scalevertical.h"
 #include "scalehorizontal.h"
-
-
+#include "canbus.h"  // Підключаємо CanBus
 
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
@@ -75,7 +74,7 @@ void VideoThread::stop() {
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr) {
     ui->setupUi(this);
 
     // Connect QLineEdit to slots for marker changes
@@ -83,10 +82,36 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->vertical_marker_input, &QLineEdit::textChanged, this, &MainWindow::onVerticalMarkerChanged);
 
     on_start_b_clicked();  // Start video on launch
+
+    // Ініціалізація CanBus
+    canBus = new CanBus(this);
+
+    // Підключення сигналу packetReceived до слотів
+    connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData){
+        // Перетворення отриманого пакету в hex і виведення в консоль
+        QString hexString = canBus->toHexString(packetData);
+        qDebug() << "Received CAN packet:" << hexString;
+        // Можете додати обробку отриманого пакету тут
+        // Наприклад, додати до QTextEdit:
+        // ui->textEdit->append(hexString);
+    });
+
+    // Стартуємо прийом пакету
+    canBus->startReceiving();
 }
 
+
+
 MainWindow::~MainWindow() {
+    // Зупинка відео потоків
     on_stop_b_2_clicked();
+
+    // Зупинка CanBus
+    if (canBus) {
+        canBus->stopReceiving();
+        delete canBus;
+    }
+
     delete ui;
 }
 

@@ -28,6 +28,7 @@ unix {
 SOURCES += \
     base.cpp \
     canbus.cpp \
+    cannelloniframe.cpp \
     clickable.cpp \
     drawsymbols.cpp \
     main.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
 HEADERS += \
     base.h \
     canbus.h \
+    cannelloniframe.h \
     clickable.h \
     drawsymbols.h \
     mainwindow.h \

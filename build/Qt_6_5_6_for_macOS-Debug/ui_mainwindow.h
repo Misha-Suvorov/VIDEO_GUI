@@ -48,6 +48,13 @@ public:
     QPushButton *pushButton;
     QLineEdit *lineEdit;
     QPushButton *pushButton_4;
+    QGridLayout *gridLayout_5;
+    QLabel *label_9;
+    QRadioButton *radioButton_2;
+    QRadioButton *radioButton;
+    QRadioButton *radioButton_3;
+    QRadioButton *radioButton_4;
+    QRadioButton *radioButton_5;
     QComboBox *comboBox;
     QLabel *label;
     QLineEdit *lineEdit_2;
@@ -56,32 +63,29 @@ public:
     QPushButton *break_range;
     QPushButton *pushButton_3;
     QLabel *label_4;
-    QPushButton *pushButton_2;
     QLabel *label_7;
     QPushButton *start_range;
     QLabel *label_6;
-    QGridLayout *gridLayout_5;
-    QLabel *label_9;
-    QRadioButton *radioButton_2;
-    QRadioButton *radioButton;
-    QRadioButton *radioButton_3;
-    QRadioButton *radioButton_4;
-    QRadioButton *radioButton_5;
+    QPushButton *pushButton_2;
     QGridLayout *gridLayout;
     QLineEdit *horizont_marker_input;
     QLabel *label_2;
     QLabel *label_3;
     QLineEdit *vertical_marker_input;
     QGridLayout *gridLayout_3;
+    QHBoxLayout *horizontalLayout_3;
     QPushButton *up_b;
-    QPushButton *d_2_b;
+    QPushButton *up_2_b;
+    QVBoxLayout *verticalLayout_5;
     QPushButton *l_l;
     QPushButton *l_2_b;
-    QPushButton *r_b;
-    QPushButton *d_b;
-    QPushButton *up_2_b;
-    QPushButton *r_2_b;
     QPushButton *stop_b;
+    QVBoxLayout *verticalLayout_8;
+    QPushButton *r_b;
+    QPushButton *r_2_b;
+    QHBoxLayout *horizontalLayout_4;
+    QPushButton *d_2_b;
+    QPushButton *d_b;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -179,6 +183,35 @@ public:
 
         pushButton = new QPushButton(frame);
         pushButton->setObjectName("pushButton");
+        pushButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"	border-top:1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* \320\233\320\265\320\263\320\272\320\265 \320\267\320\260\321\202\320\265\320\274\320\275\320\265\320\275\320\275\321\217 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 */\n"
+"}\n"
+"\n"
+"QPushButton:checked {\n"
+"    background-color: rgb(130, 170, 90); /* \320\227\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\321\202\320\270\321\201\320\272\320\260\320\275\320\275\321\226 */\n"
+"    border-left: 1px solid rgb(110, 144, 76);\n"
+"    border-right: 1px solid rgb(110, 144, 76);\n"
+"    bo"
+                        "rder-bottom: 1px solid rgb(110, 144, 76);\n"
+"	border-top: 1px solid rgb(110, 144, 76);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:checked:hover {\n"
+"    background-color: rgb(138, 181, 96); /* \320\241\320\262\321\226\321\202\320\273\321\226\321\210\320\270\320\271 \320\267\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 \320\262 \320\260\320\272\321\202\320\270\320\262\320\275\320\276\320\274\321\203 \321\201\321\202\320\260\320\275\321\226 */\n"
+"}\n"
+""));
+        pushButton->setCheckable(true);
 
         gridLayout_4->addWidget(pushButton, 0, 0, 1, 1);
 
@@ -189,74 +222,37 @@ public:
 
         pushButton_4 = new QPushButton(frame);
         pushButton_4->setObjectName("pushButton_4");
+        pushButton_4->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"	border-top:1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* \320\233\320\265\320\263\320\272\320\265 \320\267\320\260\321\202\320\265\320\274\320\275\320\265\320\275\320\275\321\217 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 */\n"
+"}\n"
+"\n"
+"QPushButton:checked {\n"
+"    background-color: rgb(130, 170, 90); /* \320\227\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\321\202\320\270\321\201\320\272\320\260\320\275\320\275\321\226 */\n"
+"    border-left: 1px solid rgb(110, 144, 76);\n"
+"    border-right: 1px solid rgb(110, 144, 76);\n"
+"    bo"
+                        "rder-bottom: 1px solid rgb(110, 144, 76);\n"
+"	border-top: 1px solid rgb(110, 144, 76);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:checked:hover {\n"
+"    background-color: rgb(138, 181, 96); /* \320\241\320\262\321\226\321\202\320\273\321\226\321\210\320\270\320\271 \320\267\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 \320\262 \320\260\320\272\321\202\320\270\320\262\320\275\320\276\320\274\321\203 \321\201\321\202\320\260\320\275\321\226 */\n"
+"}\n"
+""));
+        pushButton_4->setCheckable(true);
 
         gridLayout_4->addWidget(pushButton_4, 0, 3, 1, 1);
-
-        comboBox = new QComboBox(frame);
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->setObjectName("comboBox");
-
-        gridLayout_4->addWidget(comboBox, 2, 0, 1, 1);
-
-        label = new QLabel(frame);
-        label->setObjectName("label");
-
-        gridLayout_4->addWidget(label, 4, 0, 1, 1);
-
-        lineEdit_2 = new QLineEdit(frame);
-        lineEdit_2->setObjectName("lineEdit_2");
-
-        gridLayout_4->addWidget(lineEdit_2, 2, 2, 1, 1, Qt::AlignHCenter);
-
-        measure_mode = new QComboBox(frame);
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->setObjectName("measure_mode");
-
-        gridLayout_4->addWidget(measure_mode, 4, 1, 1, 1);
-
-        pushButton_7 = new QPushButton(frame);
-        pushButton_7->setObjectName("pushButton_7");
-
-        gridLayout_4->addWidget(pushButton_7, 3, 2, 1, 1);
-
-        break_range = new QPushButton(frame);
-        break_range->setObjectName("break_range");
-
-        gridLayout_4->addWidget(break_range, 3, 1, 1, 1);
-
-        pushButton_3 = new QPushButton(frame);
-        pushButton_3->setObjectName("pushButton_3");
-
-        gridLayout_4->addWidget(pushButton_3, 0, 2, 1, 1);
-
-        label_4 = new QLabel(frame);
-        label_4->setObjectName("label_4");
-
-        gridLayout_4->addWidget(label_4, 1, 0, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
-
-        pushButton_2 = new QPushButton(frame);
-        pushButton_2->setObjectName("pushButton_2");
-
-        gridLayout_4->addWidget(pushButton_2, 0, 1, 1, 1);
-
-        label_7 = new QLabel(frame);
-        label_7->setObjectName("label_7");
-
-        gridLayout_4->addWidget(label_7, 1, 3, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
-
-        start_range = new QPushButton(frame);
-        start_range->setObjectName("start_range");
-
-        gridLayout_4->addWidget(start_range, 3, 0, 1, 1);
-
-        label_6 = new QLabel(frame);
-        label_6->setObjectName("label_6");
-
-        gridLayout_4->addWidget(label_6, 1, 2, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
 
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setObjectName("gridLayout_5");
@@ -293,6 +289,117 @@ public:
 
         gridLayout_4->addLayout(gridLayout_5, 2, 3, 1, 1);
 
+        comboBox = new QComboBox(frame);
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->setObjectName("comboBox");
+
+        gridLayout_4->addWidget(comboBox, 2, 0, 1, 1);
+
+        label = new QLabel(frame);
+        label->setObjectName("label");
+
+        gridLayout_4->addWidget(label, 4, 0, 1, 1, Qt::AlignHCenter);
+
+        lineEdit_2 = new QLineEdit(frame);
+        lineEdit_2->setObjectName("lineEdit_2");
+
+        gridLayout_4->addWidget(lineEdit_2, 2, 2, 1, 1, Qt::AlignHCenter);
+
+        measure_mode = new QComboBox(frame);
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->setObjectName("measure_mode");
+
+        gridLayout_4->addWidget(measure_mode, 4, 1, 1, 1);
+
+        pushButton_7 = new QPushButton(frame);
+        pushButton_7->setObjectName("pushButton_7");
+
+        gridLayout_4->addWidget(pushButton_7, 3, 2, 1, 1);
+
+        break_range = new QPushButton(frame);
+        break_range->setObjectName("break_range");
+
+        gridLayout_4->addWidget(break_range, 3, 1, 1, 1);
+
+        pushButton_3 = new QPushButton(frame);
+        pushButton_3->setObjectName("pushButton_3");
+        pushButton_3->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"	border-top:1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* \320\233\320\265\320\263\320\272\320\265 \320\267\320\260\321\202\320\265\320\274\320\275\320\265\320\275\320\275\321\217 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 */\n"
+"}\n"
+"\n"
+"QPushButton:checked {\n"
+"    background-color: rgb(130, 170, 90); /* \320\227\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\321\202\320\270\321\201\320\272\320\260\320\275\320\275\321\226 */\n"
+"    border-left: 1px solid rgb(110, 144, 76);\n"
+"    border-right: 1px solid rgb(110, 144, 76);\n"
+"    bo"
+                        "rder-bottom: 1px solid rgb(110, 144, 76);\n"
+"	border-top: 1px solid rgb(110, 144, 76);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:checked:hover {\n"
+"    background-color: rgb(138, 181, 96); /* \320\241\320\262\321\226\321\202\320\273\321\226\321\210\320\270\320\271 \320\267\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 \320\262 \320\260\320\272\321\202\320\270\320\262\320\275\320\276\320\274\321\203 \321\201\321\202\320\260\320\275\321\226 */\n"
+"}\n"
+""));
+        pushButton_3->setCheckable(true);
+
+        gridLayout_4->addWidget(pushButton_3, 0, 2, 1, 1);
+
+        label_4 = new QLabel(frame);
+        label_4->setObjectName("label_4");
+
+        gridLayout_4->addWidget(label_4, 1, 0, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
+
+        label_7 = new QLabel(frame);
+        label_7->setObjectName("label_7");
+
+        gridLayout_4->addWidget(label_7, 1, 3, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
+
+        start_range = new QPushButton(frame);
+        start_range->setObjectName("start_range");
+
+        gridLayout_4->addWidget(start_range, 3, 0, 1, 1);
+
+        label_6 = new QLabel(frame);
+        label_6->setObjectName("label_6");
+
+        gridLayout_4->addWidget(label_6, 1, 2, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
+
+        pushButton_2 = new QPushButton(frame);
+        pushButton_2->setObjectName("pushButton_2");
+        pushButton_2->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"	border-top:1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* \320\233\320\265\320\263\320\272\320\265 \320\267\320\260\321\202\320\265\320\274\320\275\320\265\320\275\320\275\321\217 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 */\n"
+"}\n"
+"\n"
+""));
+        pushButton_2->setCheckable(true);
+
+        gridLayout_4->addWidget(pushButton_2, 0, 1, 1, 1);
+
 
         verticalLayout->addLayout(gridLayout_4);
 
@@ -301,28 +408,30 @@ public:
         horizont_marker_input = new QLineEdit(frame);
         horizont_marker_input->setObjectName("horizont_marker_input");
 
-        gridLayout->addWidget(horizont_marker_input, 1, 1, 1, 1, Qt::AlignRight);
+        gridLayout->addWidget(horizont_marker_input, 1, 1, 1, 1, Qt::AlignLeft);
 
         label_2 = new QLabel(frame);
         label_2->setObjectName("label_2");
 
-        gridLayout->addWidget(label_2, 1, 0, 1, 1);
+        gridLayout->addWidget(label_2, 1, 0, 1, 1, Qt::AlignRight);
 
         label_3 = new QLabel(frame);
         label_3->setObjectName("label_3");
 
-        gridLayout->addWidget(label_3, 2, 0, 1, 1);
+        gridLayout->addWidget(label_3, 2, 0, 1, 1, Qt::AlignRight);
 
         vertical_marker_input = new QLineEdit(frame);
         vertical_marker_input->setObjectName("vertical_marker_input");
 
-        gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignRight);
+        gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignLeft);
 
 
         verticalLayout->addLayout(gridLayout);
 
         gridLayout_3 = new QGridLayout();
         gridLayout_3->setObjectName("gridLayout_3");
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName("horizontalLayout_3");
         up_b = new QPushButton(frame);
         up_b->setObjectName("up_b");
         QSizePolicy sizePolicy3(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
@@ -330,59 +439,43 @@ public:
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(up_b->sizePolicy().hasHeightForWidth());
         up_b->setSizePolicy(sizePolicy3);
-        up_b->setMinimumSize(QSize(40, 40));
+        up_b->setMinimumSize(QSize(0, 0));
         up_b->setSizeIncrement(QSize(0, 0));
         up_b->setBaseSize(QSize(0, 0));
 
-        gridLayout_3->addWidget(up_b, 0, 1, 1, 1);
-
-        d_2_b = new QPushButton(frame);
-        d_2_b->setObjectName("d_2_b");
-        d_2_b->setMinimumSize(QSize(40, 40));
-
-        gridLayout_3->addWidget(d_2_b, 3, 1, 1, 1);
-
-        l_l = new QPushButton(frame);
-        l_l->setObjectName("l_l");
-        l_l->setMinimumSize(QSize(40, 40));
-
-        gridLayout_3->addWidget(l_l, 1, 0, 1, 1);
-
-        l_2_b = new QPushButton(frame);
-        l_2_b->setObjectName("l_2_b");
-        l_2_b->setMinimumSize(QSize(40, 40));
-
-        gridLayout_3->addWidget(l_2_b, 2, 0, 1, 1);
-
-        r_b = new QPushButton(frame);
-        r_b->setObjectName("r_b");
-        r_b->setMinimumSize(QSize(40, 40));
-
-        gridLayout_3->addWidget(r_b, 1, 3, 1, 1);
-
-        d_b = new QPushButton(frame);
-        d_b->setObjectName("d_b");
-        d_b->setMinimumSize(QSize(40, 40));
-
-        gridLayout_3->addWidget(d_b, 3, 2, 1, 1);
+        horizontalLayout_3->addWidget(up_b, 0, Qt::AlignRight|Qt::AlignBottom);
 
         up_2_b = new QPushButton(frame);
         up_2_b->setObjectName("up_2_b");
-        up_2_b->setMinimumSize(QSize(40, 40));
-        up_2_b->setMaximumSize(QSize(40, 40));
+        up_2_b->setMinimumSize(QSize(0, 0));
+        up_2_b->setMaximumSize(QSize(16777215, 16777215));
         up_2_b->setStyleSheet(QString::fromUtf8("QPushButton:pressed{\n"
 "	background-color:rgb(127,12,335);\n"
 "	border:none;\n"
 "}\n"
 ""));
 
-        gridLayout_3->addWidget(up_2_b, 0, 2, 1, 1);
+        horizontalLayout_3->addWidget(up_2_b, 0, Qt::AlignLeft|Qt::AlignBottom);
 
-        r_2_b = new QPushButton(frame);
-        r_2_b->setObjectName("r_2_b");
-        r_2_b->setMinimumSize(QSize(40, 40));
 
-        gridLayout_3->addWidget(r_2_b, 2, 3, 1, 1);
+        gridLayout_3->addLayout(horizontalLayout_3, 1, 2, 1, 1);
+
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName("verticalLayout_5");
+        l_l = new QPushButton(frame);
+        l_l->setObjectName("l_l");
+        l_l->setMinimumSize(QSize(0, 0));
+
+        verticalLayout_5->addWidget(l_l, 0, Qt::AlignRight);
+
+        l_2_b = new QPushButton(frame);
+        l_2_b->setObjectName("l_2_b");
+        l_2_b->setMinimumSize(QSize(0, 0));
+
+        verticalLayout_5->addWidget(l_2_b, 0, Qt::AlignRight);
+
+
+        gridLayout_3->addLayout(verticalLayout_5, 2, 1, 1, 1);
 
         stop_b = new QPushButton(frame);
         stop_b->setObjectName("stop_b");
@@ -391,9 +484,43 @@ public:
         sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(stop_b->sizePolicy().hasHeightForWidth());
         stop_b->setSizePolicy(sizePolicy4);
-        stop_b->setMinimumSize(QSize(60, 60));
+        stop_b->setMinimumSize(QSize(0, 0));
 
-        gridLayout_3->addWidget(stop_b, 1, 1, 2, 2);
+        gridLayout_3->addWidget(stop_b, 2, 2, 1, 1, Qt::AlignHCenter|Qt::AlignVCenter);
+
+        verticalLayout_8 = new QVBoxLayout();
+        verticalLayout_8->setObjectName("verticalLayout_8");
+        r_b = new QPushButton(frame);
+        r_b->setObjectName("r_b");
+        r_b->setMinimumSize(QSize(0, 0));
+
+        verticalLayout_8->addWidget(r_b, 0, Qt::AlignLeft);
+
+        r_2_b = new QPushButton(frame);
+        r_2_b->setObjectName("r_2_b");
+        r_2_b->setMinimumSize(QSize(0, 0));
+
+        verticalLayout_8->addWidget(r_2_b, 0, Qt::AlignLeft);
+
+
+        gridLayout_3->addLayout(verticalLayout_8, 2, 3, 1, 1);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName("horizontalLayout_4");
+        d_2_b = new QPushButton(frame);
+        d_2_b->setObjectName("d_2_b");
+        d_2_b->setMinimumSize(QSize(0, 0));
+
+        horizontalLayout_4->addWidget(d_2_b, 0, Qt::AlignRight|Qt::AlignTop);
+
+        d_b = new QPushButton(frame);
+        d_b->setObjectName("d_b");
+        d_b->setMinimumSize(QSize(0, 0));
+
+        horizontalLayout_4->addWidget(d_b, 0, Qt::AlignLeft|Qt::AlignTop);
+
+
+        gridLayout_3->addLayout(horizontalLayout_4, 3, 2, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout_3);
@@ -429,9 +556,17 @@ public:
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "Time remaining", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "LASER ACTIVATION", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "LASER \n"
+"ACTIVATION", nullptr));
         lineEdit->setText(QCoreApplication::translate("MainWindow", "N/A", nullptr));
-        pushButton_4->setText(QCoreApplication::translate("MainWindow", "External radiation", nullptr));
+        pushButton_4->setText(QCoreApplication::translate("MainWindow", "External\n"
+" radiation", nullptr));
+        label_9->setText(QCoreApplication::translate("MainWindow", "ENERGY", nullptr));
+        radioButton_2->setText(QCoreApplication::translate("MainWindow", "2", nullptr));
+        radioButton->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
+        radioButton_3->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
+        radioButton_4->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
+        radioButton_5->setText(QCoreApplication::translate("MainWindow", "5", nullptr));
         comboBox->setItemText(0, QCoreApplication::translate("MainWindow", "1 Hz", nullptr));
         comboBox->setItemText(1, QCoreApplication::translate("MainWindow", "2 Hz", nullptr));
         comboBox->setItemText(2, QCoreApplication::translate("MainWindow", "3 Hz", nullptr));
@@ -444,29 +579,25 @@ public:
 
         pushButton_7->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
         break_range->setText(QCoreApplication::translate("MainWindow", "Break range", nullptr));
-        pushButton_3->setText(QCoreApplication::translate("MainWindow", "Thermal control", nullptr));
+        pushButton_3->setText(QCoreApplication::translate("MainWindow", "Thermal \n"
+"control", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "pulse frequency", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "PULSE ON", nullptr));
         label_7->setText(QCoreApplication::translate("MainWindow", "Error: NONE", nullptr));
         start_range->setText(QCoreApplication::translate("MainWindow", "start range", nullptr));
         label_6->setText(QCoreApplication::translate("MainWindow", "Temperature \302\260C", nullptr));
-        label_9->setText(QCoreApplication::translate("MainWindow", "ENERGY", nullptr));
-        radioButton_2->setText(QCoreApplication::translate("MainWindow", "2", nullptr));
-        radioButton->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
-        radioButton_3->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
-        radioButton_4->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        radioButton_5->setText(QCoreApplication::translate("MainWindow", "5", nullptr));
+        pushButton_2->setText(QCoreApplication::translate("MainWindow", "PULSE\n"
+" ON", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
         up_b->setText(QCoreApplication::translate("MainWindow", "\342\206\221", nullptr));
-        d_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\212", nullptr));
+        up_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\210", nullptr));
         l_l->setText(QCoreApplication::translate("MainWindow", "\342\206\220", nullptr));
         l_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\207", nullptr));
-        r_b->setText(QCoreApplication::translate("MainWindow", "\342\206\222", nullptr));
-        d_b->setText(QCoreApplication::translate("MainWindow", "\342\206\223", nullptr));
-        up_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\210", nullptr));
-        r_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\211", nullptr));
         stop_b->setText(QCoreApplication::translate("MainWindow", ">0<", nullptr));
+        r_b->setText(QCoreApplication::translate("MainWindow", "\342\206\222", nullptr));
+        r_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\211", nullptr));
+        d_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\212", nullptr));
+        d_b->setText(QCoreApplication::translate("MainWindow", "\342\206\223", nullptr));
     } // retranslateUi
 
 };

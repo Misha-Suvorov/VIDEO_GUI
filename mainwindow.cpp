@@ -6,6 +6,7 @@
 #include "scalevertical.h"
 #include "scalehorizontal.h"
 #include "canbus.h"  // Підключаємо CanBus
+#include "cannelloniframe.h"
 
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
@@ -92,14 +93,39 @@ MainWindow::MainWindow(QWidget *parent)
         QString hexString = canBus->toHexString(packetData);
         qDebug() << "Received CAN packet:" << hexString;
         // Можете додати обробку отриманого пакету тут
-        // Наприклад, додати до QTextEdit:
-        // ui->textEdit->append(hexString);
+        CannelloniFrame frame(packetData);
+        const std::queue<std::vector<uint8_t>>& messageQueue = frame.GetMessageQueue();
+        PrintMessageQueue(messageQueue);
     });
 
     // Стартуємо прийом пакету
     canBus->startReceiving();
 }
 
+
+
+void MainWindow::PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue) {
+    int messageCount = 0;
+    std::queue<std::vector<uint8_t>> queueCopy = messageQueue; // Copy the queue to iterate
+    while (!queueCopy.empty()) {
+        std::vector<uint8_t> message = queueCopy.front();
+        queueCopy.pop();
+
+        // std::cout << "Message " << ++messageCount << " (" << message.size() << " bytes): ";
+        // for (uint8_t byte : message) {
+        //     std::cout << "0x" << std::hex << (int)byte << " ";
+        // }
+        // std::cout << std::dec << "\n"; // Reset to decimal format
+        qDebug() << "Message" << ++messageCount << " (" << message.size() << " bytes): " ;
+        QString hexString;
+        for (uint8_t byte : message) {
+            hexString += QString::asprintf("0x%02X ", byte); // Форматування байта у hex
+        }
+        qDebug() << hexString.trimmed(); // Виводимо результат в один рядок
+
+
+    }
+}
 
 
 MainWindow::~MainWindow() {

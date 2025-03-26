@@ -76,6 +76,8 @@ private:
     void startBothVideos();
     void stopBothVideos();
     CanBus *canBus;
+    void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
+
 
 
 };

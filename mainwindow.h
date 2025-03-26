@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <opencv2/opencv.hpp>
 #include "canbus.h"
+#include "canthread.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -66,6 +67,7 @@ private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;
     VideoThread *videoThread2;
+    CANThread *canThread;
     int rotationAngle = 0;
     bool isSwitched = false;
 

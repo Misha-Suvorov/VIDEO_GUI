@@ -29,6 +29,7 @@ SOURCES += \
     base.cpp \
     canbus.cpp \
     cannelloniframe.cpp \
+    canthread.cpp \
     clickable.cpp \
     drawsymbols.cpp \
     main.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     base.h \
     canbus.h \
     cannelloniframe.h \
+    canthread.h \
     clickable.h \
     drawsymbols.h \
     mainwindow.h \

@@ -7,7 +7,7 @@
 #include "scalehorizontal.h"
 #include "canbus.h"  // Підключаємо CanBus
 #include "cannelloniframe.h"
-
+#include "canthread.h"
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
 
@@ -87,6 +87,11 @@ MainWindow::MainWindow(QWidget *parent)
     // Ініціалізація CanBus
     canBus = new CanBus(this);
 
+
+    canThread = new CANThread();
+    canThread->run();
+
+
     // Підключення сигналу packetReceived до слотів
     connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData){
         // Перетворення отриманого пакету в hex і виведення в консоль
@@ -136,6 +141,10 @@ MainWindow::~MainWindow() {
     if (canBus) {
         canBus->stopReceiving();
         delete canBus;
+    }
+    if (canThread) {
+        canThread->stop();
+        delete canThread;
     }
 
     delete ui;

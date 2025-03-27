@@ -75,7 +75,7 @@ void VideoThread::stop() {
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr){
     ui->setupUi(this);
 
     // Connect QLineEdit to slots for marker changes
@@ -88,8 +88,8 @@ MainWindow::MainWindow(QWidget *parent)
     canBus = new CanBus(this);
 
 
-    canThread = new CANThread();
-    canThread->run();
+    //canThread = new CANThread();
+    // canThread->run();
 
 
     // Підключення сигналу packetReceived до слотів
@@ -142,10 +142,10 @@ MainWindow::~MainWindow() {
         canBus->stopReceiving();
         delete canBus;
     }
-    if (canThread) {
-        canThread->stop();
-        delete canThread;
-    }
+    // if (canThread) {
+    //     canThread->stop();
+    //     delete canThread;
+    // }
 
     delete ui;
 }

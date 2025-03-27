@@ -16,16 +16,18 @@ CanBus::~CanBus() {
 void CanBus::startReceiving() {
     // Відкриваємо порт для отримання пакетів
     if (udpSocket->bind(QHostAddress::Any, 14500)) {  // Вказати правильний порт
-        connect(udpSocket, &QUdpSocket::readyRead, this, [this]() {
-            while (udpSocket->hasPendingDatagrams()) {
-                QByteArray datagram;
-                datagram.resize(udpSocket->pendingDatagramSize());
-                udpSocket->readDatagram(datagram.data(), datagram.size());
+        connect(udpSocket, &QUdpSocket::readyRead, this, &CanBus::readPendingDatagrams);
+    }
+}
 
-                // Тут обробка отриманого пакету
-                emit packetReceived(datagram);  // Сигнал, який повідомляє про отриманий пакет
-            }
-        });
+void CanBus::readPendingDatagrams(){
+    while (udpSocket->hasPendingDatagrams()) {
+        QByteArray datagram;
+        datagram.resize(udpSocket->pendingDatagramSize());
+        udpSocket->readDatagram(datagram.data(), datagram.size());
+
+        // Тут обробка отриманого пакету
+        emit packetReceived(datagram);  // Сигнал, який повідомляє про отриманий пакет
     }
 }
 

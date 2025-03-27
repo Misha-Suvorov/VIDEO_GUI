@@ -55,6 +55,7 @@ OBJECTS_DIR   = ./
 SOURCES       = ../../base.cpp \
 		../../canbus.cpp \
 		../../cannelloniframe.cpp \
+		../../canthread.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
 		../../main.cpp \
@@ -67,6 +68,7 @@ SOURCES       = ../../base.cpp \
 OBJECTS       = base.o \
 		canbus.o \
 		cannelloniframe.o \
+		canthread.o \
 		clickable.o \
 		drawsymbols.o \
 		main.o \
@@ -394,6 +396,7 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../../../GUI_UDP.pro ../../base.h \
 		../../canbus.h \
 		../../cannelloniframe.h \
+		../../canthread.h \
 		../../clickable.h \
 		../../drawsymbols.h \
 		../../mainwindow.h \
@@ -403,6 +406,7 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../structs.h ../../base.cpp \
 		../../canbus.cpp \
 		../../cannelloniframe.cpp \
+		../../canthread.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
 		../../main.cpp \
@@ -1101,8 +1105,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.h ../../canbus.h ../../cannelloniframe.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../structs.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.cpp ../../canbus.cpp ../../cannelloniframe.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.h ../../canbus.h ../../cannelloniframe.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../structs.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.cpp ../../canbus.cpp ../../cannelloniframe.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1288,6 +1292,7 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qbytearray.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
+		../../canthread.h \
 		../../../Qt/6.5.6/macos/libexec/moc
 	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../mainwindow.h -o moc_mainwindow.cpp
 
@@ -1446,8 +1451,144 @@ canbus.o: ../../canbus.cpp ../../canbus.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canbus.o ../../canbus.cpp
 
-cannelloniframe.o: ../../cannelloniframe.cpp ../../cannelloniframe.h
+cannelloniframe.o: ../../cannelloniframe.cpp ../../cannelloniframe.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QByteArray \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qbytearray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cannelloniframe.o ../../cannelloniframe.cpp
+
+canthread.o: ../../canthread.cpp ../../canthread.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QThread \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qthread.h \
+		../../mainwindow.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QMainWindow \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QImage \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qimage.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLineEdit \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlineedit.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv_modules.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvdef.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/version.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/hal/interface.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cv_cpu_dispatch.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cv_cpu_helper.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/hal/msa_macros.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/fast_math.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/base.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvstd.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvstd_wrapper.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/neon_utils.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/vsx_utils.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/check.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/traits.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/matx.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/saturate.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/matx.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/types.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/mat.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/bufferpool.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/mat.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/persistence.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/operations.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cvstd.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utility.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/instrumentation.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/tls.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/optim.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/ovx.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/calib3d.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/features2d.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/miniflann.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/defines.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/config.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/affine.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/logger.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/logger.defines.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/utils/logtag.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/dnn.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/async.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/version.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/dict.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/layer.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/dnn.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/dnn/utils/inference_engine.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/flann_base.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/general.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/matrix.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/params.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/any.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/saving.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/nn_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/result_set.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/all_indices.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/kdtree_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/dynamic_bitset.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/dist.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/heap.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/allocator.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/random.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/kdtree_single_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/kmeans_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/logger.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/composite_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/linear_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/hierarchical_clustering_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/lsh_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/lsh_table.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/autotuned_index.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/ground_truth.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/index_testing.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/timer.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/flann/sampling.h \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/highgui.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/imgcodecs.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/videoio.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/imgproc.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/imgproc/segmentation.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/ml.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/ml/ml.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/aruco_detector.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/aruco_dictionary.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/aruco_board.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/graphical_code_detector.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/face.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/charuco_detector.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/objdetect/barcode.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/photo.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/warpers.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cuda.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cuda_types.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/core/cuda.inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/util.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/util_inl.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/camera.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/seam_finders.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/stitching/detail/blenders.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/tracking.hpp \
+		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp \
+		../../canbus.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/QUdpSocket \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/qudpsocket.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QByteArray \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qbytearray.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canthread.o ../../canthread.cpp
 
 clickable.o: ../../clickable.cpp ../../clickable.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
@@ -1706,6 +1847,7 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qbytearray.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
+		../../canthread.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QApplication \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
@@ -1841,6 +1983,7 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qbytearray.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
+		../../canthread.h \
 		ui_mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h \
@@ -1848,7 +1991,8 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../structs.h \
 		../../scalevertical.h \
 		../../base.h \
-		../../scalehorizontal.h
+		../../scalehorizontal.h \
+		../../cannelloniframe.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
 scalehorizontal.o: ../../scalehorizontal.cpp ../../scalehorizontal.h \

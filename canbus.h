@@ -27,6 +27,7 @@ signals:
 
 private:
     QUdpSocket *udpSocket;
+    void readPendingDatagrams();
 };
 
 #endif // CANBUS_H

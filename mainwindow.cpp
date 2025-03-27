@@ -75,7 +75,7 @@ void VideoThread::stop() {
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr){
+    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr), messageQueue(localMessageQueue){
     ui->setupUi(this);
 
     // Connect QLineEdit to slots for marker changes
@@ -87,50 +87,28 @@ MainWindow::MainWindow(QWidget *parent)
     // Ініціалізація CanBus
     canBus = new CanBus(this);
 
+    // Ініціалізація CanThread
+    canThread = new CANThread(&queueMutex, &localMessageQueue);
 
-    //canThread = new CANThread();
-    // canThread->run();
-
-
-    // Підключення сигналу packetReceived до слотів
     connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData){
         // Перетворення отриманого пакету в hex і виведення в консоль
         QString hexString = canBus->toHexString(packetData);
         qDebug() << "Received CAN packet:" << hexString;
-        // Можете додати обробку отриманого пакету тут
+
+        // обробка пакета канелоні
         CannelloniFrame frame(packetData);
-        const std::queue<std::vector<uint8_t>>& messageQueue = frame.GetMessageQueue();
-        PrintMessageQueue(messageQueue);
+        QMutexLocker locker(&queueMutex);
+        localMessageQueue = frame.GetMessageQueue();
     });
 
     // Стартуємо прийом пакету
     canBus->startReceiving();
+    canThread->start();
+
 }
 
 
 
-void MainWindow::PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue) {
-    int messageCount = 0;
-    std::queue<std::vector<uint8_t>> queueCopy = messageQueue; // Copy the queue to iterate
-    while (!queueCopy.empty()) {
-        std::vector<uint8_t> message = queueCopy.front();
-        queueCopy.pop();
-
-        // std::cout << "Message " << ++messageCount << " (" << message.size() << " bytes): ";
-        // for (uint8_t byte : message) {
-        //     std::cout << "0x" << std::hex << (int)byte << " ";
-        // }
-        // std::cout << std::dec << "\n"; // Reset to decimal format
-        qDebug() << "Message" << ++messageCount << " (" << message.size() << " bytes): " ;
-        QString hexString;
-        for (uint8_t byte : message) {
-            hexString += QString::asprintf("0x%02X ", byte); // Форматування байта у hex
-        }
-        qDebug() << hexString.trimmed(); // Виводимо результат в один рядок
-
-
-    }
-}
 
 
 MainWindow::~MainWindow() {
@@ -142,10 +120,10 @@ MainWindow::~MainWindow() {
         canBus->stopReceiving();
         delete canBus;
     }
-    // if (canThread) {
-    //     canThread->stop();
-    //     delete canThread;
-    // }
+    if (canThread) {
+        canThread->stop();
+        delete canThread;
+    }
 
     delete ui;
 }

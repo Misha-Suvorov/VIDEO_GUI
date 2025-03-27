@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include <QImage>
+#include <QMutex>
 #include <QLineEdit>
 #include <opencv2/opencv.hpp>
 #include "canbus.h"
@@ -47,6 +48,8 @@ class MainWindow : public QMainWindow {
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    std::queue<std::vector<uint8_t>>& messageQueue;
+
     ~MainWindow();
 
 private slots:
@@ -68,6 +71,11 @@ private:
     VideoThread *videoThread1;
     VideoThread *videoThread2;
     CANThread *canThread;
+    std::queue<std::vector<uint8_t>> localMessageQueue;
+    CanBus *canBus;
+    QMutex queueMutex;
+
+
     int rotationAngle = 0;
     bool isSwitched = false;
 
@@ -77,8 +85,8 @@ private:
 
     void startBothVideos();
     void stopBothVideos();
-    CanBus *canBus;
-    void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
+    //void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
+
 
 
 

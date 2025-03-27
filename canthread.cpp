@@ -6,7 +6,11 @@
 void CANThread::run(){
     running = true;
     while (running) {
-        PrintMessageQueue(messageQueue);
+        QMutexLocker locker(queueMutex); // Lock the mutex to safely access the queue
+        if (!messageQueue->empty()) {
+            PrintMessageQueue(*messageQueue);  // Display the messages in the queue
+        }
+        QThread::msleep(100);
     }
 }
 
@@ -17,12 +21,12 @@ void CANThread::PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messag
         std::vector<uint8_t> message = queueCopy.front();
         queueCopy.pop();
 
-        // std::cout << "Message " << ++messageCount << " (" << message.size() << " bytes): ";
+        // std::cout << "Message CANTHREAD" << ++messageCount << " (" << message.size() << " bytes): ";
         // for (uint8_t byte : message) {
         //     std::cout << "0x" << std::hex << (int)byte << " ";
         // }
         // std::cout << std::dec << "\n"; // Reset to decimal format
-        qDebug() << "Message" << ++messageCount << " (" << message.size() << " bytes): " ;
+        qDebug() << "Message CANTHREAD" << ++messageCount << " (" << message.size() << " bytes): " ;
         QString hexString;
         for (uint8_t byte : message) {
             hexString += QString::asprintf("0x%02X ", byte); // Форматування байта у hex

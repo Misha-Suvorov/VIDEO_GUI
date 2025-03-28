@@ -27,11 +27,14 @@ unix {
 
 SOURCES += \
     base.cpp \
+    basecanmessage.cpp \
     canbus.cpp \
+    canmessagegeneric.cpp \
     cannelloniframe.cpp \
     canthread.cpp \
     clickable.cpp \
     drawsymbols.cpp \
+    lpsparameters.cpp \
     main.cpp \
     mainwindow.cpp \
     scalehorizontal.cpp \
@@ -40,11 +43,14 @@ SOURCES += \
 
 HEADERS += \
     base.h \
+    basecanmessage.h \
     canbus.h \
+    canmessagegeneric.h \
     cannelloniframe.h \
     canthread.h \
     clickable.h \
     drawsymbols.h \
+    lpsparameters.h \
     mainwindow.h \
     scalehorizontal.h \
     scalevertical.h \

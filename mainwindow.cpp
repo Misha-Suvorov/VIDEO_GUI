@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
+#include <QTimer>
 #include <opencv2/opencv.hpp>
 #include "drawsymbols.h"
 #include "scalevertical.h"
@@ -105,6 +106,10 @@ MainWindow::MainWindow(QWidget *parent)
     canBus->startReceiving();
     canThread->start();
 
+    updateTimer = new QTimer(this);
+    connect(updateTimer, &QTimer::timeout, this, &MainWindow::updateLpsParametersUI);
+    updateTimer->start(100);
+
 }
 
 
@@ -141,8 +146,21 @@ void MainWindow::displayFrame2(const QImage &image) {
     }
 }
 
+
+
+void MainWindow::updateLpsParametersUI() {
+    float angleX = LpsParameters::GetInstance().GetAngleX();
+    float angleY = LpsParameters::GetInstance().GetAngleY();
+
+    // Display values in UI QLineEdit widgets
+    ui->horizont_marker_input->setText(QString::number(angleX, 'f', 2));
+    ui->vertical_marker_input->setText(QString::number(angleY, 'f', 2));
+}
+
+
 void MainWindow::onHorizontMarkerChanged(const QString &text) {
     bool ok;
+    //float value = LpsParameters::GetInstance().GetAngleX();
     float value = text.toFloat(&ok);
 
     if (text.isEmpty()) {
@@ -164,7 +182,9 @@ void MainWindow::onHorizontMarkerChanged(const QString &text) {
 
 void MainWindow::onVerticalMarkerChanged(const QString &text) {
     bool ok;
+    //float value = LpsParameters::GetInstance().GetAngleY();
     float value = text.toFloat(&ok);
+    //ui->horizont_marker_input->setText(QString::number(value, 'f', 2));
 
     if (text.isEmpty()) {
         value = 0;

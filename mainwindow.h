@@ -9,6 +9,7 @@
 #include <opencv2/opencv.hpp>
 #include "canbus.h"
 #include "canthread.h"
+#include "lpsparameters.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -74,6 +75,8 @@ private:
     std::queue<std::vector<uint8_t>> localMessageQueue;
     CanBus *canBus;
     QMutex queueMutex;
+    QTimer *updateTimer;
+
 
 
     int rotationAngle = 0;
@@ -85,6 +88,7 @@ private:
 
     void startBothVideos();
     void stopBothVideos();
+    void updateLpsParametersUI();
     //void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
 
 

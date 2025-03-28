@@ -16,6 +16,8 @@ private:
     std::queue<std::vector<uint8_t>> *messageQueue;
     bool running;
     void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
+    void ProcessMessage(const std::queue<std::vector<uint8_t>>& messageQueue);
+
 
 };
 

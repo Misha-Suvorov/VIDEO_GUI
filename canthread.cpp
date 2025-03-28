@@ -1,5 +1,6 @@
 #include "canthread.h"
 #include "mainwindow.h"
+#include "canmessagegeneric.h"
 
 //CANThread::CANThread() {}
 
@@ -8,9 +9,22 @@ void CANThread::run(){
     while (running) {
         QMutexLocker locker(queueMutex); // Lock the mutex to safely access the queue
         if (!messageQueue->empty()) {
-            PrintMessageQueue(*messageQueue);  // Display the messages in the queue
+            //PrintMessageQueue(*messageQueue);  // Display the messages in the queue
+            ProcessMessage(*messageQueue);
         }
-        QThread::msleep(100);
+        //QThread::msleep(100);
+    }
+}
+
+void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& messageQueue){
+    //int messageCount = 0;
+    std::queue<std::vector<uint8_t>> queueCopy = messageQueue;
+    while (!queueCopy.empty()) {
+        std::vector<uint8_t> message = queueCopy.front();
+        queueCopy.pop();
+
+        CanMessageGeneric canMessage(message);
+        float parsedValue = canMessage.ParseFloat();
     }
 }
 

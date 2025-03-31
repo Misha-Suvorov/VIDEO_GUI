@@ -167,7 +167,7 @@
             </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="laser_act_b">
              <property name="styleSheet">
               <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
@@ -214,7 +214,7 @@ ACTIVATION</string>
             </widget>
            </item>
            <item row="0" column="3">
-            <widget class="QPushButton" name="pushButton_4">
+            <widget class="QPushButton" name="ext_radiation_b">
              <property name="styleSheet">
               <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
@@ -352,21 +352,53 @@ QPushButton:checked:hover {
             </widget>
            </item>
            <item row="3" column="2">
-            <widget class="QPushButton" name="pushButton_7">
+            <widget class="QPushButton" name="pointer_b">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: none; /* Default color */
+    border: none;
+    color: black;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Light darkening on hover */
+}
+
+QPushButton:checked {
+    background-color: rgb(255, 140, 0); /* Orange color when clicked */
+    border-left: 1px solid rgb(204, 113, 0);
+    border-right: 1px solid rgb(204, 113, 0);
+    border-bottom: 1px solid rgb(204, 113, 0);
+    border-top: 1px solid rgb(204, 113, 0);
+    color: white;
+}
+
+QPushButton:checked:hover {
+    background-color: rgb(255, 165, 0); /* Lighter orange when hovered in active state */
+}
+</string>
+             </property>
              <property name="text">
               <string>Pointer</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="QPushButton" name="break_range">
+            <widget class="QPushButton" name="break_range_b">
              <property name="text">
               <string>Break range</string>
              </property>
             </widget>
            </item>
            <item row="0" column="2">
-            <widget class="QPushButton" name="pushButton_3">
+            <widget class="QPushButton" name="term_control_b">
              <property name="styleSheet">
               <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
@@ -420,7 +452,7 @@ control</string>
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QPushButton" name="start_range">
+            <widget class="QPushButton" name="start_range_b">
              <property name="text">
               <string>start range</string>
              </property>
@@ -434,7 +466,7 @@ control</string>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="pulse_b">
              <property name="styleSheet">
               <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
@@ -469,7 +501,7 @@ QPushButton:hover {
             <widget class="QLineEdit" name="horizont_marker_input"/>
            </item>
            <item row="1" column="0" alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_2">
+            <widget class="QLabel" name="horizontal_mark">
              <property name="text">
               <string>horizontal marker</string>
              </property>
@@ -489,7 +521,7 @@ QPushButton:hover {
             <widget class="QLineEdit" name="vertical_marker_input"/>
            </item>
            <item row="2" column="0" alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_3">
+            <widget class="QLabel" name="vertical_mark">
              <property name="text">
               <string>vertical marker</string>
              </property>

@@ -270,3 +270,30 @@ void MainWindow::on_switch_vid_clicked() {
         connect(videoThread2, &VideoThread::frameReady, this, &MainWindow::displayFrame2);
     }
 }
+
+
+bool statePointer = false;
+void MainWindow::on_pointer_b_clicked()
+{
+    // Toggle the state
+    statePointer = !statePointer;
+    uint8_t statePointerByte = (uint8_t)(statePointer ? 1 : 0);
+
+    // Construct the payload with the statePointerByte
+    std::vector<uint8_t> pld = {
+        0x00, 0x02, 0x13, 0x00, 0x00, 0x00, statePointerByte, 0x04
+    };
+
+    // Create an instance of SendDataFrame
+    SendDataFrame sendDataFrame;
+
+    // Send the CAN data
+    sendDataFrame.Send(0x238, pld);  // CAN ID 0x238 and the constructed payload
+
+    // if (statePointer) {
+    //     ui->pointer_b->setStyleSheet("background-color: orange;");
+    // } else {
+    //     ui->pointer_b->setStyleSheet("background-color: transparent;");
+    // }
+}
+

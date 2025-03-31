@@ -65,9 +65,11 @@ SOURCES       = ../../base.cpp \
 		../../mainwindow.cpp \
 		../../scalehorizontal.cpp \
 		../../scalevertical.cpp \
-		../../scalingfactor.cpp moc_canbus.cpp \
+		../../scalingfactor.cpp \
+		../../senddataframe.cpp moc_canbus.cpp \
 		moc_clickable.cpp \
-		moc_mainwindow.cpp
+		moc_mainwindow.cpp \
+		moc_senddataframe.cpp
 OBJECTS       = base.o \
 		basecanmessage.o \
 		canbus.o \
@@ -82,9 +84,11 @@ OBJECTS       = base.o \
 		scalehorizontal.o \
 		scalevertical.o \
 		scalingfactor.o \
+		senddataframe.o \
 		moc_canbus.o \
 		moc_clickable.o \
-		moc_mainwindow.o
+		moc_mainwindow.o \
+		moc_senddataframe.o
 DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.5.6/macos/mkspecs/features/device_config.prf \
 		/Qt/6.5.6/macos/mkspecs/common/unix.conf \
@@ -412,6 +416,7 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../scalehorizontal.h \
 		../../scalevertical.h \
 		../../scalingfactor.h \
+		../../senddataframe.h \
 		../../structs.h ../../base.cpp \
 		../../basecanmessage.cpp \
 		../../canbus.cpp \
@@ -425,7 +430,8 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../mainwindow.cpp \
 		../../scalehorizontal.cpp \
 		../../scalevertical.cpp \
-		../../scalingfactor.cpp
+		../../scalingfactor.cpp \
+		../../senddataframe.cpp
 QMAKE_TARGET  = GUI_UDP
 DESTDIR       = 
 TARGET        = GUI_UDP.app/Contents/MacOS/GUI_UDP
@@ -1117,8 +1123,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../lpsparameters.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../structs.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../lpsparameters.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../senddataframe.h ../../structs.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp ../../senddataframe.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1148,9 +1154,9 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp moc_senddataframe.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp
+	-$(DEL_FILE) moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp moc_senddataframe.cpp
 moc_canbus.cpp: ../../canbus.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
@@ -1307,8 +1313,19 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../canthread.h \
+		../../lpsparameters.h \
+		../../scalehorizontal.h \
+		../../base.h \
 		../../../Qt/6.5.6/macos/libexec/moc
 	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../mainwindow.h -o moc_mainwindow.cpp
+
+moc_senddataframe.cpp: ../../senddataframe.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/QUdpSocket \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/qudpsocket.h \
+		../../../Qt/6.5.6/macos/libexec/moc
+	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../senddataframe.h -o moc_senddataframe.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1611,7 +1628,12 @@ canthread.o: ../../canthread.cpp ../../canthread.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QByteArray \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qbytearray.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
+		../../lpsparameters.h \
+		../../scalehorizontal.h \
+		../../base.h \
+		../../canmessagegeneric.h \
+		../../BaseCanMessage.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canthread.o ../../canthread.cpp
 
 clickable.o: ../../clickable.cpp ../../clickable.h \
@@ -1877,6 +1899,9 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../canthread.h \
+		../../lpsparameters.h \
+		../../scalehorizontal.h \
+		../../base.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QApplication \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
@@ -2015,14 +2040,17 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../canthread.h \
+		../../lpsparameters.h \
+		../../scalehorizontal.h \
+		../../base.h \
 		ui_mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QTimer \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qtimer.h \
 		../../drawsymbols.h \
 		../../structs.h \
 		../../scalevertical.h \
-		../../base.h \
-		../../scalehorizontal.h \
 		../../cannelloniframe.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
@@ -2143,7 +2171,8 @@ scalehorizontal.o: ../../scalehorizontal.cpp ../../scalehorizontal.h \
 		../../base.h \
 		../../drawsymbols.h \
 		../../structs.h \
-		../../scalingfactor.h
+		../../scalingfactor.h \
+		../../LpsParameters.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scalehorizontal.o ../../scalehorizontal.cpp
 
 scalevertical.o: ../../scalevertical.cpp ../../scalevertical.h \
@@ -2382,6 +2411,15 @@ scalingfactor.o: ../../scalingfactor.cpp ../../scalingfactor.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scalingfactor.o ../../scalingfactor.cpp
 
+senddataframe.o: ../../senddataframe.cpp ../../senddataframe.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/QUdpSocket \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/qudpsocket.h \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/QHostAddress \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/qhostaddress.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o senddataframe.o ../../senddataframe.cpp
+
 moc_canbus.o: moc_canbus.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_canbus.o moc_canbus.cpp
 
@@ -2390,6 +2428,9 @@ moc_clickable.o: moc_clickable.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_senddataframe.o: moc_senddataframe.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_senddataframe.o moc_senddataframe.cpp
 
 ####### Install
 

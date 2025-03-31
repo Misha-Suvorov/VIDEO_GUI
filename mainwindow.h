@@ -11,6 +11,7 @@
 #include "canthread.h"
 #include "lpsparameters.h"
 #include "scalehorizontal.h"
+#include "senddataframe.h"
 
 
 
@@ -69,6 +70,9 @@ private slots:
     void onHorizontMarkerChanged(const QString &text);
     void onVerticalMarkerChanged(const QString &text);
 
+
+    void on_pointer_b_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;
@@ -78,6 +82,8 @@ private:
     CanBus *canBus;
     QMutex queueMutex;
     QTimer *updateTimer;
+    SendDataFrame *sendDataFrame;  // Об'єкт для відправки даних
+
 
 
 

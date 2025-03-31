@@ -45,9 +45,9 @@ public:
     QPushButton *switch_vid;
     QGridLayout *gridLayout_4;
     QLabel *label_5;
-    QPushButton *pushButton;
+    QPushButton *laser_act_b;
     QLineEdit *lineEdit;
-    QPushButton *pushButton_4;
+    QPushButton *ext_radiation_b;
     QGridLayout *gridLayout_5;
     QLabel *label_9;
     QRadioButton *radioButton_2;
@@ -59,21 +59,21 @@ public:
     QLabel *label;
     QLineEdit *lineEdit_2;
     QComboBox *measure_mode;
-    QPushButton *pushButton_7;
-    QPushButton *break_range;
-    QPushButton *pushButton_3;
+    QPushButton *pointer_b;
+    QPushButton *break_range_b;
+    QPushButton *term_control_b;
     QLabel *label_4;
     QLabel *label_7;
-    QPushButton *start_range;
+    QPushButton *start_range_b;
     QLabel *label_6;
-    QPushButton *pushButton_2;
+    QPushButton *pulse_b;
     QGridLayout *gridLayout;
     QLineEdit *horizont_marker_input;
-    QLabel *label_2;
+    QLabel *horizontal_mark;
     QLineEdit *omega_horizontal_input;
     QLabel *omega_horizontal;
     QLineEdit *vertical_marker_input;
-    QLabel *label_3;
+    QLabel *vertical_mark;
     QLineEdit *omega_vertical_input;
     QLabel *omega_vertical;
     QGridLayout *gridLayout_3;
@@ -185,9 +185,9 @@ public:
 
         gridLayout_4->addWidget(label_5, 1, 1, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
 
-        pushButton = new QPushButton(frame);
-        pushButton->setObjectName("pushButton");
-        pushButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        laser_act_b = new QPushButton(frame);
+        laser_act_b->setObjectName("laser_act_b");
+        laser_act_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
 "    color: black;\n"
@@ -215,18 +215,18 @@ public:
 "    background-color: rgb(138, 181, 96); /* \320\241\320\262\321\226\321\202\320\273\321\226\321\210\320\270\320\271 \320\267\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 \320\262 \320\260\320\272\321\202\320\270\320\262\320\275\320\276\320\274\321\203 \321\201\321\202\320\260\320\275\321\226 */\n"
 "}\n"
 ""));
-        pushButton->setCheckable(true);
+        laser_act_b->setCheckable(true);
 
-        gridLayout_4->addWidget(pushButton, 0, 0, 1, 1);
+        gridLayout_4->addWidget(laser_act_b, 0, 0, 1, 1);
 
         lineEdit = new QLineEdit(frame);
         lineEdit->setObjectName("lineEdit");
 
         gridLayout_4->addWidget(lineEdit, 2, 1, 1, 1, Qt::AlignHCenter);
 
-        pushButton_4 = new QPushButton(frame);
-        pushButton_4->setObjectName("pushButton_4");
-        pushButton_4->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        ext_radiation_b = new QPushButton(frame);
+        ext_radiation_b->setObjectName("ext_radiation_b");
+        ext_radiation_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
 "    color: black;\n"
@@ -254,9 +254,9 @@ public:
 "    background-color: rgb(138, 181, 96); /* \320\241\320\262\321\226\321\202\320\273\321\226\321\210\320\270\320\271 \320\267\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 \320\262 \320\260\320\272\321\202\320\270\320\262\320\275\320\276\320\274\321\203 \321\201\321\202\320\260\320\275\321\226 */\n"
 "}\n"
 ""));
-        pushButton_4->setCheckable(true);
+        ext_radiation_b->setCheckable(true);
 
-        gridLayout_4->addWidget(pushButton_4, 0, 3, 1, 1);
+        gridLayout_4->addWidget(ext_radiation_b, 0, 3, 1, 1);
 
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setObjectName("gridLayout_5");
@@ -319,19 +319,47 @@ public:
 
         gridLayout_4->addWidget(measure_mode, 4, 1, 1, 1);
 
-        pushButton_7 = new QPushButton(frame);
-        pushButton_7->setObjectName("pushButton_7");
+        pointer_b = new QPushButton(frame);
+        pointer_b->setObjectName("pointer_b");
+        pointer_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* Default color */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"    border-top: 1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* Light darkening on hover */\n"
+"}\n"
+"\n"
+"QPushButton:checked {\n"
+"    background-color: rgb(255, 140, 0); /* Orange color when clicked */\n"
+"    border-left: 1px solid rgb(204, 113, 0);\n"
+"    border-right: 1px solid rgb(204, 113, 0);\n"
+"    border-bottom: 1px solid rgb(204, 113, 0);\n"
+"    border-top: 1px solid rgb(204, 113, 0);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:checked:hover {\n"
+"    background-color: rgb(255, 165, 0); /* Lighter orange when hovered in active state */\n"
+"}\n"
+""));
+        pointer_b->setCheckable(true);
 
-        gridLayout_4->addWidget(pushButton_7, 3, 2, 1, 1);
+        gridLayout_4->addWidget(pointer_b, 3, 2, 1, 1);
 
-        break_range = new QPushButton(frame);
-        break_range->setObjectName("break_range");
+        break_range_b = new QPushButton(frame);
+        break_range_b->setObjectName("break_range_b");
 
-        gridLayout_4->addWidget(break_range, 3, 1, 1, 1);
+        gridLayout_4->addWidget(break_range_b, 3, 1, 1, 1);
 
-        pushButton_3 = new QPushButton(frame);
-        pushButton_3->setObjectName("pushButton_3");
-        pushButton_3->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        term_control_b = new QPushButton(frame);
+        term_control_b->setObjectName("term_control_b");
+        term_control_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
 "    color: black;\n"
@@ -359,9 +387,9 @@ public:
 "    background-color: rgb(138, 181, 96); /* \320\241\320\262\321\226\321\202\320\273\321\226\321\210\320\270\320\271 \320\267\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 \320\262 \320\260\320\272\321\202\320\270\320\262\320\275\320\276\320\274\321\203 \321\201\321\202\320\260\320\275\321\226 */\n"
 "}\n"
 ""));
-        pushButton_3->setCheckable(true);
+        term_control_b->setCheckable(true);
 
-        gridLayout_4->addWidget(pushButton_3, 0, 2, 1, 1);
+        gridLayout_4->addWidget(term_control_b, 0, 2, 1, 1);
 
         label_4 = new QLabel(frame);
         label_4->setObjectName("label_4");
@@ -373,19 +401,19 @@ public:
 
         gridLayout_4->addWidget(label_7, 1, 3, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
 
-        start_range = new QPushButton(frame);
-        start_range->setObjectName("start_range");
+        start_range_b = new QPushButton(frame);
+        start_range_b->setObjectName("start_range_b");
 
-        gridLayout_4->addWidget(start_range, 3, 0, 1, 1);
+        gridLayout_4->addWidget(start_range_b, 3, 0, 1, 1);
 
         label_6 = new QLabel(frame);
         label_6->setObjectName("label_6");
 
         gridLayout_4->addWidget(label_6, 1, 2, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
 
-        pushButton_2 = new QPushButton(frame);
-        pushButton_2->setObjectName("pushButton_2");
-        pushButton_2->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        pulse_b = new QPushButton(frame);
+        pulse_b->setObjectName("pulse_b");
+        pulse_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
 "    color: black;\n"
@@ -400,9 +428,9 @@ public:
 "}\n"
 "\n"
 ""));
-        pushButton_2->setCheckable(true);
+        pulse_b->setCheckable(true);
 
-        gridLayout_4->addWidget(pushButton_2, 0, 1, 1, 1);
+        gridLayout_4->addWidget(pulse_b, 0, 1, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout_4);
@@ -414,10 +442,10 @@ public:
 
         gridLayout->addWidget(horizont_marker_input, 1, 1, 1, 1, Qt::AlignLeft);
 
-        label_2 = new QLabel(frame);
-        label_2->setObjectName("label_2");
+        horizontal_mark = new QLabel(frame);
+        horizontal_mark->setObjectName("horizontal_mark");
 
-        gridLayout->addWidget(label_2, 1, 0, 1, 1, Qt::AlignRight);
+        gridLayout->addWidget(horizontal_mark, 1, 0, 1, 1, Qt::AlignRight);
 
         omega_horizontal_input = new QLineEdit(frame);
         omega_horizontal_input->setObjectName("omega_horizontal_input");
@@ -434,10 +462,10 @@ public:
 
         gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignLeft);
 
-        label_3 = new QLabel(frame);
-        label_3->setObjectName("label_3");
+        vertical_mark = new QLabel(frame);
+        vertical_mark->setObjectName("vertical_mark");
 
-        gridLayout->addWidget(label_3, 2, 0, 1, 1, Qt::AlignRight);
+        gridLayout->addWidget(vertical_mark, 2, 0, 1, 1, Qt::AlignRight);
 
         omega_vertical_input = new QLineEdit(frame);
         omega_vertical_input->setObjectName("omega_vertical_input");
@@ -580,10 +608,10 @@ public:
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "Time remaining", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "LASER \n"
+        laser_act_b->setText(QCoreApplication::translate("MainWindow", "LASER \n"
 "ACTIVATION", nullptr));
         lineEdit->setText(QCoreApplication::translate("MainWindow", "N/A", nullptr));
-        pushButton_4->setText(QCoreApplication::translate("MainWindow", "External\n"
+        ext_radiation_b->setText(QCoreApplication::translate("MainWindow", "External\n"
 " radiation", nullptr));
         label_9->setText(QCoreApplication::translate("MainWindow", "ENERGY", nullptr));
         radioButton_2->setText(QCoreApplication::translate("MainWindow", "2", nullptr));
@@ -601,19 +629,19 @@ public:
         measure_mode->setItemText(0, QCoreApplication::translate("MainWindow", "SMM", nullptr));
         measure_mode->setItemText(1, QCoreApplication::translate("MainWindow", "...", nullptr));
 
-        pushButton_7->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
-        break_range->setText(QCoreApplication::translate("MainWindow", "Break range", nullptr));
-        pushButton_3->setText(QCoreApplication::translate("MainWindow", "Thermal \n"
+        pointer_b->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
+        break_range_b->setText(QCoreApplication::translate("MainWindow", "Break range", nullptr));
+        term_control_b->setText(QCoreApplication::translate("MainWindow", "Thermal \n"
 "control", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "pulse frequency", nullptr));
         label_7->setText(QCoreApplication::translate("MainWindow", "Error: NONE", nullptr));
-        start_range->setText(QCoreApplication::translate("MainWindow", "start range", nullptr));
+        start_range_b->setText(QCoreApplication::translate("MainWindow", "start range", nullptr));
         label_6->setText(QCoreApplication::translate("MainWindow", "Temperature \302\260C", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "PULSE\n"
+        pulse_b->setText(QCoreApplication::translate("MainWindow", "PULSE\n"
 " ON", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
+        horizontal_mark->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
         omega_horizontal->setText(QCoreApplication::translate("MainWindow", "\317\211 H", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
+        vertical_mark->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
         omega_vertical->setText(QCoreApplication::translate("MainWindow", "\317\211 V", nullptr));
         up_b->setText(QCoreApplication::translate("MainWindow", "\342\206\221", nullptr));
         up_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\210", nullptr));

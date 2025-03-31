@@ -39,7 +39,8 @@ SOURCES += \
     mainwindow.cpp \
     scalehorizontal.cpp \
     scalevertical.cpp \
-    scalingfactor.cpp
+    scalingfactor.cpp \
+    senddataframe.cpp
 
 HEADERS += \
     base.h \
@@ -55,6 +56,7 @@ HEADERS += \
     scalehorizontal.h \
     scalevertical.h \
     scalingfactor.h \
+    senddataframe.h \
     structs.h
 
 FORMS += \

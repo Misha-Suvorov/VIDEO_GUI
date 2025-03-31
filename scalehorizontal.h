@@ -9,7 +9,11 @@ class ScaleHorizontal : public baseElement
 private:
     int countStepsForHorizontalScale = 4;
     float lineLengthForHorizontalScale = 20;
-    int markerPosition = 0; // Marker position for the horizontal scale
+    int markerPosition = 0; // Marker position for the horizontal
+
+    float omegaX = 0.0f;
+    float omegaY = 0.0f;
+
 
     std::string convertValueToText(float value);
 
@@ -21,6 +25,8 @@ public:
 
     void setMarkerPosition(int position) { markerPosition = position; }  // Set horizontal marker position
     void drawScale(cv::InputOutputArray img, const cv::Scalar& color, int thickness, int lineType, float value);
+    void setOmegaValues(float omegaX, float omegaY); // Метод для отримання значень
+
 };
 
 #endif // SCALEHORIZONTAL_H

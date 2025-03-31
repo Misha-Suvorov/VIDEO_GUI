@@ -10,6 +10,8 @@
 #include "canbus.h"
 #include "canthread.h"
 #include "lpsparameters.h"
+#include "scalehorizontal.h"
+
 
 
 QT_BEGIN_NAMESPACE
@@ -90,6 +92,8 @@ private:
     void stopBothVideos();
     void updateLpsParametersUI();
     //void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
+    ScaleHorizontal scaleHorizontal;
+
 
 
 

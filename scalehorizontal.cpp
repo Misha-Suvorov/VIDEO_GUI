@@ -1,6 +1,8 @@
 #include "scalehorizontal.h"
 #include "drawsymbols.h"
 #include "scalingfactor.h"
+#include "LpsParameters.h"
+
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <cmath>
@@ -18,6 +20,14 @@ std::string ScaleHorizontal::convertValueToText(float value)
     }
     return textValue;
 }
+
+void ScaleHorizontal::setOmegaValues(float omegaX, float omegaY)
+{
+    this->omegaX = omegaX;
+    this->omegaY = omegaY;
+}
+
+
 
 void ScaleHorizontal::drawScale(cv::InputOutputArray img, const Scalar& color, int thickness, int lineType, float value)
 {
@@ -74,4 +84,10 @@ void ScaleHorizontal::drawScale(cv::InputOutputArray img, const Scalar& color, i
     Point pt1 = Point(markerPosX, startY);
     Point pt2 = Point(markerPosX, startY - 10);
     cv::drawLineStroked(img, pt1, pt2, cv::Scalar(0, 0, 255), thickness + 1, lineType);
+
+    // Draw omega values in the top-left corner
+    std::string omegaTextX = "w horizontal = " + std::to_string(omegaX);
+    std::string omegaTextY = "w vertical = " + std::to_string(omegaY);
+    cv::putText(img, omegaTextX, Point(10, 30), FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(255, 255, 255), 2);
+    cv::putText(img, omegaTextY, Point(10, 60), FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(255, 255, 255), 2);
 }

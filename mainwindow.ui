@@ -475,6 +475,19 @@ QPushButton:hover {
              </property>
             </widget>
            </item>
+           <item row="3" column="1" alignment="Qt::AlignLeft">
+            <widget class="QLineEdit" name="omega_horizontal_input"/>
+           </item>
+           <item row="3" column="0" alignment="Qt::AlignRight">
+            <widget class="QLabel" name="omega_horizontal">
+             <property name="text">
+              <string>ω H</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" alignment="Qt::AlignLeft">
+            <widget class="QLineEdit" name="vertical_marker_input"/>
+           </item>
            <item row="2" column="0" alignment="Qt::AlignRight">
             <widget class="QLabel" name="label_3">
              <property name="text">
@@ -482,8 +495,15 @@ QPushButton:hover {
              </property>
             </widget>
            </item>
-           <item row="2" column="1" alignment="Qt::AlignLeft">
-            <widget class="QLineEdit" name="vertical_marker_input"/>
+           <item row="4" column="1" alignment="Qt::AlignLeft">
+            <widget class="QLineEdit" name="omega_vertical_input"/>
+           </item>
+           <item row="4" column="0" alignment="Qt::AlignRight">
+            <widget class="QLabel" name="omega_vertical">
+             <property name="text">
+              <string>ω V</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

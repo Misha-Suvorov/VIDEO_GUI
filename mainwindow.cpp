@@ -152,9 +152,20 @@ void MainWindow::updateLpsParametersUI() {
     float angleX = LpsParameters::GetInstance().GetAngleX();
     float angleY = LpsParameters::GetInstance().GetAngleY();
 
+    float omegaX = LpsParameters::GetInstance().GetSpeedX();
+    float omegaY = LpsParameters::GetInstance().GetSpeedY();
+
     // Display values in UI QLineEdit widgets
     ui->horizont_marker_input->setText(QString::number(angleX, 'f', 2));
     ui->vertical_marker_input->setText(QString::number(angleY, 'f', 2));
+
+    ui->omega_vertical_input->setText(QString::number(omegaX, 'f', 4));
+    ui->omega_horizontal_input->setText(QString::number(omegaY, 'f', 4));
+
+    scaleHorizontal.setOmegaValues(omegaX, omegaY);
+
+
+
 }
 
 

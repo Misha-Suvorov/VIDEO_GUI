@@ -70,8 +70,12 @@ public:
     QGridLayout *gridLayout;
     QLineEdit *horizont_marker_input;
     QLabel *label_2;
-    QLabel *label_3;
+    QLineEdit *omega_horizontal_input;
+    QLabel *omega_horizontal;
     QLineEdit *vertical_marker_input;
+    QLabel *label_3;
+    QLineEdit *omega_vertical_input;
+    QLabel *omega_vertical;
     QGridLayout *gridLayout_3;
     QHBoxLayout *horizontalLayout_3;
     QPushButton *up_b;
@@ -415,15 +419,35 @@ public:
 
         gridLayout->addWidget(label_2, 1, 0, 1, 1, Qt::AlignRight);
 
-        label_3 = new QLabel(frame);
-        label_3->setObjectName("label_3");
+        omega_horizontal_input = new QLineEdit(frame);
+        omega_horizontal_input->setObjectName("omega_horizontal_input");
 
-        gridLayout->addWidget(label_3, 2, 0, 1, 1, Qt::AlignRight);
+        gridLayout->addWidget(omega_horizontal_input, 3, 1, 1, 1, Qt::AlignLeft);
+
+        omega_horizontal = new QLabel(frame);
+        omega_horizontal->setObjectName("omega_horizontal");
+
+        gridLayout->addWidget(omega_horizontal, 3, 0, 1, 1, Qt::AlignRight);
 
         vertical_marker_input = new QLineEdit(frame);
         vertical_marker_input->setObjectName("vertical_marker_input");
 
         gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignLeft);
+
+        label_3 = new QLabel(frame);
+        label_3->setObjectName("label_3");
+
+        gridLayout->addWidget(label_3, 2, 0, 1, 1, Qt::AlignRight);
+
+        omega_vertical_input = new QLineEdit(frame);
+        omega_vertical_input->setObjectName("omega_vertical_input");
+
+        gridLayout->addWidget(omega_vertical_input, 4, 1, 1, 1, Qt::AlignLeft);
+
+        omega_vertical = new QLabel(frame);
+        omega_vertical->setObjectName("omega_vertical");
+
+        gridLayout->addWidget(omega_vertical, 4, 0, 1, 1, Qt::AlignRight);
 
 
         verticalLayout->addLayout(gridLayout);
@@ -588,7 +612,9 @@ public:
         pushButton_2->setText(QCoreApplication::translate("MainWindow", "PULSE\n"
 " ON", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
+        omega_horizontal->setText(QCoreApplication::translate("MainWindow", "\317\211 H", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
+        omega_vertical->setText(QCoreApplication::translate("MainWindow", "\317\211 V", nullptr));
         up_b->setText(QCoreApplication::translate("MainWindow", "\342\206\221", nullptr));
         up_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\210", nullptr));
         l_l->setText(QCoreApplication::translate("MainWindow", "\342\206\220", nullptr));

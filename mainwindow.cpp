@@ -272,28 +272,27 @@ void MainWindow::on_switch_vid_clicked() {
 }
 
 
-bool statePointer = false;
-void MainWindow::on_pointer_b_clicked()
-{
-    // Toggle the state
-    statePointer = !statePointer;
+// void MainWindow::on_pointer_b_clicked() {
+//     // Приклад payload для CAN кадру
+//     std::vector<uint8_t> payload = {0x00, 0x10, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00};
+
+//     // Створення об'єкта для відправки даних
+//     SendDataFrame sendDataFrame;
+//     sendDataFrame.Send(0x210, payload);  // Відправка CAN повідомлення з ID 0x210
+// }
+
+
+void MainWindow::on_pointer_b_clicked() {
+    bool statePointer = false;  // Приклад значення
+
+    // Встановлюємо statePointerByte
     uint8_t statePointerByte = (uint8_t)(statePointer ? 1 : 0);
 
-    // Construct the payload with the statePointerByte
-    std::vector<uint8_t> pld = {
-        0x00, 0x02, 0x13, 0x00, 0x00, 0x00, statePointerByte, 0x04
-    };
+    // Формуємо payload
+    std::vector<uint8_t> payload = {0x00, 0x02, 0x13, 0x00, 0x00, 0x00, statePointerByte, 0x04};
 
-    // Create an instance of SendDataFrame
+    // Створення об'єкта для відправки даних
     SendDataFrame sendDataFrame;
-
-    // Send the CAN data
-    sendDataFrame.Send(0x238, pld);  // CAN ID 0x238 and the constructed payload
-
-    // if (statePointer) {
-    //     ui->pointer_b->setStyleSheet("background-color: orange;");
-    // } else {
-    //     ui->pointer_b->setStyleSheet("background-color: transparent;");
-    // }
+    sendDataFrame.Send(0x238, payload);  // Відправка CAN повідомлення з ID 0x238
 }
 

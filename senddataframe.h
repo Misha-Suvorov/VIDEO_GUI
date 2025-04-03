@@ -5,15 +5,13 @@
 #include <QUdpSocket>
 #include <vector>
 
-class SendDataFrame : public QObject {
-    Q_OBJECT
-
+class SendDataFrame {
 public:
-    explicit SendDataFrame(QObject *parent = nullptr);
-    void Send(uint16_t id, const std::vector<uint8_t>& pld);
+    SendDataFrame();                // Конструктор
+    void Send(uint16_t can_id, const std::vector<uint8_t>& payload);  // Метод відправки CAN повідомлення
 
 private:
-    QUdpSocket *udpSocket;
+    QUdpSocket udpSocket;  // Сокет для UDP відправки
 };
 
 #endif // SENDDATAFRAME_H

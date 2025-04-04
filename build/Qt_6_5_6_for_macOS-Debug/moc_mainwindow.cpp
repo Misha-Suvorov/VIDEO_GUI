@@ -183,11 +183,13 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "onHorizontMarkerChanged",
     "text",
     "onVerticalMarkerChanged",
-    "on_pointer_b_clicked"
+    "on_pointer_b_clicked",
+    "on_start_range_b_clicked",
+    "on_break_range_b_clicked"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
-    uint offsetsAndSizes[28];
+    uint offsetsAndSizes[32];
     char stringdata0[11];
     char stringdata1[14];
     char stringdata2[1];
@@ -202,6 +204,8 @@ struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
     char stringdata11[5];
     char stringdata12[24];
     char stringdata13[21];
+    char stringdata14[25];
+    char stringdata15[25];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSMainWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -220,7 +224,9 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
         QT_MOC_LITERAL(151, 23),  // "onHorizontMarkerChanged"
         QT_MOC_LITERAL(175, 4),  // "text"
         QT_MOC_LITERAL(180, 23),  // "onVerticalMarkerChanged"
-        QT_MOC_LITERAL(204, 20)   // "on_pointer_b_clicked"
+        QT_MOC_LITERAL(204, 20),  // "on_pointer_b_clicked"
+        QT_MOC_LITERAL(225, 24),  // "on_start_range_b_clicked"
+        QT_MOC_LITERAL(250, 24)   // "on_break_range_b_clicked"
     },
     "MainWindow",
     "displayFrame1",
@@ -235,7 +241,9 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
     "onHorizontMarkerChanged",
     "text",
     "onVerticalMarkerChanged",
-    "on_pointer_b_clicked"
+    "on_pointer_b_clicked",
+    "on_start_range_b_clicked",
+    "on_break_range_b_clicked"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -247,7 +255,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -255,16 +263,18 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   74,    2, 0x08,    1 /* Private */,
-       4,    1,   77,    2, 0x08,    3 /* Private */,
-       5,    0,   80,    2, 0x08,    5 /* Private */,
-       6,    0,   81,    2, 0x08,    6 /* Private */,
-       7,    0,   82,    2, 0x08,    7 /* Private */,
-       8,    0,   83,    2, 0x08,    8 /* Private */,
-       9,    0,   84,    2, 0x08,    9 /* Private */,
-      10,    1,   85,    2, 0x08,   10 /* Private */,
-      12,    1,   88,    2, 0x08,   12 /* Private */,
-      13,    0,   91,    2, 0x08,   14 /* Private */,
+       1,    1,   86,    2, 0x08,    1 /* Private */,
+       4,    1,   89,    2, 0x08,    3 /* Private */,
+       5,    0,   92,    2, 0x08,    5 /* Private */,
+       6,    0,   93,    2, 0x08,    6 /* Private */,
+       7,    0,   94,    2, 0x08,    7 /* Private */,
+       8,    0,   95,    2, 0x08,    8 /* Private */,
+       9,    0,   96,    2, 0x08,    9 /* Private */,
+      10,    1,   97,    2, 0x08,   10 /* Private */,
+      12,    1,  100,    2, 0x08,   12 /* Private */,
+      13,    0,  103,    2, 0x08,   14 /* Private */,
+      14,    0,  104,    2, 0x08,   15 /* Private */,
+      15,    0,  105,    2, 0x08,   16 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QImage,    3,
@@ -276,6 +286,8 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,   11,
     QMetaType::Void, QMetaType::QString,   11,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -313,6 +325,10 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
         // method 'on_pointer_b_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_start_range_b_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_break_range_b_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -334,6 +350,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 7: _t->onHorizontMarkerChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 8: _t->onVerticalMarkerChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 9: _t->on_pointer_b_clicked(); break;
+        case 10: _t->on_start_range_b_clicked(); break;
+        case 11: _t->on_break_range_b_clicked(); break;
         default: ;
         }
     }
@@ -358,13 +376,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 12)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 10;
+        _id -= 12;
     }
     return _id;
 }

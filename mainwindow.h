@@ -73,6 +73,10 @@ private slots:
 
     void on_pointer_b_clicked();
 
+    void on_start_range_b_clicked();
+
+    void on_break_range_b_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;
@@ -89,6 +93,8 @@ private:
 
     int rotationAngle = 0;
     bool isSwitched = false;
+    bool statePointer = false;
+
 
     // New variables for marker values
     float horizontMarkerValue = 0;

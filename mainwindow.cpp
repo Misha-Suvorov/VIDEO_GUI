@@ -155,12 +155,15 @@ void MainWindow::updateLpsParametersUI() {
     float omegaX = LpsParameters::GetInstance().GetSpeedX();
     float omegaY = LpsParameters::GetInstance().GetSpeedY();
 
+    float range = LpsParameters::GetInstance().GetRange();
     // Display values in UI QLineEdit widgets
     ui->horizont_marker_input->setText(QString::number(angleX, 'f', 2));
     ui->vertical_marker_input->setText(QString::number(angleY, 'f', 2));
 
     ui->omega_vertical_input->setText(QString::number(omegaX, 'f', 4));
     ui->omega_horizontal_input->setText(QString::number(omegaY, 'f', 4));
+    ui->range_out->setText(QString::number(range, 'f', 4));
+
 
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
 
@@ -283,16 +286,38 @@ void MainWindow::on_switch_vid_clicked() {
 
 
 void MainWindow::on_pointer_b_clicked() {
-    bool statePointer = false;  // Приклад значення
+    statePointer = !statePointer;
 
-    // Встановлюємо statePointerByte
-    uint8_t statePointerByte = (uint8_t)(statePointer ? 1 : 0);
+    // Встановлюємо байт відповідно до стану
+    uint8_t statePointerByte = static_cast<uint8_t>(statePointer ? 1 : 0);
 
     // Формуємо payload
     std::vector<uint8_t> payload = {0x00, 0x02, 0x13, 0x00, 0x00, 0x00, statePointerByte, 0x04};
 
-    // Створення об'єкта для відправки даних
+    // Відправка повідомлення
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x238, payload);  // Відправка CAN повідомлення з ID 0x238
+    sendDataFrame.Send(0x238, payload);
+}
+
+
+void MainWindow::on_start_range_b_clicked()
+{
+    // Формуємо payload
+    std::vector<uint8_t> payload = {0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x02};
+
+    // Відправка повідомлення
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x238, payload);
+}
+
+
+void MainWindow::on_break_range_b_clicked()
+{
+    // Формуємо payload
+    std::vector<uint8_t> payload = {0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    // Відправка повідомлення
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x238, payload);
 }
 

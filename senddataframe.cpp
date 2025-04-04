@@ -54,13 +54,10 @@ void SendDataFrame::Send(uint16_t can_id, const std::vector<uint8_t>& payload) {
     // Додаємо Count byte: 0x08 (8 байт в повідомленні)
     data.push_back(0x08);
 
-    // Додаємо payload
     data.insert(data.end(), payload.begin(), payload.end());
 
-    // Конвертуємо в QByteArray для UDP
     QByteArray byteArray(reinterpret_cast<const char*>(data.data()), static_cast<int>(data.size()));
 
-    // Відправляємо дані через UDP на IP 192.168.144.10, порт 14500
     udpSocket.writeDatagram(byteArray, QHostAddress("192.168.144.10"), 14500);
 
     std::cout << "Відправлено через UDP: ID=" << std::hex << can_id << " [";

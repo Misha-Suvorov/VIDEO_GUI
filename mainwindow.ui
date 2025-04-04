@@ -303,7 +303,7 @@ QPushButton:checked:hover {
             <widget class="QComboBox" name="comboBox">
              <item>
               <property name="text">
-               <string>1 Hz</string>
+               <string>1 HZ</string>
               </property>
              </item>
              <item>
@@ -313,12 +313,32 @@ QPushButton:checked:hover {
              </item>
              <item>
               <property name="text">
-               <string>3 Hz</string>
+               <string>5 Hz</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>4 Hz</string>
+               <string>10 Hz</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>20 HZ</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>25 HZ</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>0,5 HZ</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>0,1 HZ</string>
               </property>
              </item>
             </widget>
@@ -346,7 +366,12 @@ QPushButton:checked:hover {
              </item>
              <item>
               <property name="text">
-               <string>...</string>
+               <string>CMM</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Quick SMM</string>
               </property>
              </item>
             </widget>
@@ -492,6 +517,9 @@ QPushButton:hover {
               <bool>true</bool>
              </property>
             </widget>
+           </item>
+           <item row="4" column="2" alignment="Qt::AlignLeft">
+            <widget class="QLineEdit" name="range_out"/>
            </item>
           </layout>
          </item>

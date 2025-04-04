@@ -66,7 +66,7 @@ enum class IdNode1 {
 };
 
 enum class IdNode3 {
-    MEASURED_RANGES_1 = 0x01
+    MEASURED_RANGES_1 = 0x06
 };
 
 

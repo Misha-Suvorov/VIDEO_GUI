@@ -67,6 +67,7 @@ public:
     QPushButton *start_range_b;
     QLabel *label_6;
     QPushButton *pulse_b;
+    QLineEdit *range_out;
     QGridLayout *gridLayout;
     QLineEdit *horizont_marker_input;
     QLabel *horizontal_mark;
@@ -298,6 +299,10 @@ public:
         comboBox->addItem(QString());
         comboBox->addItem(QString());
         comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
         comboBox->setObjectName("comboBox");
 
         gridLayout_4->addWidget(comboBox, 2, 0, 1, 1);
@@ -313,6 +318,7 @@ public:
         gridLayout_4->addWidget(lineEdit_2, 2, 2, 1, 1, Qt::AlignHCenter);
 
         measure_mode = new QComboBox(frame);
+        measure_mode->addItem(QString());
         measure_mode->addItem(QString());
         measure_mode->addItem(QString());
         measure_mode->setObjectName("measure_mode");
@@ -431,6 +437,11 @@ public:
         pulse_b->setCheckable(true);
 
         gridLayout_4->addWidget(pulse_b, 0, 1, 1, 1);
+
+        range_out = new QLineEdit(frame);
+        range_out->setObjectName("range_out");
+
+        gridLayout_4->addWidget(range_out, 4, 2, 1, 1, Qt::AlignLeft);
 
 
         verticalLayout->addLayout(gridLayout_4);
@@ -619,15 +630,20 @@ public:
         radioButton_3->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
         radioButton_4->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         radioButton_5->setText(QCoreApplication::translate("MainWindow", "5", nullptr));
-        comboBox->setItemText(0, QCoreApplication::translate("MainWindow", "1 Hz", nullptr));
+        comboBox->setItemText(0, QCoreApplication::translate("MainWindow", "1 HZ", nullptr));
         comboBox->setItemText(1, QCoreApplication::translate("MainWindow", "2 Hz", nullptr));
-        comboBox->setItemText(2, QCoreApplication::translate("MainWindow", "3 Hz", nullptr));
-        comboBox->setItemText(3, QCoreApplication::translate("MainWindow", "4 Hz", nullptr));
+        comboBox->setItemText(2, QCoreApplication::translate("MainWindow", "5 Hz", nullptr));
+        comboBox->setItemText(3, QCoreApplication::translate("MainWindow", "10 Hz", nullptr));
+        comboBox->setItemText(4, QCoreApplication::translate("MainWindow", "20 HZ", nullptr));
+        comboBox->setItemText(5, QCoreApplication::translate("MainWindow", "25 HZ", nullptr));
+        comboBox->setItemText(6, QCoreApplication::translate("MainWindow", "0,5 HZ", nullptr));
+        comboBox->setItemText(7, QCoreApplication::translate("MainWindow", "0,1 HZ", nullptr));
 
         label->setText(QCoreApplication::translate("MainWindow", "Mesurement mode", nullptr));
         lineEdit_2->setText(QString());
         measure_mode->setItemText(0, QCoreApplication::translate("MainWindow", "SMM", nullptr));
-        measure_mode->setItemText(1, QCoreApplication::translate("MainWindow", "...", nullptr));
+        measure_mode->setItemText(1, QCoreApplication::translate("MainWindow", "CMM", nullptr));
+        measure_mode->setItemText(2, QCoreApplication::translate("MainWindow", "Quick SMM", nullptr));
 
         pointer_b->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
         break_range_b->setText(QCoreApplication::translate("MainWindow", "Break range", nullptr));

@@ -77,6 +77,9 @@ private slots:
 
     void on_break_range_b_clicked();
 
+    void onMeasureModeChanged(int index);
+
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;
@@ -89,6 +92,7 @@ private:
     SendDataFrame *sendDataFrame;  // Об'єкт для відправки даних
 
 
+    QString code;
 
 
     int rotationAngle = 0;

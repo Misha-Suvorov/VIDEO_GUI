@@ -351,7 +351,7 @@ QPushButton:checked:hover {
             </widget>
            </item>
            <item row="2" column="2" alignment="Qt::AlignHCenter">
-            <widget class="QLineEdit" name="lineEdit_2">
+            <widget class="QLineEdit" name="temp_out">
              <property name="text">
               <string/>
              </property>
@@ -366,12 +366,42 @@ QPushButton:checked:hover {
              </item>
              <item>
               <property name="text">
-               <string>CMM</string>
+               <string>CMM 1Hz</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Quick SMM</string>
+               <string>CMM 4Hz</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CMM 10Hz</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CMM 20Hz</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CMM 100Hz</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CMM 200Hz</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Quick SMM 1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Quick SMM 2</string>
               </property>
              </item>
             </widget>

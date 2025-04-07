@@ -57,7 +57,7 @@ public:
     QRadioButton *radioButton_5;
     QComboBox *comboBox;
     QLabel *label;
-    QLineEdit *lineEdit_2;
+    QLineEdit *temp_out;
     QComboBox *measure_mode;
     QPushButton *pointer_b;
     QPushButton *break_range_b;
@@ -312,12 +312,18 @@ public:
 
         gridLayout_4->addWidget(label, 4, 0, 1, 1, Qt::AlignHCenter);
 
-        lineEdit_2 = new QLineEdit(frame);
-        lineEdit_2->setObjectName("lineEdit_2");
+        temp_out = new QLineEdit(frame);
+        temp_out->setObjectName("temp_out");
 
-        gridLayout_4->addWidget(lineEdit_2, 2, 2, 1, 1, Qt::AlignHCenter);
+        gridLayout_4->addWidget(temp_out, 2, 2, 1, 1, Qt::AlignHCenter);
 
         measure_mode = new QComboBox(frame);
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
         measure_mode->addItem(QString());
         measure_mode->addItem(QString());
         measure_mode->addItem(QString());
@@ -640,10 +646,16 @@ public:
         comboBox->setItemText(7, QCoreApplication::translate("MainWindow", "0,1 HZ", nullptr));
 
         label->setText(QCoreApplication::translate("MainWindow", "Mesurement mode", nullptr));
-        lineEdit_2->setText(QString());
+        temp_out->setText(QString());
         measure_mode->setItemText(0, QCoreApplication::translate("MainWindow", "SMM", nullptr));
-        measure_mode->setItemText(1, QCoreApplication::translate("MainWindow", "CMM", nullptr));
-        measure_mode->setItemText(2, QCoreApplication::translate("MainWindow", "Quick SMM", nullptr));
+        measure_mode->setItemText(1, QCoreApplication::translate("MainWindow", "CMM 1Hz", nullptr));
+        measure_mode->setItemText(2, QCoreApplication::translate("MainWindow", "CMM 4Hz", nullptr));
+        measure_mode->setItemText(3, QCoreApplication::translate("MainWindow", "CMM 10Hz", nullptr));
+        measure_mode->setItemText(4, QCoreApplication::translate("MainWindow", "CMM 20Hz", nullptr));
+        measure_mode->setItemText(5, QCoreApplication::translate("MainWindow", "CMM 100Hz", nullptr));
+        measure_mode->setItemText(6, QCoreApplication::translate("MainWindow", "CMM 200Hz", nullptr));
+        measure_mode->setItemText(7, QCoreApplication::translate("MainWindow", "Quick SMM 1", nullptr));
+        measure_mode->setItemText(8, QCoreApplication::translate("MainWindow", "Quick SMM 2", nullptr));
 
         pointer_b->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
         break_range_b->setText(QCoreApplication::translate("MainWindow", "Break range", nullptr));

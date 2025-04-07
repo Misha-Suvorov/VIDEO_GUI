@@ -79,6 +79,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr), messageQueue(localMessageQueue){
     ui->setupUi(this);
 
+    connect(ui->measure_mode, &QComboBox::currentIndexChanged,
+            this, &MainWindow::onMeasureModeChanged);
+    onMeasureModeChanged(ui->measure_mode->currentIndex());
+
+
     // Connect QLineEdit to slots for marker changes
     connect(ui->horizont_marker_input, &QLineEdit::textChanged, this, &MainWindow::onHorizontMarkerChanged);
     connect(ui->vertical_marker_input, &QLineEdit::textChanged, this, &MainWindow::onVerticalMarkerChanged);
@@ -133,6 +138,45 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::onMeasureModeChanged(int index)
+{
+    switch (index) {
+    case 0:
+        code = "0x01";
+        break;
+    case 1:
+        code = "0x02";
+        break;
+    case 2:
+        code = "0x03";
+        break;
+    case 3:
+        code = "0x04";
+        break;
+    case 4:
+        code = "0x05";
+        break;
+    case 5:
+        code = "0x06";
+        break;
+    case 6:
+        code = "0x07";
+        break;
+    case 7:
+        code = "0x08";
+        break;
+    case 8:
+        code = "0x09";
+        break;
+
+    default:
+        code = "0x01";
+        break;
+    }
+
+}
+
+
 void MainWindow::displayFrame1(const QImage &image) {
     if (!image.isNull()) {
         QPixmap rotatedPixmap = QPixmap::fromImage(image).transformed(QTransform().rotate(rotationAngle), Qt::SmoothTransformation);
@@ -156,14 +200,17 @@ void MainWindow::updateLpsParametersUI() {
     float omegaY = LpsParameters::GetInstance().GetSpeedY();
 
     float range = LpsParameters::GetInstance().GetRange();
+    float temp = LpsParameters::GetInstance().GetTemperature();
+
     // Display values in UI QLineEdit widgets
     ui->horizont_marker_input->setText(QString::number(angleX, 'f', 2));
     ui->vertical_marker_input->setText(QString::number(angleY, 'f', 2));
 
     ui->omega_vertical_input->setText(QString::number(omegaX, 'f', 4));
     ui->omega_horizontal_input->setText(QString::number(omegaY, 'f', 4));
-    ui->range_out->setText(QString::number(range, 'f', 4));
 
+    ui->range_out->setText(QString::number(range, 'f', 4));
+    ui->temp_out->setText(QString::number(temp, 'f',4));
 
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
 
@@ -300,14 +347,31 @@ void MainWindow::on_pointer_b_clicked() {
 }
 
 
+// void MainWindow::on_start_range_b_clicked()
+// {
+//     // Формуємо payload
+//     std::vector<uint8_t> payload = {0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x02};
+
+//     // Відправка повідомлення
+//     SendDataFrame sendDataFrame;
+//     sendDataFrame.Send(0x238, payload);
+// }
+
+
+
 void MainWindow::on_start_range_b_clicked()
 {
-    // Формуємо payload
-    std::vector<uint8_t> payload = {0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x02};
+    bool ok;
+    uint8_t codeByte = static_cast<uint8_t>(code.toUInt(&ok, 16));
+
+    std::vector<uint8_t> payload = {
+        0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, codeByte
+    };
 
     // Відправка повідомлення
     SendDataFrame sendDataFrame;
     sendDataFrame.Send(0x238, payload);
+
 }
 
 

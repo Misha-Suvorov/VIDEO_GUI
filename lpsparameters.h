@@ -13,12 +13,14 @@ public:
     void SetSpeedX(float value);
     void SetSpeedY(float value);
     void SetRange(float value);
+    void SetTemperature(float value);
 
     float GetAngleX() const;
     float GetAngleY() const;
     float GetSpeedX() const;
     float GetSpeedY() const;
     float GetRange() const;
+    float GetTemperature() const;
 
 
 private:
@@ -28,5 +30,6 @@ private:
     float speedX = 0.0f;
     float speedY = 0.0f;
     float range = 0.0f;
+    float temperature = 0.0f;
 };
 #endif // LPSPARAMETERS_H

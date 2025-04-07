@@ -78,6 +78,12 @@ float CanMessageGeneric::ParseFloat() {
         }
     }
 
+    if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER)) {
+        if (Message.ID == static_cast<uint8_t>(IdNode4::TEMPERATURE)) {
+            manager.SetTemperature(floatValue);
+        }
+    }
+
     return floatValue;
 }
 

@@ -70,6 +70,19 @@ enum class IdNode3 {
 };
 
 
+enum class IdNode4{
+    LASER_ACTIVE = 0,
+    PULSE_ON = 0x1,
+    TIME_RADIATION_REMAINING = 0x4,
+    TIME_DELAY_REMAINING = 0x5,
+    ENERGY = 0x0E,
+    BLIND_ON = 0x0F,
+    THERMAL_CONTROLE = 0xC0,
+    TEMPERATURE = 0xC1,
+    COUNT_PULSES = 0xF0,
+    ERROR_CODE = 0xFE
+};
+
 
 class CanMessageGeneric : public BaseCanMessage {
 public:

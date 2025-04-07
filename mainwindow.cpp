@@ -193,14 +193,19 @@ void MainWindow::displayFrame2(const QImage &image) {
 
 
 void MainWindow::updateLpsParametersUI() {
-    float angleX = LpsParameters::GetInstance().GetAngleX();
-    float angleY = LpsParameters::GetInstance().GetAngleY();
+    LpsParameters& manager = LpsParameters::GetInstance();
 
-    float omegaX = LpsParameters::GetInstance().GetSpeedX();
-    float omegaY = LpsParameters::GetInstance().GetSpeedY();
+    float angleX = manager.GetAngleX();
+    float angleY = manager.GetAngleY();
 
-    float range = LpsParameters::GetInstance().GetRange();
-    float temp = LpsParameters::GetInstance().GetTemperature();
+    float omegaX = manager.GetSpeedX();
+    float omegaY = manager.GetSpeedY();
+
+    float range = manager.GetRange();
+    float temp = manager.GetTemperature();
+
+    uint32_t freq = manager.GetLaserFrequency();
+    uint32_t stanag = manager.GetLaserStanag();
 
     // Display values in UI QLineEdit widgets
     ui->horizont_marker_input->setText(QString::number(angleX, 'f', 2));
@@ -212,9 +217,10 @@ void MainWindow::updateLpsParametersUI() {
     ui->range_out->setText(QString::number(range, 'f', 4));
     ui->temp_out->setText(QString::number(temp, 'f',4));
 
+    ui->frequency_out->setText(QString::number(freq));
+    ui->stanag_out->setText(QString::number(stanag));
+
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
-
-
 
 }
 
@@ -383,5 +389,66 @@ void MainWindow::on_break_range_b_clicked()
     // Відправка повідомлення
     SendDataFrame sendDataFrame;
     sendDataFrame.Send(0x238, payload);
+}
+
+
+void MainWindow::on_laser_act_b_clicked()
+{
+    laserOn = !laserOn;
+    uint8_t lastByte = laserOn ? 0x01 : 0x00;
+
+    std::vector<uint8_t> payload = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte
+    };
+
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248, payload);
+
+}
+
+
+
+void MainWindow::on_pulse_b_clicked()
+{
+    pulseOn = !pulseOn;
+    uint8_t lastByte = pulseOn ? 0x01 : 0x00;
+
+    std::vector<uint8_t> payload = {
+        0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte
+    };
+
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248, payload);
+
+}
+
+
+void MainWindow::on_term_control_b_clicked()
+{
+    termOn = !termOn;
+    uint8_t lastByte = termOn ? 0x01 : 0x00;
+
+    std::vector<uint8_t> payload = {
+        0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte
+    };
+
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248, payload);
+}
+
+
+void MainWindow::on_get_frequency_clicked()
+{
+    std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248, payload);
+}
+
+
+void MainWindow::on_get_stanag_clicked()
+{
+    std::vector<uint8_t> payload = {0x00, 0x03, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248, payload);
 }
 

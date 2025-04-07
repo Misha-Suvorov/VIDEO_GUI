@@ -7,8 +7,9 @@
 
 class SendDataFrame {
 public:
-    SendDataFrame();                // Конструктор
+    SendDataFrame();        // Конструктор
     void Send(uint16_t can_id, const std::vector<uint8_t>& payload);  // Метод відправки CAN повідомлення
+    void SendLaser(uint16_t can_id, const std::vector<uint8_t>& payload);
 
 private:
     QUdpSocket udpSocket;  // Сокет для UDP відправки

@@ -73,6 +73,8 @@ enum class IdNode3 {
 enum class IdNode4{
     LASER_ACTIVE = 0,
     PULSE_ON = 0x1,
+    FREQUENCY = 0x2,
+    STANAG = 0x3,
     TIME_RADIATION_REMAINING = 0x4,
     TIME_DELAY_REMAINING = 0x5,
     ENERGY = 0x0E,
@@ -102,6 +104,7 @@ public:
     CanMessageGeneric(const std::vector<uint8_t>& bytes);
 
     float ParseFloat();
+    uint32_t ParseULong();
 
     void PrintParsedValue();
     float GetFloatFromPayload();

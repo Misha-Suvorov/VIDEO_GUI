@@ -80,6 +80,16 @@ private slots:
     void onMeasureModeChanged(int index);
 
 
+    void on_laser_act_b_clicked();
+
+    void on_pulse_b_clicked();
+
+    void on_term_control_b_clicked();
+
+    void on_get_frequency_clicked();
+
+    void on_get_stanag_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;
@@ -98,6 +108,9 @@ private:
     int rotationAngle = 0;
     bool isSwitched = false;
     bool statePointer = false;
+    bool laserOn = false;
+    bool pulseOn = false;
+    bool termOn = false;
 
 
     // New variables for marker values

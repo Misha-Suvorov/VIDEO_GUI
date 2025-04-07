@@ -87,6 +87,24 @@ float CanMessageGeneric::ParseFloat() {
     return floatValue;
 }
 
+uint32_t CanMessageGeneric::ParseULong(){
+    uint32_t uLongValue = GetULongFromPayload();
+    LpsParameters& manager = LpsParameters::GetInstance();
+
+
+    if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER)) {
+        switch (Message.ID) {
+        case static_cast<uint8_t>(IdNode4::FREQUENCY):
+            manager.SetLaserFrequency(uLongValue);
+            break;
+        case static_cast<uint8_t>(IdNode4::STANAG):
+            manager.SetLaserStanag(uLongValue);
+            break;
+        }
+    }
+
+}
+
 void CanMessageGeneric::PrintParsedValue() {
     std::cout << "Extracted Value: ";
     switch (Message.TYPE) {

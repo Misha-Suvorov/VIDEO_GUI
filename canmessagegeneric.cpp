@@ -26,11 +26,21 @@ float CanMessageGeneric::GetFloatFromPayload() {
     return floatValue;
 }
 
+// uint32_t CanMessageGeneric::GetULongFromPayload() {
+//     uint32_t ulongValue;
+//     std::memcpy(&ulongValue, Message.PL, sizeof(uint32_t));
+//     return ulongValue;
+// }
+
 uint32_t CanMessageGeneric::GetULongFromPayload() {
-    uint32_t ulongValue;
-    std::memcpy(&ulongValue, Message.PL, sizeof(uint32_t));
+    uint32_t ulongValue = 0;
+    ulongValue |= static_cast<uint32_t>(Message.PL[3]) << 0;
+    ulongValue |= static_cast<uint32_t>(Message.PL[2]) << 8;
+    ulongValue |= static_cast<uint32_t>(Message.PL[1]) << 16;
+    ulongValue |= static_cast<uint32_t>(Message.PL[0]) << 24;
     return ulongValue;
 }
+
 
 int32_t CanMessageGeneric::GetLongFromPayload() {
     int32_t longValue;
@@ -95,13 +105,18 @@ uint32_t CanMessageGeneric::ParseULong(){
     if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER)) {
         switch (Message.ID) {
         case static_cast<uint8_t>(IdNode4::FREQUENCY):
-            manager.SetLaserFrequency(uLongValue);
+                 manager.SetLaserFrequency(uLongValue);
             break;
         case static_cast<uint8_t>(IdNode4::STANAG):
             manager.SetLaserStanag(uLongValue);
             break;
+        case static_cast<uint8_t>(IdNode4::COUNT_PULSES):
+            manager.SetLaserCountPulses(uLongValue);
+            break;
         }
     }
+
+    return uLongValue;
 
 }
 

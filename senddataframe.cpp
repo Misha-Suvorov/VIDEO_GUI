@@ -9,7 +9,7 @@ SendDataFrame::SendDataFrame() {}
 
 
 
-void SendDataFrame::Send(uint16_t can_id, const std::vector<uint8_t>& payload) {
+void SendDataFrame::Send(uint16_t can_id, uint8_t can_len, const std::vector<uint8_t>& payload) {
     std::vector<uint8_t> data;
 
     uint8_t can_id_high = (can_id >> 8) & 0xFF;
@@ -31,7 +31,7 @@ void SendDataFrame::Send(uint16_t can_id, const std::vector<uint8_t>& payload) {
     data.push_back(can_id_low);
 
     // Додаємо Count byte: 0x08 (8 байт в повідомленні)
-    data.push_back(0x08);
+    data.push_back(can_len);
 
     data.insert(data.end(), payload.begin(), payload.end());
 

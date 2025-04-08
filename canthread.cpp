@@ -25,6 +25,7 @@ void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& messageQu
 
         CanMessageGeneric canMessage(message);
         float parsedValue = canMessage.ParseFloat();
+        uint32_t parsedULong = canMessage.ParseULong();
     }
 }
 

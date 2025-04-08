@@ -188,15 +188,17 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_break_range_b_clicked",
     "onMeasureModeChanged",
     "index",
+    "onFrequencyModeChanged",
     "on_laser_act_b_clicked",
     "on_pulse_b_clicked",
     "on_term_control_b_clicked",
     "on_get_frequency_clicked",
-    "on_get_stanag_clicked"
+    "on_get_stanag_clicked",
+    "on_frequency_mode_currentIndexChanged"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
-    uint offsetsAndSizes[46];
+    uint offsetsAndSizes[50];
     char stringdata0[11];
     char stringdata1[14];
     char stringdata2[1];
@@ -216,10 +218,12 @@ struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
     char stringdata16[21];
     char stringdata17[6];
     char stringdata18[23];
-    char stringdata19[19];
-    char stringdata20[26];
-    char stringdata21[25];
-    char stringdata22[22];
+    char stringdata19[23];
+    char stringdata20[19];
+    char stringdata21[26];
+    char stringdata22[25];
+    char stringdata23[22];
+    char stringdata24[38];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSMainWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -243,11 +247,13 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
         QT_MOC_LITERAL(250, 24),  // "on_break_range_b_clicked"
         QT_MOC_LITERAL(275, 20),  // "onMeasureModeChanged"
         QT_MOC_LITERAL(296, 5),  // "index"
-        QT_MOC_LITERAL(302, 22),  // "on_laser_act_b_clicked"
-        QT_MOC_LITERAL(325, 18),  // "on_pulse_b_clicked"
-        QT_MOC_LITERAL(344, 25),  // "on_term_control_b_clicked"
-        QT_MOC_LITERAL(370, 24),  // "on_get_frequency_clicked"
-        QT_MOC_LITERAL(395, 21)   // "on_get_stanag_clicked"
+        QT_MOC_LITERAL(302, 22),  // "onFrequencyModeChanged"
+        QT_MOC_LITERAL(325, 22),  // "on_laser_act_b_clicked"
+        QT_MOC_LITERAL(348, 18),  // "on_pulse_b_clicked"
+        QT_MOC_LITERAL(367, 25),  // "on_term_control_b_clicked"
+        QT_MOC_LITERAL(393, 24),  // "on_get_frequency_clicked"
+        QT_MOC_LITERAL(418, 21),  // "on_get_stanag_clicked"
+        QT_MOC_LITERAL(440, 37)   // "on_frequency_mode_currentInde..."
     },
     "MainWindow",
     "displayFrame1",
@@ -267,11 +273,13 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
     "on_break_range_b_clicked",
     "onMeasureModeChanged",
     "index",
+    "onFrequencyModeChanged",
     "on_laser_act_b_clicked",
     "on_pulse_b_clicked",
     "on_term_control_b_clicked",
     "on_get_frequency_clicked",
-    "on_get_stanag_clicked"
+    "on_get_stanag_clicked",
+    "on_frequency_mode_currentIndexChanged"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -283,7 +291,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-      18,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -291,24 +299,26 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  122,    2, 0x08,    1 /* Private */,
-       4,    1,  125,    2, 0x08,    3 /* Private */,
-       5,    0,  128,    2, 0x08,    5 /* Private */,
-       6,    0,  129,    2, 0x08,    6 /* Private */,
-       7,    0,  130,    2, 0x08,    7 /* Private */,
-       8,    0,  131,    2, 0x08,    8 /* Private */,
-       9,    0,  132,    2, 0x08,    9 /* Private */,
-      10,    1,  133,    2, 0x08,   10 /* Private */,
-      12,    1,  136,    2, 0x08,   12 /* Private */,
-      13,    0,  139,    2, 0x08,   14 /* Private */,
-      14,    0,  140,    2, 0x08,   15 /* Private */,
-      15,    0,  141,    2, 0x08,   16 /* Private */,
-      16,    1,  142,    2, 0x08,   17 /* Private */,
-      18,    0,  145,    2, 0x08,   19 /* Private */,
-      19,    0,  146,    2, 0x08,   20 /* Private */,
-      20,    0,  147,    2, 0x08,   21 /* Private */,
-      21,    0,  148,    2, 0x08,   22 /* Private */,
-      22,    0,  149,    2, 0x08,   23 /* Private */,
+       1,    1,  134,    2, 0x08,    1 /* Private */,
+       4,    1,  137,    2, 0x08,    3 /* Private */,
+       5,    0,  140,    2, 0x08,    5 /* Private */,
+       6,    0,  141,    2, 0x08,    6 /* Private */,
+       7,    0,  142,    2, 0x08,    7 /* Private */,
+       8,    0,  143,    2, 0x08,    8 /* Private */,
+       9,    0,  144,    2, 0x08,    9 /* Private */,
+      10,    1,  145,    2, 0x08,   10 /* Private */,
+      12,    1,  148,    2, 0x08,   12 /* Private */,
+      13,    0,  151,    2, 0x08,   14 /* Private */,
+      14,    0,  152,    2, 0x08,   15 /* Private */,
+      15,    0,  153,    2, 0x08,   16 /* Private */,
+      16,    1,  154,    2, 0x08,   17 /* Private */,
+      18,    1,  157,    2, 0x08,   19 /* Private */,
+      19,    0,  160,    2, 0x08,   21 /* Private */,
+      20,    0,  161,    2, 0x08,   22 /* Private */,
+      21,    0,  162,    2, 0x08,   23 /* Private */,
+      22,    0,  163,    2, 0x08,   24 /* Private */,
+      23,    0,  164,    2, 0x08,   25 /* Private */,
+      24,    1,  165,    2, 0x08,   26 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QImage,    3,
@@ -324,11 +334,13 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   17,
+    QMetaType::Void, QMetaType::Int,   17,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   17,
 
        0        // eod
 };
@@ -373,6 +385,9 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'onMeasureModeChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'onFrequencyModeChanged'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'on_laser_act_b_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_pulse_b_clicked'
@@ -382,7 +397,10 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'on_get_frequency_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_get_stanag_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_frequency_mode_currentIndexChanged'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>
     >,
     nullptr
 } };
@@ -406,11 +424,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 10: _t->on_start_range_b_clicked(); break;
         case 11: _t->on_break_range_b_clicked(); break;
         case 12: _t->onMeasureModeChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 13: _t->on_laser_act_b_clicked(); break;
-        case 14: _t->on_pulse_b_clicked(); break;
-        case 15: _t->on_term_control_b_clicked(); break;
-        case 16: _t->on_get_frequency_clicked(); break;
-        case 17: _t->on_get_stanag_clicked(); break;
+        case 13: _t->onFrequencyModeChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 14: _t->on_laser_act_b_clicked(); break;
+        case 15: _t->on_pulse_b_clicked(); break;
+        case 16: _t->on_term_control_b_clicked(); break;
+        case 17: _t->on_get_frequency_clicked(); break;
+        case 18: _t->on_get_stanag_clicked(); break;
+        case 19: _t->on_frequency_mode_currentIndexChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     }
@@ -435,13 +455,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 18)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 18;
+        _id -= 20;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 18)
+        if (_id < 20)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 18;
+        _id -= 20;
     }
     return _id;
 }

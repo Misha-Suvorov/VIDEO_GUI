@@ -16,6 +16,7 @@ public:
     void SetTemperature(float value);
     void SetLaserFrequency(uint32_t value);
     void SetLaserStanag(uint32_t value);
+    void SetLaserCountPulses(uint32_t value);
 
 
     float GetAngleX() const;
@@ -24,8 +25,11 @@ public:
     float GetSpeedY() const;
     float GetRange() const;
     float GetTemperature() const;
+
+
     uint32_t GetLaserFrequency() const;
     uint32_t GetLaserStanag() const;
+    uint32_t GetLaserCountPulses() const;
 
 
 
@@ -39,5 +43,6 @@ private:
     float temperature = 0.0f;
     uint32_t laser_frequency = 0;
     uint32_t laser_stanag = 0;
+    uint32_t laser_pulses = 0;
 };
 #endif // LPSPARAMETERS_H

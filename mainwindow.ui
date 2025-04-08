@@ -413,7 +413,7 @@ QPushButton:checked:hover {
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="QComboBox" name="comboBox">
+            <widget class="QComboBox" name="frequency_mode">
              <item>
               <property name="text">
                <string>1 HZ</string>

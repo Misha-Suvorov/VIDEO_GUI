@@ -17,6 +17,8 @@ void LpsParameters::SetRange(float value) { range = value; }
 void LpsParameters::SetTemperature(float value) { temperature = value;}
 void LpsParameters::SetLaserFrequency(uint32_t value) { laser_frequency = value;}
 void LpsParameters::SetLaserStanag(uint32_t value) { laser_stanag = value;}
+void LpsParameters::SetLaserCountPulses(uint32_t value) { laser_pulses = value;}
+
 
 // Методи отримання значень
 float LpsParameters::GetAngleX() const { return angleX; }
@@ -25,6 +27,9 @@ float LpsParameters::GetSpeedX() const { return speedX; }
 float LpsParameters::GetSpeedY() const { return speedY; }
 float LpsParameters::GetRange() const { return range; }
 float LpsParameters::GetTemperature() const { return temperature;}
+
 uint32_t LpsParameters::GetLaserFrequency() const { return laser_frequency;}
 uint32_t LpsParameters::GetLaserStanag() const { return laser_stanag;}
+uint32_t LpsParameters::GetLaserCountPulses() const { return laser_pulses;}
+
 

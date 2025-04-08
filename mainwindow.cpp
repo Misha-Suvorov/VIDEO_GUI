@@ -83,6 +83,10 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::onMeasureModeChanged);
     onMeasureModeChanged(ui->measure_mode->currentIndex());
 
+    connect(ui->frequency_mode, &QComboBox::currentIndexChanged,
+            this, &MainWindow::onFrequencyModeChanged);
+    onFrequencyModeChanged(ui->frequency_mode->currentIndex());
+
 
     // Connect QLineEdit to slots for marker changes
     connect(ui->horizont_marker_input, &QLineEdit::textChanged, this, &MainWindow::onHorizontMarkerChanged);
@@ -138,40 +142,41 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+
+
+void MainWindow::onFrequencyModeChanged(int index){
+    float frequency[8] = {1,2,5,10,20,25,0.5,0.1};
+    uint periodInMicrosec = static_cast<uint>(std::round((1.0 / frequency[index]) * 1e6));
+
+    std::vector<uint8_t> byteArray(sizeof(periodInMicrosec));
+    for (int i = 0; i < sizeof(periodInMicrosec); ++i) {
+        byteArray[i] = (periodInMicrosec >> (i * 8)) & 0xFF;
+    }
+
+
+    std::reverse(byteArray.begin(), byteArray.end());
+
+    std::vector<uint8_t> pld = {0x00, 0x02, 0x04, 0x00};
+    pld.insert(pld.end(), byteArray.begin(), byteArray.end());
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248, 0x08, pld);
+
+}
+
 void MainWindow::onMeasureModeChanged(int index)
 {
     switch (index) {
-    case 0:
-        code = "0x01";
-        break;
-    case 1:
-        code = "0x02";
-        break;
-    case 2:
-        code = "0x03";
-        break;
-    case 3:
-        code = "0x04";
-        break;
-    case 4:
-        code = "0x05";
-        break;
-    case 5:
-        code = "0x06";
-        break;
-    case 6:
-        code = "0x07";
-        break;
-    case 7:
-        code = "0x08";
-        break;
-    case 8:
-        code = "0x09";
-        break;
+    case 0: code = "0x01"; break;
+    case 1: code = "0x02"; break;
+    case 2: code = "0x03"; break;
+    case 3: code = "0x04"; break;
+    case 4: code = "0x05"; break;
+    case 5: code = "0x06"; break;
+    case 6: code = "0x07"; break;
+    case 7: code = "0x08"; break;
+    case 8: code = "0x09"; break;
 
-    default:
-        code = "0x01";
-        break;
+    default: code = "0x01"; break;
     }
 
 }
@@ -349,7 +354,7 @@ void MainWindow::on_pointer_b_clicked() {
 
     // Відправка повідомлення
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x238, payload);
+    sendDataFrame.Send(0x238,0x08, payload);
 }
 
 
@@ -376,7 +381,7 @@ void MainWindow::on_start_range_b_clicked()
 
     // Відправка повідомлення
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x238, payload);
+    sendDataFrame.Send(0x238,0x08, payload);
 
 }
 
@@ -388,7 +393,7 @@ void MainWindow::on_break_range_b_clicked()
 
     // Відправка повідомлення
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x238, payload);
+    sendDataFrame.Send(0x238,0x08, payload);
 }
 
 
@@ -402,7 +407,7 @@ void MainWindow::on_laser_act_b_clicked()
     };
 
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248, payload);
+    sendDataFrame.Send(0x248,0x08, payload);
 
 }
 
@@ -418,7 +423,7 @@ void MainWindow::on_pulse_b_clicked()
     };
 
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248, payload);
+    sendDataFrame.Send(0x248,0x08, payload);
 
 }
 
@@ -433,22 +438,30 @@ void MainWindow::on_term_control_b_clicked()
     };
 
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248, payload);
+    sendDataFrame.Send(0x248,0x08, payload);
 }
 
 
 void MainWindow::on_get_frequency_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
+    std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x01};
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248, payload);
+    sendDataFrame.Send(0x248,0x04, payload);
 }
 
 
 void MainWindow::on_get_stanag_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x03, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
+    std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x00};
+    //std::vector<uint8_t> payload = {0x00, 0xF0, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248, payload);
+    sendDataFrame.Send(0x248,0x04, payload);
+}
+
+
+void MainWindow::on_frequency_mode_currentIndexChanged(int index)
+{
+    QString selectedText = ui->frequency_mode->itemText(index);
+    ui->frequency_out->setText(selectedText);
 }
 

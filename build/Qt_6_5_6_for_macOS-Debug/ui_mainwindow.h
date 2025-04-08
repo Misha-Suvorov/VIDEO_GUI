@@ -61,7 +61,7 @@ public:
     QPushButton *term_control_b;
     QPushButton *pointer_b;
     QLabel *label_7;
-    QComboBox *comboBox;
+    QComboBox *frequency_mode;
     QPushButton *pulse_b;
     QComboBox *measure_mode;
     QLabel *label;
@@ -387,18 +387,18 @@ public:
 
         gridLayout_4->addWidget(label_7, 1, 3, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
 
-        comboBox = new QComboBox(frame);
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->addItem(QString());
-        comboBox->setObjectName("comboBox");
+        frequency_mode = new QComboBox(frame);
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->setObjectName("frequency_mode");
 
-        gridLayout_4->addWidget(comboBox, 2, 0, 1, 1);
+        gridLayout_4->addWidget(frequency_mode, 2, 0, 1, 1);
 
         pulse_b = new QPushButton(frame);
         pulse_b->setObjectName("pulse_b");
@@ -670,14 +670,14 @@ public:
 "control", nullptr));
         pointer_b->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
         label_7->setText(QCoreApplication::translate("MainWindow", "Error: NONE", nullptr));
-        comboBox->setItemText(0, QCoreApplication::translate("MainWindow", "1 HZ", nullptr));
-        comboBox->setItemText(1, QCoreApplication::translate("MainWindow", "2 Hz", nullptr));
-        comboBox->setItemText(2, QCoreApplication::translate("MainWindow", "5 Hz", nullptr));
-        comboBox->setItemText(3, QCoreApplication::translate("MainWindow", "10 Hz", nullptr));
-        comboBox->setItemText(4, QCoreApplication::translate("MainWindow", "20 HZ", nullptr));
-        comboBox->setItemText(5, QCoreApplication::translate("MainWindow", "25 HZ", nullptr));
-        comboBox->setItemText(6, QCoreApplication::translate("MainWindow", "0,5 HZ", nullptr));
-        comboBox->setItemText(7, QCoreApplication::translate("MainWindow", "0,1 HZ", nullptr));
+        frequency_mode->setItemText(0, QCoreApplication::translate("MainWindow", "1 HZ", nullptr));
+        frequency_mode->setItemText(1, QCoreApplication::translate("MainWindow", "2 Hz", nullptr));
+        frequency_mode->setItemText(2, QCoreApplication::translate("MainWindow", "5 Hz", nullptr));
+        frequency_mode->setItemText(3, QCoreApplication::translate("MainWindow", "10 Hz", nullptr));
+        frequency_mode->setItemText(4, QCoreApplication::translate("MainWindow", "20 HZ", nullptr));
+        frequency_mode->setItemText(5, QCoreApplication::translate("MainWindow", "25 HZ", nullptr));
+        frequency_mode->setItemText(6, QCoreApplication::translate("MainWindow", "0,5 HZ", nullptr));
+        frequency_mode->setItemText(7, QCoreApplication::translate("MainWindow", "0,1 HZ", nullptr));
 
         pulse_b->setText(QCoreApplication::translate("MainWindow", "PULSE\n"
 " ON", nullptr));

@@ -24,8 +24,18 @@ void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& messageQu
         queueCopy.pop();
 
         CanMessageGeneric canMessage(message);
-        float parsedValue = canMessage.ParseFloat();
-        uint32_t parsedULong = canMessage.ParseULong();
+        switch (canMessage.Message.TYPE) {
+        case ParamType::NoneType:
+            LpsParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
+        case ParamType::Float:
+            canMessage.ParseFloat();
+            break;
+        case ParamType::ULong:
+            canMessage.ParseULong();
+            break;
+        default:
+            break;
+        }
     }
 }
 

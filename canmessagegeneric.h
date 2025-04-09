@@ -112,6 +112,7 @@ public:
     int32_t GetLongFromPayload();
     uint16_t GetUShortFromPayload();
     int16_t GetShortFromPayload();
+    uint8_t GetByteFromPayload();
 };
 
 

@@ -17,6 +17,8 @@ public:
     void SetLaserFrequency(uint32_t value);
     void SetLaserStanag(uint32_t value);
     void SetLaserCountPulses(uint32_t value);
+    void SetTimeRemaining(uint32_t value);
+    void SetLaserError(uint8_t value);
 
 
     float GetAngleX() const;
@@ -30,6 +32,9 @@ public:
     uint32_t GetLaserFrequency() const;
     uint32_t GetLaserStanag() const;
     uint32_t GetLaserCountPulses() const;
+    uint32_t GetTimeRemaining () const;
+
+    uint8_t GetLaserError() const;
 
 
 
@@ -44,5 +49,7 @@ private:
     uint32_t laser_frequency = 0;
     uint32_t laser_stanag = 0;
     uint32_t laser_pulses = 0;
+    uint32_t time_remaining = 0;
+    uint8_t laser_error = 0;
 };
 #endif // LPSPARAMETERS_H

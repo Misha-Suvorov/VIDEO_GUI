@@ -91,7 +91,24 @@ private slots:
 
     void on_get_stanag_clicked();
 
-    void on_frequency_mode_currentIndexChanged(int index);
+    //void on_frequency_mode_currentIndexChanged(int index);
+
+    void on_first_STANAG_Changed(int index);
+
+    void on_energy_1_clicked();
+
+    void on_energy_2_clicked();
+
+    void on_energy_0_clicked();
+
+    void on_energy_3_clicked();
+
+    void on_energy_4_clicked();
+
+    void on_energy_5_clicked();
+
+
+    void on_mode_input_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

@@ -60,6 +60,12 @@ int16_t CanMessageGeneric::GetShortFromPayload() {
     return shortValue;
 }
 
+uint8_t CanMessageGeneric::GetByteFromPayload() {
+    uint8_t byteValue;
+    std::memcpy(&byteValue, Message.PL, sizeof(uint8_t));
+    return byteValue;
+}
+
 float CanMessageGeneric::ParseFloat() {
     float floatValue = GetFloatFromPayload();
     LpsParameters& manager = LpsParameters::GetInstance();
@@ -113,7 +119,11 @@ uint32_t CanMessageGeneric::ParseULong(){
         case static_cast<uint8_t>(IdNode4::COUNT_PULSES):
             manager.SetLaserCountPulses(uLongValue);
             break;
+        case static_cast<uint8_t>(IdNode4::TIME_RADIATION_REMAINING):
+            manager.SetTimeRemaining(uLongValue);
+            break;
         }
+
     }
 
     return uLongValue;

@@ -33,7 +33,6 @@ public:
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout;
     QGridLayout *gridLayout_2;
-    QLabel *videoLabel;
     QFrame *frame;
     QVBoxLayout *verticalLayout;
     QLabel *videoLabel2;
@@ -44,33 +43,38 @@ public:
     QPushButton *stop_b_2;
     QPushButton *switch_vid;
     QGridLayout *gridLayout_4;
-    QLabel *label_4;
     QPushButton *break_range_b;
+    QLabel *label;
+    QPushButton *pulse_b;
+    QLineEdit *temp_out;
+    QComboBox *measure_mode;
+    QLabel *label_4;
     QLabel *label_5;
     QPushButton *laser_act_b;
+    QLabel *error_label;
+    QPushButton *start_range_b;
+    QLineEdit *time_remaining_out;
     QGridLayout *gridLayout_5;
     QLabel *label_9;
-    QRadioButton *radioButton_2;
-    QRadioButton *radioButton;
-    QRadioButton *radioButton_3;
-    QRadioButton *radioButton_4;
-    QRadioButton *radioButton_5;
-    QLineEdit *lineEdit;
-    QPushButton *ext_radiation_b;
-    QPushButton *start_range_b;
-    QPushButton *term_control_b;
+    QRadioButton *energy_4;
+    QRadioButton *energy_5;
+    QRadioButton *energy_3;
+    QRadioButton *energy_2;
+    QRadioButton *energy_0;
+    QRadioButton *energy_1;
     QPushButton *pointer_b;
-    QLabel *label_7;
     QComboBox *frequency_mode;
-    QPushButton *pulse_b;
-    QComboBox *measure_mode;
-    QLabel *label;
-    QLineEdit *temp_out;
-    QLineEdit *range_out;
     QLabel *label_6;
+    QPushButton *ext_radiation_b;
+    QPushButton *term_control_b;
+    QLineEdit *range_out;
     QPushButton *get_frequency;
     QLineEdit *frequency_out;
-    QLineEdit *stanag_out;
+    QGridLayout *gridLayout_7;
+    QComboBox *third_STANAG;
+    QComboBox *second_STANAG;
+    QComboBox *first_STANAG;
+    QLabel *label_3;
     QPushButton *get_stanag;
     QGridLayout *gridLayout;
     QLineEdit *horizont_marker_input;
@@ -95,6 +99,13 @@ public:
     QHBoxLayout *horizontalLayout_4;
     QPushButton *d_2_b;
     QPushButton *d_b;
+    QGridLayout *gridLayout_9;
+    QLabel *label_2;
+    QComboBox *mode_input;
+    QGridLayout *gridLayout_10;
+    QLabel *label_7;
+    QComboBox *step_input;
+    QLabel *videoLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -117,16 +128,6 @@ public:
         horizontalLayout->setObjectName("horizontalLayout");
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName("gridLayout_2");
-        videoLabel = new QLabel(centralwidget);
-        videoLabel->setObjectName("videoLabel");
-        videoLabel->setEnabled(true);
-        sizePolicy.setHeightForWidth(videoLabel->sizePolicy().hasHeightForWidth());
-        videoLabel->setSizePolicy(sizePolicy);
-        videoLabel->setMinimumSize(QSize(0, 0));
-        videoLabel->setAutoFillBackground(false);
-
-        gridLayout_2->addWidget(videoLabel, 0, 0, 1, 1);
-
         frame = new QFrame(centralwidget);
         frame->setObjectName("frame");
         QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
@@ -185,15 +186,61 @@ public:
 
         gridLayout_4 = new QGridLayout();
         gridLayout_4->setObjectName("gridLayout_4");
+        break_range_b = new QPushButton(frame);
+        break_range_b->setObjectName("break_range_b");
+
+        gridLayout_4->addWidget(break_range_b, 5, 1, 1, 1);
+
+        label = new QLabel(frame);
+        label->setObjectName("label");
+
+        gridLayout_4->addWidget(label, 6, 0, 1, 1, Qt::AlignHCenter);
+
+        pulse_b = new QPushButton(frame);
+        pulse_b->setObjectName("pulse_b");
+        pulse_b->setEnabled(false);
+        pulse_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"	border-top:1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* \320\233\320\265\320\263\320\272\320\265 \320\267\320\260\321\202\320\265\320\274\320\275\320\265\320\275\320\275\321\217 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 */\n"
+"}\n"
+"\n"
+""));
+        pulse_b->setCheckable(true);
+
+        gridLayout_4->addWidget(pulse_b, 0, 1, 1, 1);
+
+        temp_out = new QLineEdit(frame);
+        temp_out->setObjectName("temp_out");
+
+        gridLayout_4->addWidget(temp_out, 2, 2, 1, 1, Qt::AlignHCenter);
+
+        measure_mode = new QComboBox(frame);
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->addItem(QString());
+        measure_mode->setObjectName("measure_mode");
+
+        gridLayout_4->addWidget(measure_mode, 6, 1, 1, 1);
+
         label_4 = new QLabel(frame);
         label_4->setObjectName("label_4");
 
         gridLayout_4->addWidget(label_4, 1, 0, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
-
-        break_range_b = new QPushButton(frame);
-        break_range_b->setObjectName("break_range_b");
-
-        gridLayout_4->addWidget(break_range_b, 4, 1, 1, 1);
 
         label_5 = new QLabel(frame);
         label_5->setObjectName("label_5");
@@ -235,6 +282,21 @@ public:
 
         gridLayout_4->addWidget(laser_act_b, 0, 0, 1, 1);
 
+        error_label = new QLabel(frame);
+        error_label->setObjectName("error_label");
+
+        gridLayout_4->addWidget(error_label, 1, 3, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
+
+        start_range_b = new QPushButton(frame);
+        start_range_b->setObjectName("start_range_b");
+
+        gridLayout_4->addWidget(start_range_b, 5, 0, 1, 1);
+
+        time_remaining_out = new QLineEdit(frame);
+        time_remaining_out->setObjectName("time_remaining_out");
+
+        gridLayout_4->addWidget(time_remaining_out, 2, 1, 1, 1, Qt::AlignHCenter);
+
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setObjectName("gridLayout_5");
         label_9 = new QLabel(frame);
@@ -242,38 +304,89 @@ public:
 
         gridLayout_5->addWidget(label_9, 0, 0, 1, 1);
 
-        radioButton_2 = new QRadioButton(frame);
-        radioButton_2->setObjectName("radioButton_2");
+        energy_4 = new QRadioButton(frame);
+        energy_4->setObjectName("energy_4");
 
-        gridLayout_5->addWidget(radioButton_2, 1, 0, 1, 1);
+        gridLayout_5->addWidget(energy_4, 3, 0, 1, 1);
 
-        radioButton = new QRadioButton(frame);
-        radioButton->setObjectName("radioButton");
+        energy_5 = new QRadioButton(frame);
+        energy_5->setObjectName("energy_5");
 
-        gridLayout_5->addWidget(radioButton, 0, 1, 1, 1);
+        gridLayout_5->addWidget(energy_5, 3, 1, 1, 1);
 
-        radioButton_3 = new QRadioButton(frame);
-        radioButton_3->setObjectName("radioButton_3");
+        energy_3 = new QRadioButton(frame);
+        energy_3->setObjectName("energy_3");
 
-        gridLayout_5->addWidget(radioButton_3, 1, 1, 1, 1);
+        gridLayout_5->addWidget(energy_3, 2, 1, 1, 1);
 
-        radioButton_4 = new QRadioButton(frame);
-        radioButton_4->setObjectName("radioButton_4");
+        energy_2 = new QRadioButton(frame);
+        energy_2->setObjectName("energy_2");
 
-        gridLayout_5->addWidget(radioButton_4, 2, 0, 1, 1);
+        gridLayout_5->addWidget(energy_2, 2, 0, 1, 1);
 
-        radioButton_5 = new QRadioButton(frame);
-        radioButton_5->setObjectName("radioButton_5");
+        energy_0 = new QRadioButton(frame);
+        energy_0->setObjectName("energy_0");
 
-        gridLayout_5->addWidget(radioButton_5, 2, 1, 1, 1);
+        gridLayout_5->addWidget(energy_0, 1, 0, 1, 1);
+
+        energy_1 = new QRadioButton(frame);
+        energy_1->setObjectName("energy_1");
+
+        gridLayout_5->addWidget(energy_1, 1, 1, 1, 1);
 
 
         gridLayout_4->addLayout(gridLayout_5, 2, 3, 1, 1);
 
-        lineEdit = new QLineEdit(frame);
-        lineEdit->setObjectName("lineEdit");
+        pointer_b = new QPushButton(frame);
+        pointer_b->setObjectName("pointer_b");
+        pointer_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* Default color */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"    border-top: 1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* Light darkening on hover */\n"
+"}\n"
+"\n"
+"QPushButton:checked {\n"
+"    background-color: rgb(255, 140, 0); /* Orange color when clicked */\n"
+"    border-left: 1px solid rgb(204, 113, 0);\n"
+"    border-right: 1px solid rgb(204, 113, 0);\n"
+"    border-bottom: 1px solid rgb(204, 113, 0);\n"
+"    border-top: 1px solid rgb(204, 113, 0);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:checked:hover {\n"
+"    background-color: rgb(255, 165, 0); /* Lighter orange when hovered in active state */\n"
+"}\n"
+""));
+        pointer_b->setCheckable(true);
 
-        gridLayout_4->addWidget(lineEdit, 2, 1, 1, 1, Qt::AlignHCenter);
+        gridLayout_4->addWidget(pointer_b, 5, 2, 1, 1);
+
+        frequency_mode = new QComboBox(frame);
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->addItem(QString());
+        frequency_mode->setObjectName("frequency_mode");
+
+        gridLayout_4->addWidget(frequency_mode, 2, 0, 1, 1);
+
+        label_6 = new QLabel(frame);
+        label_6->setObjectName("label_6");
+
+        gridLayout_4->addWidget(label_6, 1, 2, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
 
         ext_radiation_b = new QPushButton(frame);
         ext_radiation_b->setObjectName("ext_radiation_b");
@@ -308,11 +421,6 @@ public:
         ext_radiation_b->setCheckable(true);
 
         gridLayout_4->addWidget(ext_radiation_b, 0, 3, 1, 1);
-
-        start_range_b = new QPushButton(frame);
-        start_range_b->setObjectName("start_range_b");
-
-        gridLayout_4->addWidget(start_range_b, 4, 0, 1, 1);
 
         term_control_b = new QPushButton(frame);
         term_control_b->setObjectName("term_control_b");
@@ -349,132 +457,79 @@ public:
 
         gridLayout_4->addWidget(term_control_b, 0, 2, 1, 1);
 
-        pointer_b = new QPushButton(frame);
-        pointer_b->setObjectName("pointer_b");
-        pointer_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"    background-color: none; /* Default color */\n"
-"    border: none;\n"
-"    color: black;\n"
-"    border-left: 1px solid gray;\n"
-"    border-right: 1px solid gray;\n"
-"    border-top: 1px solid gray;\n"
-"    border-bottom: 1px solid gray;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: rgba(0, 0, 0, 0.1); /* Light darkening on hover */\n"
-"}\n"
-"\n"
-"QPushButton:checked {\n"
-"    background-color: rgb(255, 140, 0); /* Orange color when clicked */\n"
-"    border-left: 1px solid rgb(204, 113, 0);\n"
-"    border-right: 1px solid rgb(204, 113, 0);\n"
-"    border-bottom: 1px solid rgb(204, 113, 0);\n"
-"    border-top: 1px solid rgb(204, 113, 0);\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QPushButton:checked:hover {\n"
-"    background-color: rgb(255, 165, 0); /* Lighter orange when hovered in active state */\n"
-"}\n"
-""));
-        pointer_b->setCheckable(true);
-
-        gridLayout_4->addWidget(pointer_b, 4, 2, 1, 1);
-
-        label_7 = new QLabel(frame);
-        label_7->setObjectName("label_7");
-
-        gridLayout_4->addWidget(label_7, 1, 3, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
-
-        frequency_mode = new QComboBox(frame);
-        frequency_mode->addItem(QString());
-        frequency_mode->addItem(QString());
-        frequency_mode->addItem(QString());
-        frequency_mode->addItem(QString());
-        frequency_mode->addItem(QString());
-        frequency_mode->addItem(QString());
-        frequency_mode->addItem(QString());
-        frequency_mode->addItem(QString());
-        frequency_mode->setObjectName("frequency_mode");
-
-        gridLayout_4->addWidget(frequency_mode, 2, 0, 1, 1);
-
-        pulse_b = new QPushButton(frame);
-        pulse_b->setObjectName("pulse_b");
-        pulse_b->setEnabled(false);
-        pulse_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
-"    border: none;\n"
-"    color: black;\n"
-"    border-left: 1px solid gray;\n"
-"    border-right: 1px solid gray;\n"
-"	border-top:1px solid gray;\n"
-"    border-bottom: 1px solid gray;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: rgba(0, 0, 0, 0.1); /* \320\233\320\265\320\263\320\272\320\265 \320\267\320\260\321\202\320\265\320\274\320\275\320\265\320\275\320\275\321\217 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 */\n"
-"}\n"
-"\n"
-""));
-        pulse_b->setCheckable(true);
-
-        gridLayout_4->addWidget(pulse_b, 0, 1, 1, 1);
-
-        measure_mode = new QComboBox(frame);
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->addItem(QString());
-        measure_mode->setObjectName("measure_mode");
-
-        gridLayout_4->addWidget(measure_mode, 5, 1, 1, 1);
-
-        label = new QLabel(frame);
-        label->setObjectName("label");
-
-        gridLayout_4->addWidget(label, 5, 0, 1, 1, Qt::AlignHCenter);
-
-        temp_out = new QLineEdit(frame);
-        temp_out->setObjectName("temp_out");
-
-        gridLayout_4->addWidget(temp_out, 2, 2, 1, 1, Qt::AlignHCenter);
-
         range_out = new QLineEdit(frame);
         range_out->setObjectName("range_out");
 
-        gridLayout_4->addWidget(range_out, 5, 2, 1, 1, Qt::AlignLeft);
-
-        label_6 = new QLabel(frame);
-        label_6->setObjectName("label_6");
-
-        gridLayout_4->addWidget(label_6, 1, 2, 1, 1, Qt::AlignHCenter|Qt::AlignTop);
+        gridLayout_4->addWidget(range_out, 6, 2, 1, 1, Qt::AlignLeft);
 
         get_frequency = new QPushButton(frame);
         get_frequency->setObjectName("get_frequency");
 
-        gridLayout_4->addWidget(get_frequency, 3, 0, 1, 1);
+        gridLayout_4->addWidget(get_frequency, 4, 2, 1, 1);
 
         frequency_out = new QLineEdit(frame);
         frequency_out->setObjectName("frequency_out");
 
-        gridLayout_4->addWidget(frequency_out, 3, 1, 1, 1, Qt::AlignHCenter);
+        gridLayout_4->addWidget(frequency_out, 4, 3, 1, 1, Qt::AlignHCenter);
 
-        stanag_out = new QLineEdit(frame);
-        stanag_out->setObjectName("stanag_out");
+        gridLayout_7 = new QGridLayout();
+        gridLayout_7->setObjectName("gridLayout_7");
+        gridLayout_7->setHorizontalSpacing(0);
+        third_STANAG = new QComboBox(frame);
+        third_STANAG->addItem(QString());
+        third_STANAG->addItem(QString());
+        third_STANAG->addItem(QString());
+        third_STANAG->addItem(QString());
+        third_STANAG->addItem(QString());
+        third_STANAG->addItem(QString());
+        third_STANAG->addItem(QString());
+        third_STANAG->addItem(QString());
+        third_STANAG->setObjectName("third_STANAG");
+        third_STANAG->setMaximumSize(QSize(50, 16777215));
 
-        gridLayout_4->addWidget(stanag_out, 3, 3, 1, 1, Qt::AlignHCenter);
+        gridLayout_7->addWidget(third_STANAG, 1, 4, 1, 1);
+
+        second_STANAG = new QComboBox(frame);
+        second_STANAG->addItem(QString());
+        second_STANAG->addItem(QString());
+        second_STANAG->addItem(QString());
+        second_STANAG->addItem(QString());
+        second_STANAG->addItem(QString());
+        second_STANAG->addItem(QString());
+        second_STANAG->addItem(QString());
+        second_STANAG->addItem(QString());
+        second_STANAG->setObjectName("second_STANAG");
+        second_STANAG->setMaximumSize(QSize(50, 16777215));
+
+        gridLayout_7->addWidget(second_STANAG, 1, 3, 1, 1, Qt::AlignRight);
+
+        first_STANAG = new QComboBox(frame);
+        first_STANAG->addItem(QString());
+        first_STANAG->addItem(QString());
+        first_STANAG->addItem(QString());
+        first_STANAG->addItem(QString());
+        first_STANAG->addItem(QString());
+        first_STANAG->addItem(QString());
+        first_STANAG->addItem(QString());
+        first_STANAG->addItem(QString());
+        first_STANAG->setObjectName("first_STANAG");
+        first_STANAG->setMaximumSize(QSize(50, 16777215));
+
+        gridLayout_7->addWidget(first_STANAG, 1, 2, 1, 1, Qt::AlignRight);
+
+        label_3 = new QLabel(frame);
+        label_3->setObjectName("label_3");
+        label_3->setMaximumSize(QSize(10, 16777215));
+
+        gridLayout_7->addWidget(label_3, 1, 1, 1, 1, Qt::AlignRight);
+
+
+        gridLayout_4->addLayout(gridLayout_7, 4, 0, 1, 1);
 
         get_stanag = new QPushButton(frame);
         get_stanag->setObjectName("get_stanag");
 
-        gridLayout_4->addWidget(get_stanag, 3, 2, 1, 1);
+        gridLayout_4->addWidget(get_stanag, 4, 1, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout_4);
@@ -618,11 +673,63 @@ public:
 
         gridLayout_3->addLayout(horizontalLayout_4, 3, 2, 1, 1);
 
+        gridLayout_9 = new QGridLayout();
+        gridLayout_9->setObjectName("gridLayout_9");
+        label_2 = new QLabel(frame);
+        label_2->setObjectName("label_2");
+
+        gridLayout_9->addWidget(label_2, 0, 0, 1, 1, Qt::AlignHCenter);
+
+        mode_input = new QComboBox(frame);
+        mode_input->addItem(QString());
+        mode_input->addItem(QString());
+        mode_input->addItem(QString());
+        mode_input->setObjectName("mode_input");
+
+        gridLayout_9->addWidget(mode_input, 1, 0, 1, 1, Qt::AlignHCenter);
+
+
+        gridLayout_3->addLayout(gridLayout_9, 1, 1, 1, 1);
+
+        gridLayout_10 = new QGridLayout();
+        gridLayout_10->setObjectName("gridLayout_10");
+        label_7 = new QLabel(frame);
+        label_7->setObjectName("label_7");
+
+        gridLayout_10->addWidget(label_7, 0, 0, 1, 1, Qt::AlignHCenter);
+
+        step_input = new QComboBox(frame);
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->addItem(QString());
+        step_input->setObjectName("step_input");
+
+        gridLayout_10->addWidget(step_input, 1, 0, 1, 1, Qt::AlignHCenter);
+
+
+        gridLayout_3->addLayout(gridLayout_10, 1, 3, 1, 1);
+
 
         verticalLayout->addLayout(gridLayout_3);
 
 
         gridLayout_2->addWidget(frame, 0, 1, 1, 1);
+
+        videoLabel = new QLabel(centralwidget);
+        videoLabel->setObjectName("videoLabel");
+        videoLabel->setEnabled(true);
+        sizePolicy.setHeightForWidth(videoLabel->sizePolicy().hasHeightForWidth());
+        videoLabel->setSizePolicy(sizePolicy);
+        videoLabel->setMinimumSize(QSize(0, 0));
+        videoLabel->setAutoFillBackground(false);
+
+        gridLayout_2->addWidget(videoLabel, 0, 0, 1, 1);
 
 
         horizontalLayout->addLayout(gridLayout_2);
@@ -644,43 +751,17 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        videoLabel->setText(QString());
         videoLabel2->setText(QString());
         l_vid_turn->setText(QCoreApplication::translate("MainWindow", "\342\237\262", nullptr));
         r_vid_turn->setText(QCoreApplication::translate("MainWindow", "\342\237\263", nullptr));
         start_b->setText(QCoreApplication::translate("MainWindow", "start", nullptr));
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));
-        label_4->setText(QCoreApplication::translate("MainWindow", "pulse frequency", nullptr));
         break_range_b->setText(QCoreApplication::translate("MainWindow", "Break range", nullptr));
-        label_5->setText(QCoreApplication::translate("MainWindow", "Time remaining", nullptr));
-        laser_act_b->setText(QCoreApplication::translate("MainWindow", "LASER \n"
-"ACTIVATION", nullptr));
-        label_9->setText(QCoreApplication::translate("MainWindow", "ENERGY", nullptr));
-        radioButton_2->setText(QCoreApplication::translate("MainWindow", "2", nullptr));
-        radioButton->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
-        radioButton_3->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
-        radioButton_4->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        radioButton_5->setText(QCoreApplication::translate("MainWindow", "5", nullptr));
-        lineEdit->setText(QCoreApplication::translate("MainWindow", "N/A", nullptr));
-        ext_radiation_b->setText(QCoreApplication::translate("MainWindow", "External\n"
-" radiation", nullptr));
-        start_range_b->setText(QCoreApplication::translate("MainWindow", "start range", nullptr));
-        term_control_b->setText(QCoreApplication::translate("MainWindow", "Thermal \n"
-"control", nullptr));
-        pointer_b->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
-        label_7->setText(QCoreApplication::translate("MainWindow", "Error: NONE", nullptr));
-        frequency_mode->setItemText(0, QCoreApplication::translate("MainWindow", "1 HZ", nullptr));
-        frequency_mode->setItemText(1, QCoreApplication::translate("MainWindow", "2 Hz", nullptr));
-        frequency_mode->setItemText(2, QCoreApplication::translate("MainWindow", "5 Hz", nullptr));
-        frequency_mode->setItemText(3, QCoreApplication::translate("MainWindow", "10 Hz", nullptr));
-        frequency_mode->setItemText(4, QCoreApplication::translate("MainWindow", "20 HZ", nullptr));
-        frequency_mode->setItemText(5, QCoreApplication::translate("MainWindow", "25 HZ", nullptr));
-        frequency_mode->setItemText(6, QCoreApplication::translate("MainWindow", "0,5 HZ", nullptr));
-        frequency_mode->setItemText(7, QCoreApplication::translate("MainWindow", "0,1 HZ", nullptr));
-
+        label->setText(QCoreApplication::translate("MainWindow", "Mesurement mode", nullptr));
         pulse_b->setText(QCoreApplication::translate("MainWindow", "PULSE\n"
 " ON", nullptr));
+        temp_out->setText(QString());
         measure_mode->setItemText(0, QCoreApplication::translate("MainWindow", "SMM", nullptr));
         measure_mode->setItemText(1, QCoreApplication::translate("MainWindow", "CMM 1Hz", nullptr));
         measure_mode->setItemText(2, QCoreApplication::translate("MainWindow", "CMM 4Hz", nullptr));
@@ -691,11 +772,65 @@ public:
         measure_mode->setItemText(7, QCoreApplication::translate("MainWindow", "Quick SMM 1", nullptr));
         measure_mode->setItemText(8, QCoreApplication::translate("MainWindow", "Quick SMM 2", nullptr));
 
-        label->setText(QCoreApplication::translate("MainWindow", "Mesurement mode", nullptr));
-        temp_out->setText(QString());
+        label_4->setText(QCoreApplication::translate("MainWindow", "pulse frequency", nullptr));
+        label_5->setText(QCoreApplication::translate("MainWindow", "Time remaining (sec)", nullptr));
+        laser_act_b->setText(QCoreApplication::translate("MainWindow", "LASER \n"
+"ACTIVATION", nullptr));
+        error_label->setText(QCoreApplication::translate("MainWindow", "Error: NONE", nullptr));
+        start_range_b->setText(QCoreApplication::translate("MainWindow", "start range", nullptr));
+        time_remaining_out->setText(QCoreApplication::translate("MainWindow", "N/A", nullptr));
+        label_9->setText(QCoreApplication::translate("MainWindow", "ENERGY", nullptr));
+        energy_4->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
+        energy_5->setText(QCoreApplication::translate("MainWindow", "5", nullptr));
+        energy_3->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
+        energy_2->setText(QCoreApplication::translate("MainWindow", "2", nullptr));
+        energy_0->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        energy_1->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
+        pointer_b->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
+        frequency_mode->setItemText(0, QCoreApplication::translate("MainWindow", "1 HZ", nullptr));
+        frequency_mode->setItemText(1, QCoreApplication::translate("MainWindow", "2 Hz", nullptr));
+        frequency_mode->setItemText(2, QCoreApplication::translate("MainWindow", "5 Hz", nullptr));
+        frequency_mode->setItemText(3, QCoreApplication::translate("MainWindow", "10 Hz", nullptr));
+        frequency_mode->setItemText(4, QCoreApplication::translate("MainWindow", "20 HZ", nullptr));
+        frequency_mode->setItemText(5, QCoreApplication::translate("MainWindow", "25 HZ", nullptr));
+        frequency_mode->setItemText(6, QCoreApplication::translate("MainWindow", "0,5 HZ", nullptr));
+        frequency_mode->setItemText(7, QCoreApplication::translate("MainWindow", "0,1 HZ", nullptr));
+
         label_6->setText(QCoreApplication::translate("MainWindow", "Temperature \302\260C", nullptr));
+        ext_radiation_b->setText(QCoreApplication::translate("MainWindow", "External\n"
+" radiation", nullptr));
+        term_control_b->setText(QCoreApplication::translate("MainWindow", "Thermal \n"
+"control", nullptr));
         get_frequency->setText(QCoreApplication::translate("MainWindow", "Get Frequency", nullptr));
-        get_stanag->setText(QCoreApplication::translate("MainWindow", "Get STANAG Code", nullptr));
+        third_STANAG->setItemText(0, QCoreApplication::translate("MainWindow", "1", nullptr));
+        third_STANAG->setItemText(1, QCoreApplication::translate("MainWindow", "2", nullptr));
+        third_STANAG->setItemText(2, QCoreApplication::translate("MainWindow", "3", nullptr));
+        third_STANAG->setItemText(3, QCoreApplication::translate("MainWindow", "4", nullptr));
+        third_STANAG->setItemText(4, QCoreApplication::translate("MainWindow", "5", nullptr));
+        third_STANAG->setItemText(5, QCoreApplication::translate("MainWindow", "6", nullptr));
+        third_STANAG->setItemText(6, QCoreApplication::translate("MainWindow", "7", nullptr));
+        third_STANAG->setItemText(7, QCoreApplication::translate("MainWindow", "8", nullptr));
+
+        second_STANAG->setItemText(0, QCoreApplication::translate("MainWindow", "1", nullptr));
+        second_STANAG->setItemText(1, QCoreApplication::translate("MainWindow", "2", nullptr));
+        second_STANAG->setItemText(2, QCoreApplication::translate("MainWindow", "3", nullptr));
+        second_STANAG->setItemText(3, QCoreApplication::translate("MainWindow", "4", nullptr));
+        second_STANAG->setItemText(4, QCoreApplication::translate("MainWindow", "5", nullptr));
+        second_STANAG->setItemText(5, QCoreApplication::translate("MainWindow", "6", nullptr));
+        second_STANAG->setItemText(6, QCoreApplication::translate("MainWindow", "7", nullptr));
+        second_STANAG->setItemText(7, QCoreApplication::translate("MainWindow", "8", nullptr));
+
+        first_STANAG->setItemText(0, QCoreApplication::translate("MainWindow", "1", nullptr));
+        first_STANAG->setItemText(1, QCoreApplication::translate("MainWindow", "2", nullptr));
+        first_STANAG->setItemText(2, QCoreApplication::translate("MainWindow", "3", nullptr));
+        first_STANAG->setItemText(3, QCoreApplication::translate("MainWindow", "4", nullptr));
+        first_STANAG->setItemText(4, QCoreApplication::translate("MainWindow", "5", nullptr));
+        first_STANAG->setItemText(5, QCoreApplication::translate("MainWindow", "6", nullptr));
+        first_STANAG->setItemText(6, QCoreApplication::translate("MainWindow", "7", nullptr));
+        first_STANAG->setItemText(7, QCoreApplication::translate("MainWindow", "8", nullptr));
+
+        label_3->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
+        get_stanag->setText(QCoreApplication::translate("MainWindow", "Set STANAG", nullptr));
         horizontal_mark->setText(QCoreApplication::translate("MainWindow", "horizontal marker", nullptr));
         omega_horizontal->setText(QCoreApplication::translate("MainWindow", "\317\211 H", nullptr));
         vertical_mark->setText(QCoreApplication::translate("MainWindow", "vertical marker", nullptr));
@@ -709,6 +844,23 @@ public:
         r_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\211", nullptr));
         d_2_b->setText(QCoreApplication::translate("MainWindow", "\342\207\212", nullptr));
         d_b->setText(QCoreApplication::translate("MainWindow", "\342\206\223", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "Mode", nullptr));
+        mode_input->setItemText(0, QCoreApplication::translate("MainWindow", "INERT", nullptr));
+        mode_input->setItemText(1, QCoreApplication::translate("MainWindow", "BODY", nullptr));
+        mode_input->setItemText(2, QCoreApplication::translate("MainWindow", "EARTH", nullptr));
+
+        label_7->setText(QCoreApplication::translate("MainWindow", "Step (\302\260/s)", nullptr));
+        step_input->setItemText(0, QCoreApplication::translate("MainWindow", "0.001", nullptr));
+        step_input->setItemText(1, QCoreApplication::translate("MainWindow", "0.01", nullptr));
+        step_input->setItemText(2, QCoreApplication::translate("MainWindow", "0.035", nullptr));
+        step_input->setItemText(3, QCoreApplication::translate("MainWindow", "0.05", nullptr));
+        step_input->setItemText(4, QCoreApplication::translate("MainWindow", "0.1", nullptr));
+        step_input->setItemText(5, QCoreApplication::translate("MainWindow", "0.5", nullptr));
+        step_input->setItemText(6, QCoreApplication::translate("MainWindow", "1", nullptr));
+        step_input->setItemText(7, QCoreApplication::translate("MainWindow", "2", nullptr));
+        step_input->setItemText(8, QCoreApplication::translate("MainWindow", "3", nullptr));
+
+        videoLabel->setText(QString());
     } // retranslateUi
 
 };

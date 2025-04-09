@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QTimer>
+#include <format>
 #include <opencv2/opencv.hpp>
 #include "drawsymbols.h"
 #include "scalevertical.h"
@@ -163,6 +164,13 @@ void MainWindow::onFrequencyModeChanged(int index){
 
 }
 
+
+void MainWindow::on_first_STANAG_Changed(int index)
+{
+    int first_stanag_input[8] = {1,2,3,4,5,6,7,8};
+}
+
+
 void MainWindow::onMeasureModeChanged(int index)
 {
     switch (index) {
@@ -210,7 +218,11 @@ void MainWindow::updateLpsParametersUI() {
     float temp = manager.GetTemperature();
 
     uint32_t freq = manager.GetLaserFrequency();
-    uint32_t stanag = manager.GetLaserStanag();
+
+    uint32_t time_remaining = manager.GetTimeRemaining();
+    uint8_t laser_error_code = manager.GetLaserError();
+    QString laser_error_str[4] = {"Error: NONE","Error: INPUT","Error: OVERTEMPERATURE", "Error: OVERVOLTAGE"};
+    //uint32_t stanag = manager.GetLaserStanag();
 
     // Display values in UI QLineEdit widgets
     ui->horizont_marker_input->setText(QString::number(angleX, 'f', 2));
@@ -223,7 +235,9 @@ void MainWindow::updateLpsParametersUI() {
     ui->temp_out->setText(QString::number(temp, 'f',4));
 
     ui->frequency_out->setText(QString::number(freq));
-    ui->stanag_out->setText(QString::number(stanag));
+    ui->time_remaining_out->setText(QString::number(time_remaining/1000));
+
+    ui->error_label->setText(laser_error_str[laser_error_code]);
 
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
 
@@ -452,16 +466,73 @@ void MainWindow::on_get_frequency_clicked()
 
 void MainWindow::on_get_stanag_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x00};
-    //std::vector<uint8_t> payload = {0x00, 0xF0, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
+    QString octalStr = QString("%1%2%3").arg(ui->first_STANAG->currentIndex()).arg(ui->second_STANAG->currentIndex()).arg(ui->third_STANAG->currentIndex());
+    bool ok = false;
+    int octalValue = octalStr.toInt(&ok, 8);  // основа 8
+
+    std::vector<uint8_t> octalBytes(4);
+    octalBytes[0] = (octalValue >> 24) & 0xFF;
+    octalBytes[1] = (octalValue >> 16) & 0xFF;
+    octalBytes[2] = (octalValue >> 8) & 0xFF;
+    octalBytes[3] = octalValue & 0xFF;
+
+    std::vector<uint8_t> payload = {0x00, 0x03, 0x04, 0x00};
+    payload.insert(payload.end(), octalBytes.begin(), octalBytes.end());
+
+    // 5. Відправка через SendDataFrame
     SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x04, payload);
+    sendDataFrame.Send(0x248, 0x08, payload);
+
 }
 
 
-void MainWindow::on_frequency_mode_currentIndexChanged(int index)
+
+
+void MainWindow::on_energy_0_clicked()
 {
-    QString selectedText = ui->frequency_mode->itemText(index);
-    ui->frequency_out->setText(selectedText);
+    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248,0x08, payload);
+}
+void MainWindow::on_energy_1_clicked()
+{
+    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248,0x08, payload);
+}
+void MainWindow::on_energy_2_clicked()
+{
+    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248,0x08, payload);
+}
+void MainWindow::on_energy_3_clicked()
+{
+    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248,0x08, payload);
+}
+void MainWindow::on_energy_4_clicked()
+{
+    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248,0x08, payload);
+}
+void MainWindow::on_energy_5_clicked()
+{
+    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x248,0x08, payload);
+}
+
+
+
+
+
+void MainWindow::on_mode_input_currentIndexChanged(int index)
+{
+    std::vector<uint8_t> payload = {0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, (uint8_t)index};
+    SendDataFrame sendDataFrame;
+    sendDataFrame.Send(0x118,0x08, payload);
 }
 

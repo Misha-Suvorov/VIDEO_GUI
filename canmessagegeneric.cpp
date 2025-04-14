@@ -23,6 +23,9 @@ CanMessageGeneric::CanMessageGeneric(const std::vector<uint8_t>& bytes)
 float CanMessageGeneric::GetFloatFromPayload() {
     float floatValue;
     std::memcpy(&floatValue, Message.PL, sizeof(float));
+    if(floatValue == 0){
+        floatValue = 10;
+    }
     return floatValue;
 }
 
@@ -71,7 +74,7 @@ float CanMessageGeneric::ParseFloat() {
     LpsParameters& manager = LpsParameters::GetInstance();
 
     // Process the float based on Node and Priority
-    if (Node == static_cast<uint8_t>(NodeId::PLATFORM) && Priority == 2) {
+    if (Node == static_cast<uint8_t>(NodeId::PLATFORM) && Priority == 2 && Dir == 0) {
         switch (Message.ID) {
         case static_cast<uint8_t>(IdNode1::ANGLE_HORIZONTAL_CHANNEL):
             manager.SetAngleX(floatValue);

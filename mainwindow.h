@@ -12,8 +12,8 @@
 #include "lpsparameters.h"
 #include "scalehorizontal.h"
 #include "senddataframe.h"
-
-
+#include "canparserworker.h"
+#include "CircularBuffer.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -54,7 +54,7 @@ class MainWindow : public QMainWindow {
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    std::queue<std::vector<uint8_t>>& messageQueue;
+    //std::queue<std::vector<uint8_t>>& messageQueue;
 
     ~MainWindow();
 
@@ -95,7 +95,7 @@ private slots:
 
     //void on_frequency_mode_currentIndexChanged(int index);
 
-    void on_first_STANAG_Changed(int index);
+    //void on_first_STANAG_Changed(int index);
 
     void on_energy_1_clicked();
 
@@ -121,9 +121,11 @@ private:
     QTimer *updateTimer;
     SendDataFrame *sendDataFrame;  // Об'єкт для відправки даних
 
+    CANParserWorker *parserWorker;
+    QThread *parserThread;
 
-
-    std::queue<std::vector<uint8_t>> localMessageQueue;
+    //std::queue<std::vector<uint8_t>> localMessageQueue;
+CircularBuffer<std::vector<uint8_t>> localMessageQueue;
     QMutex queueMutex;
 
 

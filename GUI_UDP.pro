@@ -35,6 +35,7 @@ SOURCES += \
     canbus.cpp \
     canmessagegeneric.cpp \
     cannelloniframe.cpp \
+    canparserworker.cpp \
     canthread.cpp \
     clickable.cpp \
     drawsymbols.cpp \
@@ -47,11 +48,13 @@ SOURCES += \
     senddataframe.cpp
 
 HEADERS += \
+    CircularBuffer.h \
     base.h \
     basecanmessage.h \
     canbus.h \
     canmessagegeneric.h \
     cannelloniframe.h \
+    canparserworker.h \
     canthread.h \
     clickable.h \
     drawsymbols.h \

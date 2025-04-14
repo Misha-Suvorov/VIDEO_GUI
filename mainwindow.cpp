@@ -2,14 +2,14 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QTimer>
-#include <format>
 #include <opencv2/opencv.hpp>
-#include "drawsymbols.h"
 #include "scalevertical.h"
 #include "scalehorizontal.h"
 #include "canbus.h"  // Підключаємо CanBus
 #include "cannelloniframe.h"
 #include "canthread.h"
+#include "structs.h"
+
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
 
@@ -77,7 +77,8 @@ void VideoThread::stop() {
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr), messageQueue(localMessageQueue){
+    : QMainWindow(parent), ui(new Ui::MainWindow), videoThread1(nullptr), videoThread2(nullptr), rotationAngle(0), canBus(nullptr),
+    /*messageQueue(localMessageQueue),*/localMessageQueue(1000){
     ui->setupUi(this);
 
     connect(ui->measure_mode, &QComboBox::currentIndexChanged,
@@ -97,58 +98,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Ініціалізація CanBus
     canBus = new CanBus(this);
-
-    // Ініціалізація CanThread
-    canThread = new CANThread(&queueMutex, &localMessageQueue);
-
-
-    /*parserxWorker = new CANParserWorker();
-    parserThread = new QThread();
-    parserWorker->moveToThread(parserThread);
-
-    connect(parserThread, &QThread::started, parserWorker, &CANParserWorker::process);
-    connect(parserWorker, &CANParserWorker::messageParsed, this, []() {
-        qDebug() << "Message parsed in worker.";
-    });
-    connect(parserWorker, &CANParserWorker::parseError, this, [](const QString &err) {
-        qWarning() << err;
-    });
-
-    parserThread->start();
-
-
-    QTimer *queueTransferTimer = new QTimer(this);
-    connect(queueTransferTimer, &QTimer::timeout, this, [this]() {
-        QMutexLocker locker(&queueMutex);
-        while (!localMessageQueue.empty()) {
-            parserWorker->enqueueMessage(localMessageQueue.front());
-            localMessageQueue.pop();
-        }
-    });
-    queueTransferTimer->start(20);  */// Кожні 20 мс перевіряє чергу
-
-
-
-    // connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData){
-    //     // Перетворення отриманого пакету в hex і виведення в консоль
-    //     QString hexString = canBus->toHexString(packetData);
-    //     qDebug() << "Received CAN packet:" << hexString;
-
-    //     // обробка пакета канелоні
-    //     CannelloniFrame frame(packetData);
-    //     QMutexLocker locker(&queueMutex);
-    //     //localMessageQueue = frame.GetMessageQueue();
-    //     auto frameQueue = frame.GetMessageQueue();
-    //     while (!frameQueue.empty()) {
-    //         localMessageQueue.push(frameQueue.front());
-    //         frameQueue.pop();
-    //     }
-
-    // });
-
-
-
-
 
     connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData) {
         // Перетворення отриманого пакету в hex і виведення в консоль
@@ -175,18 +124,52 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
 
+    parserWorker = new CANParserWorker();
 
+    parserThread = new QThread();
+    parserWorker->moveToThread(parserThread);
 
+    connect(parserThread, &QThread::started, parserWorker, &CANParserWorker::process);
+    // connect(parserWorker, &CANParserWorker::messageParsed, this, []() {
+    //     qDebug() << "Message parsed in worker.";
+    // });
+    // connect(parserWorker, &CANParserWorker::parseError, this, [](const QString &err) {
+    //     qWarning() << err;
+    // });
 
+    parserThread->start();
+
+     // Ініціалізація CanThread
+     //canThread = new CANThread(&queueMutex, &localMessageQueue);
+
+    QTimer *queueTransferTimer = new QTimer(this);
+    connect(queueTransferTimer, &QTimer::timeout, this, [this]() {
+        QMutexLocker locker(&queueMutex);
+
+        std::vector<uint8_t> msg;
+        int maxMsgs = 100;  // optional cap per cycle
+
+        for (int i = 0; i < maxMsgs && localMessageQueue.pop(msg); ++i) {
+             parserWorker->enqueueMessage(msg);
+        }
+
+        // while (!localMessageQueue.empty()) {
+        //     //parserWorker->enqueueMessage(localMessageQueue.front());
+        //     localMessageQueue.pop();
+        // }
+    });
+    queueTransferTimer->start(10);  // Кожні 10 мс перевіряє чергу
 
 
     // Стартуємо прийом пакету
     canBus->startReceiving();
-    canThread->start();
+    //canThread->start();
 
     updateTimer = new QTimer(this);
     connect(updateTimer, &QTimer::timeout, this, &MainWindow::updateLpsParametersUI);
     updateTimer->start(100);
+
+
 
 }
 
@@ -209,6 +192,11 @@ MainWindow::~MainWindow() {
     }
 
 
+
+    parserThread->quit();
+    parserThread->wait();
+    parserWorker->deleteLater();
+    parserThread->deleteLater();
 
 
     delete ui;
@@ -236,10 +224,10 @@ void MainWindow::onFrequencyModeChanged(int index){
 }
 
 
-void MainWindow::on_first_STANAG_Changed(int index)
-{
-    int first_stanag_input[8] = {1,2,3,4,5,6,7,8};
-}
+// void MainWindow::on_first_STANAG_Changed(int index)
+// {
+//     int first_stanag_input[8] = {1,2,3,4,5,6,7,8};
+// }
 
 
 void MainWindow::onMeasureModeChanged(int index)

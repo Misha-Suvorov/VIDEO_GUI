@@ -181,6 +181,9 @@ QPushButton:hover {
            </item>
            <item row="2" column="2" alignment="Qt::AlignHCenter">
             <widget class="QLineEdit" name="temp_out">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -734,7 +737,11 @@ control</string>
          <item>
           <layout class="QGridLayout" name="gridLayout">
            <item row="1" column="1" alignment="Qt::AlignLeft">
-            <widget class="QLineEdit" name="horizont_marker_input"/>
+            <widget class="QLineEdit" name="horizont_marker_input">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item row="1" column="0" alignment="Qt::AlignRight">
             <widget class="QLabel" name="horizontal_mark">
@@ -744,7 +751,11 @@ control</string>
             </widget>
            </item>
            <item row="3" column="1" alignment="Qt::AlignLeft">
-            <widget class="QLineEdit" name="omega_horizontal_input"/>
+            <widget class="QLineEdit" name="omega_horizontal_input">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item row="3" column="0" alignment="Qt::AlignRight">
             <widget class="QLabel" name="omega_horizontal">
@@ -754,7 +765,11 @@ control</string>
             </widget>
            </item>
            <item row="2" column="1" alignment="Qt::AlignLeft">
-            <widget class="QLineEdit" name="vertical_marker_input"/>
+            <widget class="QLineEdit" name="vertical_marker_input">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0" alignment="Qt::AlignRight">
             <widget class="QLabel" name="vertical_mark">
@@ -764,7 +779,11 @@ control</string>
             </widget>
            </item>
            <item row="4" column="1" alignment="Qt::AlignLeft">
-            <widget class="QLineEdit" name="omega_vertical_input"/>
+            <widget class="QLineEdit" name="omega_vertical_input">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item row="4" column="0" alignment="Qt::AlignRight">
             <widget class="QLabel" name="omega_vertical">

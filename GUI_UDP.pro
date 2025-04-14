@@ -7,6 +7,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
+
+
+
+
 # OpenCV configuration
 INCLUDEPATH += /Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4
 LIBS += -L/Users/mac/Downloads/opencv-4.10.0/build/install/lib \

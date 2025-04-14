@@ -220,6 +220,7 @@ public:
 
         temp_out = new QLineEdit(frame);
         temp_out->setObjectName("temp_out");
+        temp_out->setEnabled(true);
 
         gridLayout_4->addWidget(temp_out, 2, 2, 1, 1, Qt::AlignHCenter);
 
@@ -538,6 +539,7 @@ public:
         gridLayout->setObjectName("gridLayout");
         horizont_marker_input = new QLineEdit(frame);
         horizont_marker_input->setObjectName("horizont_marker_input");
+        horizont_marker_input->setEnabled(true);
 
         gridLayout->addWidget(horizont_marker_input, 1, 1, 1, 1, Qt::AlignLeft);
 
@@ -548,6 +550,7 @@ public:
 
         omega_horizontal_input = new QLineEdit(frame);
         omega_horizontal_input->setObjectName("omega_horizontal_input");
+        omega_horizontal_input->setEnabled(true);
 
         gridLayout->addWidget(omega_horizontal_input, 3, 1, 1, 1, Qt::AlignLeft);
 
@@ -558,6 +561,7 @@ public:
 
         vertical_marker_input = new QLineEdit(frame);
         vertical_marker_input->setObjectName("vertical_marker_input");
+        vertical_marker_input->setEnabled(true);
 
         gridLayout->addWidget(vertical_marker_input, 2, 1, 1, 1, Qt::AlignLeft);
 
@@ -568,6 +572,7 @@ public:
 
         omega_vertical_input = new QLineEdit(frame);
         omega_vertical_input->setObjectName("omega_vertical_input");
+        omega_vertical_input->setEnabled(true);
 
         gridLayout->addWidget(omega_vertical_input, 4, 1, 1, 1, Qt::AlignLeft);
 

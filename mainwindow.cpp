@@ -101,16 +101,84 @@ MainWindow::MainWindow(QWidget *parent)
     // Ініціалізація CanThread
     canThread = new CANThread(&queueMutex, &localMessageQueue);
 
-    connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData){
+
+    /*parserxWorker = new CANParserWorker();
+    parserThread = new QThread();
+    parserWorker->moveToThread(parserThread);
+
+    connect(parserThread, &QThread::started, parserWorker, &CANParserWorker::process);
+    connect(parserWorker, &CANParserWorker::messageParsed, this, []() {
+        qDebug() << "Message parsed in worker.";
+    });
+    connect(parserWorker, &CANParserWorker::parseError, this, [](const QString &err) {
+        qWarning() << err;
+    });
+
+    parserThread->start();
+
+
+    QTimer *queueTransferTimer = new QTimer(this);
+    connect(queueTransferTimer, &QTimer::timeout, this, [this]() {
+        QMutexLocker locker(&queueMutex);
+        while (!localMessageQueue.empty()) {
+            parserWorker->enqueueMessage(localMessageQueue.front());
+            localMessageQueue.pop();
+        }
+    });
+    queueTransferTimer->start(20);  */// Кожні 20 мс перевіряє чергу
+
+
+
+    // connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData){
+    //     // Перетворення отриманого пакету в hex і виведення в консоль
+    //     QString hexString = canBus->toHexString(packetData);
+    //     qDebug() << "Received CAN packet:" << hexString;
+
+    //     // обробка пакета канелоні
+    //     CannelloniFrame frame(packetData);
+    //     QMutexLocker locker(&queueMutex);
+    //     //localMessageQueue = frame.GetMessageQueue();
+    //     auto frameQueue = frame.GetMessageQueue();
+    //     while (!frameQueue.empty()) {
+    //         localMessageQueue.push(frameQueue.front());
+    //         frameQueue.pop();
+    //     }
+
+    // });
+
+
+
+
+
+    connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData) {
         // Перетворення отриманого пакету в hex і виведення в консоль
         QString hexString = canBus->toHexString(packetData);
         qDebug() << "Received CAN packet:" << hexString;
 
-        // обробка пакета канелоні
-        CannelloniFrame frame(packetData);
-        QMutexLocker locker(&queueMutex);
-        localMessageQueue = frame.GetMessageQueue();
+        try {
+            // обробка пакета канелоні
+            CannelloniFrame frame(packetData);
+
+            QMutexLocker locker(&queueMutex);  // Блокуємо доступ до черги
+
+            // Отримуємо тимчасову чергу з кадру
+            std::queue<std::vector<uint8_t>> frameQueue = frame.GetMessageQueue();
+
+            // Додаємо всі повідомлення в спільну чергу
+            while (!frameQueue.empty()) {
+                localMessageQueue.push(frameQueue.front());
+                frameQueue.pop();
+            }
+        } catch (const std::exception &e) {
+            qWarning() << "Error parsing CannelloniFrame:" << e.what();
+        }
     });
+
+
+
+
+
+
 
     // Стартуємо прийом пакету
     canBus->startReceiving();
@@ -139,6 +207,9 @@ MainWindow::~MainWindow() {
         canThread->stop();
         delete canThread;
     }
+
+
+
 
     delete ui;
 }

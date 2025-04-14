@@ -28,7 +28,7 @@ void CannelloniFrame::ParseCANMessages(const std::vector<uint8_t>& bytes)
             throw std::runtime_error("Invalid CAN message header");
         }
 
-        msg.can_id = (bytes[offset + 2] << 8) | (bytes[offset + 3] << 8);
+        msg.can_id = (bytes[offset + 2] << 8) | (bytes[offset + 3]);
         msg.len = bytes[offset + 4];
         messageSize += msg.len;
 

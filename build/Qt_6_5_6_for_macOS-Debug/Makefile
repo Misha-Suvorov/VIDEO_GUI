@@ -68,8 +68,7 @@ SOURCES       = ../../base.cpp \
 		../../scalingfactor.cpp \
 		../../senddataframe.cpp moc_canbus.cpp \
 		moc_clickable.cpp \
-		moc_mainwindow.cpp \
-		moc_senddataframe.cpp
+		moc_mainwindow.cpp
 OBJECTS       = base.o \
 		basecanmessage.o \
 		canbus.o \
@@ -87,8 +86,7 @@ OBJECTS       = base.o \
 		senddataframe.o \
 		moc_canbus.o \
 		moc_clickable.o \
-		moc_mainwindow.o \
-		moc_senddataframe.o
+		moc_mainwindow.o
 DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		/Qt/6.5.6/macos/mkspecs/features/device_config.prf \
 		/Qt/6.5.6/macos/mkspecs/common/unix.conf \
@@ -1154,9 +1152,9 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp moc_senddataframe.cpp
+compiler_moc_header_make_all: moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp moc_senddataframe.cpp
+	-$(DEL_FILE) moc_canbus.cpp moc_clickable.cpp moc_mainwindow.cpp
 moc_canbus.cpp: ../../canbus.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
@@ -1316,16 +1314,9 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../lpsparameters.h \
 		../../scalehorizontal.h \
 		../../base.h \
+		../../senddataframe.h \
 		../../../Qt/6.5.6/macos/libexec/moc
 	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../mainwindow.h -o moc_mainwindow.cpp
-
-moc_senddataframe.cpp: ../../senddataframe.h \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
-		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/QUdpSocket \
-		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/qudpsocket.h \
-		../../../Qt/6.5.6/macos/libexec/moc
-	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../senddataframe.h -o moc_senddataframe.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1632,6 +1623,7 @@ canthread.o: ../../canthread.cpp ../../canthread.h \
 		../../lpsparameters.h \
 		../../scalehorizontal.h \
 		../../base.h \
+		../../senddataframe.h \
 		../../canmessagegeneric.h \
 		../../BaseCanMessage.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canthread.o ../../canthread.cpp
@@ -1902,6 +1894,7 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../lpsparameters.h \
 		../../scalehorizontal.h \
 		../../base.h \
+		../../senddataframe.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QApplication \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
@@ -2043,6 +2036,7 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../lpsparameters.h \
 		../../scalehorizontal.h \
 		../../base.h \
+		../../senddataframe.h \
 		ui_mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h \
@@ -2428,9 +2422,6 @@ moc_clickable.o: moc_clickable.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
-
-moc_senddataframe.o: moc_senddataframe.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_senddataframe.o moc_senddataframe.cpp
 
 ####### Install
 

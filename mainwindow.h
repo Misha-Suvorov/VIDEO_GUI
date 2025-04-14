@@ -15,6 +15,7 @@
 
 
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -44,6 +45,7 @@ private:
     float horizontMarkerValue = 0;
     float verticalMarkerValue = 0;
     int rotationAngle = 0;
+
 
 };
 
@@ -115,11 +117,14 @@ private:
     VideoThread *videoThread1;
     VideoThread *videoThread2;
     CANThread *canThread;
-    std::queue<std::vector<uint8_t>> localMessageQueue;
     CanBus *canBus;
-    QMutex queueMutex;
     QTimer *updateTimer;
     SendDataFrame *sendDataFrame;  // Об'єкт для відправки даних
+
+
+
+    std::queue<std::vector<uint8_t>> localMessageQueue;
+    QMutex queueMutex;
 
 
     QString code;

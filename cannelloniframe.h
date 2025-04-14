@@ -26,9 +26,11 @@ public:
     void PrintCANMessages() const;
     void PrintMessageQueue() const;
 
-    const std::queue<std::vector<uint8_t>>& GetMessageQueue() const {
+    std::queue<std::vector<uint8_t>> GetMessageQueue() const {
         return messageQueue;
     }
+
+
 
 protected:
     void ParseCANMessages(const std::vector<uint8_t>& bytes);

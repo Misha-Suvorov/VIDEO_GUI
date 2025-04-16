@@ -17,6 +17,9 @@ VideoThread::~VideoThread() {
     stop();
 }
 
+
+
+
 void VideoThread::setPipeline(const std::string &pipeline) {
     gstPipeline = pipeline;
 }
@@ -59,6 +62,25 @@ void VideoThread::run() {
         cap >> frame;
         if (frame.empty()) continue;
 
+        // Draw crosshair in the center
+        cv::Point center(frame.cols / 2, frame.rows / 2);
+        cv::Scalar crossColor(255, 255, 0);  // Червоний колір
+        int thickness = 1;
+        int length = 15;
+
+        // Horizontal line
+        cv::line(frame,
+                 cv::Point(center.x - length, center.y),
+                 cv::Point(center.x + length, center.y),
+                 crossColor, thickness);
+
+        // Vertical line
+        cv::line(frame,
+                 cv::Point(center.x, center.y - length),
+                 cv::Point(center.x, center.y + length),
+                 crossColor, thickness);
+
+
         // Draw the scale and markers
         scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
         scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
@@ -66,10 +88,14 @@ void VideoThread::run() {
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
         QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
         emit frameReady(image.copy());
+
+
     }
 
     cap.release();
 }
+
+
 
 void VideoThread::stop() {
     running = false;
@@ -88,6 +114,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->frequency_mode, &QComboBox::currentIndexChanged,
             this, &MainWindow::onFrequencyModeChanged);
     onFrequencyModeChanged(ui->frequency_mode->currentIndex());
+
+
+    connect(ui->videoLabel, &ClickableLabel::clickedAt,
+            this, &MainWindow::onLabelClicked);
+
+
 
 
     // Connect QLineEdit to slots for marker changes
@@ -202,6 +234,11 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::onLabelClicked(QPoint pos) {
+    //qDebug() << "Клік у QLabel на позиції:" << pos;
+    //PixelToAngleConverter converter(videoLabel->width(), videoLabel->height(), 8.0, 6.0);
+
+}
 
 
 void MainWindow::onFrequencyModeChanged(int index){

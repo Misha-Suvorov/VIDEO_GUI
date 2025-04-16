@@ -64,9 +64,11 @@ SOURCES       = ../../base.cpp \
 		../../lpsparameters.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
+		../../pixeltoangleconverter.cpp \
 		../../scalehorizontal.cpp \
 		../../scalevertical.cpp \
 		../../scalingfactor.cpp \
+		../../scriptcommands.cpp \
 		../../senddataframe.cpp moc_canbus.cpp \
 		moc_canparserworker.cpp \
 		moc_clickable.cpp \
@@ -83,9 +85,11 @@ OBJECTS       = base.o \
 		lpsparameters.o \
 		main.o \
 		mainwindow.o \
+		pixeltoangleconverter.o \
 		scalehorizontal.o \
 		scalevertical.o \
 		scalingfactor.o \
+		scriptcommands.o \
 		senddataframe.o \
 		moc_canbus.o \
 		moc_canparserworker.o \
@@ -417,9 +421,11 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../drawsymbols.h \
 		../../lpsparameters.h \
 		../../mainwindow.h \
+		../../pixeltoangleconverter.h \
 		../../scalehorizontal.h \
 		../../scalevertical.h \
 		../../scalingfactor.h \
+		../../scriptcommands.h \
 		../../senddataframe.h \
 		../../structs.h ../../base.cpp \
 		../../basecanmessage.cpp \
@@ -433,9 +439,11 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../lpsparameters.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
+		../../pixeltoangleconverter.cpp \
 		../../scalehorizontal.cpp \
 		../../scalevertical.cpp \
 		../../scalingfactor.cpp \
+		../../scriptcommands.cpp \
 		../../senddataframe.cpp
 QMAKE_TARGET  = GUI_UDP
 DESTDIR       = 
@@ -1128,8 +1136,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../CircularBuffer.h ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canparserworker.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../lpsparameters.h ../../mainwindow.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../senddataframe.h ../../structs.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canparserworker.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp ../../senddataframe.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../CircularBuffer.h ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canparserworker.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../lpsparameters.h ../../mainwindow.h ../../pixeltoangleconverter.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../scriptcommands.h ../../senddataframe.h ../../structs.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canparserworker.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../pixeltoangleconverter.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp ../../scriptcommands.cpp ../../senddataframe.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1189,10 +1197,10 @@ moc_canparserworker.cpp: ../../canparserworker.h \
 moc_clickable.cpp: ../../clickable.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
-		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QWidget \
-		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPoint \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h \
 		../../../Qt/6.5.6/macos/libexec/moc
 	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../clickable.h -o moc_clickable.cpp
 
@@ -1338,6 +1346,17 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QQueue \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qqueue.h \
 		../../CircularBuffer.h \
+		../../clickable.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPoint \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h \
+		../../pixeltoangleconverter.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QSize \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qsize.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPointF \
 		../../../Qt/6.5.6/macos/libexec/moc
 	/Users/mac/Qt/6.5.6/macos/libexec/moc $(DEFINES) -D__APPLE__ -D__GNUC__=4 -D__APPLE_CC__ -D__cplusplus=199711L -D__APPLE_CC__=6000 -D__clang__ -D__clang_major__=16 -D__clang_minor__=0 -D__clang_patchlevel__=0 -D__GNUC__=4 -D__GNUC_MINOR__=2 -D__GNUC_PATCHLEVEL__=1 -I/Users/mac/Qt/6.5.6/macos/mkspecs/macx-clang -I/Users/mac/GUI_UDP -I/Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4 -I/Users/mac/Qt/6.5.6/macos/lib/QtWidgets.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtGui.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialBus.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtNetwork.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtSerialPort.framework/Headers -I/Users/mac/Qt/6.5.6/macos/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/Users/mac/Qt/6.5.6/macos/lib ../../mainwindow.h -o moc_mainwindow.cpp
 
@@ -1349,7 +1368,14 @@ compiler_uic_make_all: ui_mainwindow.h
 compiler_uic_clean:
 	-$(DEL_FILE) ui_mainwindow.h
 ui_mainwindow.h: ../../mainwindow.ui \
-		../../../Qt/6.5.6/macos/libexec/uic
+		../../../Qt/6.5.6/macos/libexec/uic \
+		../../clickable.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPoint \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h
 	/Users/mac/Qt/6.5.6/macos/libexec/uic ../../mainwindow.ui -o ui_mainwindow.h
 
 compiler_rez_source_make_all:
@@ -1519,7 +1545,10 @@ canparserworker.o: ../../canparserworker.cpp ../../canparserworker.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QQueue \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qqueue.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QDebug \
-		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h \
+		../../canmessagegeneric.h \
+		../../BaseCanMessage.h \
+		../../lpsparameters.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canparserworker.o ../../canparserworker.cpp
 
 canthread.o: ../../canthread.cpp ../../canthread.h \
@@ -1664,6 +1693,17 @@ canthread.o: ../../canthread.cpp ../../canthread.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QQueue \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qqueue.h \
 		../../CircularBuffer.h \
+		../../clickable.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPoint \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h \
+		../../pixeltoangleconverter.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QSize \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qsize.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPointF \
 		../../canmessagegeneric.h \
 		../../BaseCanMessage.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canthread.o ../../canthread.cpp
@@ -1671,10 +1711,17 @@ canthread.o: ../../canthread.cpp ../../canthread.h \
 clickable.o: ../../clickable.cpp ../../clickable.h \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
-		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QWidget \
-		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qwidget.h \
 		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
-		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPoint \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h \
+		../../pixeltoangleconverter.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QSize \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qsize.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPointF \
+		../../scriptcommands.h \
+		../../structs.h \
+		../../lpsparameters.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o clickable.o ../../clickable.cpp
 
 drawsymbols.o: ../../drawsymbols.cpp ../../drawsymbols.h \
@@ -1939,6 +1986,17 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QQueue \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qqueue.h \
 		../../CircularBuffer.h \
+		../../clickable.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPoint \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h \
+		../../pixeltoangleconverter.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QSize \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qsize.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPointF \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QApplication \
 		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
@@ -2085,6 +2143,17 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QQueue \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qqueue.h \
 		../../CircularBuffer.h \
+		../../clickable.h \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/QLabel \
+		../../../Qt/6.5.6/macos/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../Qt/6.5.6/macos/lib/QtGui.framework/Headers/qevent.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPoint \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h \
+		../../pixeltoangleconverter.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QSize \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qsize.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPointF \
 		ui_mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QDebug \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h \
@@ -2094,6 +2163,13 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../cannelloniframe.h \
 		../../structs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
+
+pixeltoangleconverter.o: ../../pixeltoangleconverter.cpp ../../PixelToAngleConverter.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QSize \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qsize.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QPointF \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qpoint.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pixeltoangleconverter.o ../../pixeltoangleconverter.cpp
 
 scalehorizontal.o: ../../scalehorizontal.cpp ../../scalehorizontal.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/opencv.hpp \
@@ -2451,6 +2527,15 @@ scalingfactor.o: ../../scalingfactor.cpp ../../scalingfactor.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/tracking.hpp \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scalingfactor.o ../../scalingfactor.cpp
+
+scriptcommands.o: ../../scriptcommands.cpp ../../scriptcommands.h \
+		../../structs.h \
+		../../senddataframe.h \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \
+		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qobject.h \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/QUdpSocket \
+		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/qudpsocket.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scriptcommands.o ../../scriptcommands.cpp
 
 senddataframe.o: ../../senddataframe.cpp ../../senddataframe.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QObject \

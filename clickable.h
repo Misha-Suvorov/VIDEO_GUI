@@ -1,22 +1,19 @@
-#ifndef CLICKABLELABEL_H
-#define CLICKABLELABEL_H
+// ClickableLabel.h
+#pragma once
 
 #include <QLabel>
-#include <QWidget>
 #include <QMouseEvent>
+#include <QPoint>
 
 class ClickableLabel : public QLabel {
-    Q_OBJECT  // Required for using signals and slots
-
+    Q_OBJECT
 public:
-    explicit ClickableLabel(QWidget* parent = nullptr);
-    ~ClickableLabel();
+    explicit ClickableLabel(QWidget *parent = nullptr);
+
 
 signals:
-    void clicked();  // Signal that will be emitted when the label is clicked
+    void clickedAt(QPoint pos);
 
 protected:
-    void mousePressEvent(QMouseEvent* event) override;  // Override mouse click event
+    void mousePressEvent(QMouseEvent *event) override;
 };
-
-#endif // CLICKABLELABEL_H

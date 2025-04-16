@@ -42,9 +42,11 @@ SOURCES += \
     lpsparameters.cpp \
     main.cpp \
     mainwindow.cpp \
+    pixeltoangleconverter.cpp \
     scalehorizontal.cpp \
     scalevertical.cpp \
     scalingfactor.cpp \
+    scriptcommands.cpp \
     senddataframe.cpp
 
 HEADERS += \
@@ -60,9 +62,11 @@ HEADERS += \
     drawsymbols.h \
     lpsparameters.h \
     mainwindow.h \
+    pixeltoangleconverter.h \
     scalehorizontal.h \
     scalevertical.h \
     scalingfactor.h \
+    scriptcommands.h \
     senddataframe.h \
     structs.h
 

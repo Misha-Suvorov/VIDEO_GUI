@@ -24,6 +24,7 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <clickable.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -105,7 +106,7 @@ public:
     QGridLayout *gridLayout_10;
     QLabel *label_7;
     QComboBox *step_input;
-    QLabel *videoLabel;
+    ClickableLabel *videoLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -250,7 +251,7 @@ public:
 
         laser_act_b = new QPushButton(frame);
         laser_act_b->setObjectName("laser_act_b");
-        laser_act_b->setEnabled(false);
+        laser_act_b->setEnabled(true);
         laser_act_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
@@ -726,13 +727,14 @@ public:
 
         gridLayout_2->addWidget(frame, 0, 1, 1, 1);
 
-        videoLabel = new QLabel(centralwidget);
+        videoLabel = new ClickableLabel(centralwidget);
         videoLabel->setObjectName("videoLabel");
         videoLabel->setEnabled(true);
         sizePolicy.setHeightForWidth(videoLabel->sizePolicy().hasHeightForWidth());
         videoLabel->setSizePolicy(sizePolicy);
         videoLabel->setMinimumSize(QSize(0, 0));
         videoLabel->setAutoFillBackground(false);
+        videoLabel->setFrameShape(QFrame::NoFrame);
 
         gridLayout_2->addWidget(videoLabel, 0, 0, 1, 1);
 

@@ -255,7 +255,7 @@ QPushButton:hover {
            <item row="0" column="0">
             <widget class="QPushButton" name="laser_act_b">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="styleSheet">
               <string notr="true">QPushButton {
@@ -1062,7 +1062,7 @@ control</string>
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="videoLabel">
+       <widget class="ClickableLabel" name="videoLabel">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -1080,6 +1080,9 @@ control</string>
         </property>
         <property name="autoFillBackground">
          <bool>false</bool>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
          <string/>
@@ -1102,6 +1105,13 @@ control</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">clickable.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

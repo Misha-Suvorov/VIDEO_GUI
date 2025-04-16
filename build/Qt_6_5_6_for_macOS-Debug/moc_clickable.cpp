@@ -40,27 +40,31 @@ namespace {
 struct qt_meta_stringdata_CLASSClickableLabelENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSClickableLabelENDCLASS = QtMocHelpers::stringData(
     "ClickableLabel",
-    "clicked",
-    ""
+    "clickedAt",
+    "",
+    "pos"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSClickableLabelENDCLASS_t {
-    uint offsetsAndSizes[6];
+    uint offsetsAndSizes[8];
     char stringdata0[15];
-    char stringdata1[8];
+    char stringdata1[10];
     char stringdata2[1];
+    char stringdata3[4];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSClickableLabelENDCLASS_t::offsetsAndSizes) + ofs), len 
 Q_CONSTINIT static const qt_meta_stringdata_CLASSClickableLabelENDCLASS_t qt_meta_stringdata_CLASSClickableLabelENDCLASS = {
     {
         QT_MOC_LITERAL(0, 14),  // "ClickableLabel"
-        QT_MOC_LITERAL(15, 7),  // "clicked"
-        QT_MOC_LITERAL(23, 0)   // ""
+        QT_MOC_LITERAL(15, 9),  // "clickedAt"
+        QT_MOC_LITERAL(25, 0),  // ""
+        QT_MOC_LITERAL(26, 3)   // "pos"
     },
     "ClickableLabel",
-    "clicked",
-    ""
+    "clickedAt",
+    "",
+    "pos"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -80,10 +84,10 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSClickableLabelENDCLASS[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   20,    2, 0x06,    1 /* Public */,
+       1,    1,   20,    2, 0x06,    1 /* Public */,
 
  // signals: parameters
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QPoint,    3,
 
        0        // eod
 };
@@ -97,8 +101,9 @@ Q_CONSTINIT const QMetaObject ClickableLabel::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSClickableLabelENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<ClickableLabel, std::true_type>,
-        // method 'clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        // method 'clickedAt'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QPoint, std::false_type>
     >,
     nullptr
 } };
@@ -109,20 +114,19 @@ void ClickableLabel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         auto *_t = static_cast<ClickableLabel *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->clicked(); break;
+        case 0: _t->clickedAt((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (ClickableLabel::*)();
-            if (_t _q_method = &ClickableLabel::clicked; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+            using _t = void (ClickableLabel::*)(QPoint );
+            if (_t _q_method = &ClickableLabel::clickedAt; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
             }
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *ClickableLabel::metaObject() const
@@ -156,8 +160,9 @@ int ClickableLabel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void ClickableLabel::clicked()
+void ClickableLabel::clickedAt(QPoint _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_WARNING_POP

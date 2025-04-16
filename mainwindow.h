@@ -14,6 +14,9 @@
 #include "senddataframe.h"
 #include "canparserworker.h"
 #include "CircularBuffer.h"
+#include "clickable.h"
+#include "pixeltoangleconverter.h"
+
 
 
 QT_BEGIN_NAMESPACE
@@ -61,6 +64,7 @@ public:
 private slots:
     void displayFrame1(const QImage &image);
     void displayFrame2(const QImage &image);
+    void onLabelClicked(QPoint pos);
 
     void on_l_vid_turn_clicked();
     void on_r_vid_turn_clicked();
@@ -123,6 +127,9 @@ private:
 
     CANParserWorker *parserWorker;
     QThread *parserThread;
+
+    ClickableLabel *videoLabel;
+
 
     //std::queue<std::vector<uint8_t>> localMessageQueue;
 CircularBuffer<std::vector<uint8_t>> localMessageQueue;

@@ -1,6 +1,7 @@
 #ifndef LPSPARAMETERS_H
 #define LPSPARAMETERS_H
 #include <cstdint>
+#include "structs.h"
 
 
 class LpsParameters
@@ -12,7 +13,10 @@ public:
     void SetAngleY(float value);
     void SetSpeedX(float value);
     void SetSpeedY(float value);
+    void SetModePlatform(ModePlatform value);
+
     void SetRange(float value);
+
     void SetTemperature(float value);
     void SetLaserFrequency(uint32_t value);
     void SetLaserStanag(uint32_t value);
@@ -21,10 +25,13 @@ public:
     void SetLaserError(uint8_t value);
 
 
+
     float GetAngleX() const;
     float GetAngleY() const;
     float GetSpeedX() const;
     float GetSpeedY() const;
+    ModePlatform GetModePlatform() const;
+
     float GetRange() const;
     float GetTemperature() const;
 
@@ -33,8 +40,9 @@ public:
     uint32_t GetLaserStanag() const;
     uint32_t GetLaserCountPulses() const;
     uint32_t GetTimeRemaining () const;
-
     uint8_t GetLaserError() const;
+
+
 
 
 
@@ -44,6 +52,8 @@ private:
     float angleY = 0.0f;
     float speedX = 0.0f;
     float speedY = 0.0f;
+    ModePlatform mode_platform ;
+
     float range = 0.0f;
     float temperature = 0.0f;
     uint32_t laser_frequency = 0;
@@ -51,5 +61,6 @@ private:
     uint32_t laser_pulses = 0;
     uint32_t time_remaining = 0;
     uint8_t laser_error = 0;
+
 };
 #endif // LPSPARAMETERS_H

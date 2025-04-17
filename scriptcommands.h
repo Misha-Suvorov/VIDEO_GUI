@@ -1,6 +1,8 @@
 #ifndef SCRIPTCOMMANDS_H
 #define SCRIPTCOMMANDS_H
 #include "structs.h"
+#include <vector>
+
 
 class ScriptCommands
 {
@@ -10,6 +12,8 @@ public:
     void SetAngleEncoder_V(float value);
     void SetMode(ModePlatform mode);
     void GetMode();
+    void SetLaserEnergy(uint8_t value);
+
 
     //ScriptCommands();
 };

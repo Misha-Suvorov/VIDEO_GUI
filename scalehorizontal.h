@@ -25,6 +25,8 @@ public:
 
     void setMarkerPosition(int position) { markerPosition = position; }  // Set horizontal marker position
     void drawScale(cv::InputOutputArray img, const cv::Scalar& color, int thickness, int lineType, float value);
+    void drawScaleReversed(cv::InputOutputArray img, const cv::Scalar& color, int thickness, int lineType, float value);
+
     void setOmegaValues(float omegaX, float omegaY); // Метод для отримання значень
 
 };

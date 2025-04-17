@@ -36,10 +36,11 @@ public:
     QGridLayout *gridLayout_2;
     QFrame *frame;
     QVBoxLayout *verticalLayout;
+    QGridLayout *gridLayout_6;
+    QLabel *status_label;
     QLabel *videoLabel2;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *l_vid_turn;
-    QPushButton *r_vid_turn;
     QPushButton *start_b;
     QPushButton *stop_b_2;
     QPushButton *switch_vid;
@@ -141,6 +142,16 @@ public:
         frame->setFrameShadow(QFrame::Raised);
         verticalLayout = new QVBoxLayout(frame);
         verticalLayout->setObjectName("verticalLayout");
+        gridLayout_6 = new QGridLayout();
+        gridLayout_6->setObjectName("gridLayout_6");
+        status_label = new QLabel(frame);
+        status_label->setObjectName("status_label");
+
+        gridLayout_6->addWidget(status_label, 0, 0, 1, 1);
+
+
+        verticalLayout->addLayout(gridLayout_6);
+
         videoLabel2 = new QLabel(frame);
         videoLabel2->setObjectName("videoLabel2");
         QSizePolicy sizePolicy2(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Preferred);
@@ -160,12 +171,6 @@ public:
         l_vid_turn->setMaximumSize(QSize(50, 16777215));
 
         horizontalLayout_2->addWidget(l_vid_turn);
-
-        r_vid_turn = new QPushButton(frame);
-        r_vid_turn->setObjectName("r_vid_turn");
-        r_vid_turn->setMaximumSize(QSize(50, 16777215));
-
-        horizontalLayout_2->addWidget(r_vid_turn);
 
         start_b = new QPushButton(frame);
         start_b->setObjectName("start_b");
@@ -758,9 +763,9 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        status_label->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         videoLabel2->setText(QString());
-        l_vid_turn->setText(QCoreApplication::translate("MainWindow", "\342\237\262", nullptr));
-        r_vid_turn->setText(QCoreApplication::translate("MainWindow", "\342\237\263", nullptr));
+        l_vid_turn->setText(QCoreApplication::translate("MainWindow", "\342\237\263", nullptr));
         start_b->setText(QCoreApplication::translate("MainWindow", "start", nullptr));
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));

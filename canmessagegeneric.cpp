@@ -91,6 +91,8 @@ float CanMessageGeneric::ParseFloat() {
         }
     }
 
+
+
     if (Node == static_cast<uint8_t>(NodeId::RANGE_FINDER)) {
         if (Message.ID == static_cast<uint8_t>(IdNode3::MEASURED_RANGES_1)) {
             manager.SetRange(floatValue);
@@ -109,6 +111,10 @@ float CanMessageGeneric::ParseFloat() {
 uint32_t CanMessageGeneric::ParseULong(){
     uint32_t uLongValue = GetULongFromPayload();
     LpsParameters& manager = LpsParameters::GetInstance();
+
+    if(Node == static_cast<uint8_t>(NodeId::PLATFORM)/* && ParamID==0*/){
+        manager.SetModePlatform((ModePlatform)uLongValue);
+    }
 
 
     if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER)) {

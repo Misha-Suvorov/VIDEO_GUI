@@ -37,6 +37,9 @@ public:
     void setHorizontMarkerValue(float value);
     void setVerticalMarkerValue(float value);
     void setRotationAngle(int angle);
+    bool isRotated = false;
+
+
 
 signals:
     void frameReady(const QImage &image);
@@ -48,6 +51,7 @@ private:
     float horizontMarkerValue = 0;
     float verticalMarkerValue = 0;
     int rotationAngle = 0;
+
 
 
 };
@@ -67,7 +71,6 @@ private slots:
     void onLabelClicked(QPoint pos);
 
     void on_l_vid_turn_clicked();
-    void on_r_vid_turn_clicked();
     void on_switch_vid_clicked();
     void on_start_b_clicked();
     void on_stop_b_2_clicked();
@@ -129,6 +132,7 @@ private:
     QThread *parserThread;
 
     ClickableLabel *videoLabel;
+
 
 
     //std::queue<std::vector<uint8_t>> localMessageQueue;

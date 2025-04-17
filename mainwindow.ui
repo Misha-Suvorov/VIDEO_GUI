@@ -56,6 +56,17 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="0">
+            <widget class="QLabel" name="status_label">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
          <item alignment="Qt::AlignHCenter|Qt::AlignTop">
           <widget class="QLabel" name="videoLabel2">
            <property name="sizePolicy">
@@ -85,19 +96,6 @@
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QPushButton" name="l_vid_turn">
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>⟲</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="r_vid_turn">
              <property name="maximumSize">
               <size>
                <width>50</width>

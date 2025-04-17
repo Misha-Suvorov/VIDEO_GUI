@@ -9,6 +9,7 @@
 #include "cannelloniframe.h"
 #include "canthread.h"
 #include "structs.h"
+#include "scriptcommands.h"
 
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
@@ -82,8 +83,17 @@ void VideoThread::run() {
 
 
         // Draw the scale and markers
-        scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
-        scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
+
+        if(isRotated){
+            scaleVertical.drawScaleRotated(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
+            scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
+
+        }
+        else{
+            scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
+            scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
+        }
+
 
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
         QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
@@ -171,8 +181,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     parserThread->start();
 
-     // Ініціалізація CanThread
-     //canThread = new CANThread(&queueMutex, &localMessageQueue);
+    // Ініціалізація CanThread
+    //canThread = new CANThread(&queueMutex, &localMessageQueue);
 
     QTimer *queueTransferTimer = new QTimer(this);
     connect(queueTransferTimer, &QTimer::timeout, this, [this]() {
@@ -182,7 +192,7 @@ MainWindow::MainWindow(QWidget *parent)
         int maxMsgs = 100;  // optional cap per cycle
 
         for (int i = 0; i < maxMsgs && localMessageQueue.pop(msg); ++i) {
-             parserWorker->enqueueMessage(msg);
+            parserWorker->enqueueMessage(msg);
         }
 
         // while (!localMessageQueue.empty()) {
@@ -337,6 +347,25 @@ void MainWindow::updateLpsParametersUI() {
 
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
 
+    //ScriptCommands::GetInstance().GetMode();
+
+    switch (manager.GetModePlatform()) {
+    case BODY:
+        ui->status_label->setText("Mode: BODY");
+
+        break;
+    case INERT:
+        ui->status_label->setText("Mode: INERT");
+
+        break;
+    case EARTH:
+        ui->status_label->setText("Mode: EARTH");
+
+        break;
+    default:
+        break;
+    }
+
 }
 
 
@@ -417,14 +446,13 @@ void MainWindow::on_stop_b_2_clicked() {
 }
 
 void MainWindow::on_l_vid_turn_clicked() {
-    rotationAngle -= 90;
+    //VideoThread.isRotated = !isRotated;
+    videoThread1->isRotated = !videoThread1->isRotated;
+    rotationAngle -= 180;
     if (rotationAngle < 0) rotationAngle += 360;
 }
 
-void MainWindow::on_r_vid_turn_clicked() {
-    rotationAngle += 90;
-    if (rotationAngle >= 360) rotationAngle -= 360;
-}
+
 
 void MainWindow::on_switch_vid_clicked() {
     static bool isSwitched = false;
@@ -586,39 +614,34 @@ void MainWindow::on_get_stanag_clicked()
 
 void MainWindow::on_energy_0_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    ScriptCommands::GetInstance().SetLaserEnergy(0);
+
 }
 void MainWindow::on_energy_1_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    ScriptCommands::GetInstance().SetLaserEnergy(1);
+
 }
 void MainWindow::on_energy_2_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    ScriptCommands::GetInstance().SetLaserEnergy(2);
+
 }
 void MainWindow::on_energy_3_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    ScriptCommands::GetInstance().SetLaserEnergy(3);
+
 }
 void MainWindow::on_energy_4_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    ScriptCommands::GetInstance().SetLaserEnergy(4);
+
 }
 void MainWindow::on_energy_5_clicked()
 {
-    std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    ScriptCommands::GetInstance().SetLaserEnergy(5);
+
+
 }
 
 
@@ -627,8 +650,5 @@ void MainWindow::on_energy_5_clicked()
 
 void MainWindow::on_mode_input_currentIndexChanged(int index)
 {
-    std::vector<uint8_t> payload = {0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, (uint8_t)index};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x118,0x08, payload);
+    ScriptCommands::GetInstance().SetMode((ModePlatform)index);
 }
-

@@ -22,5 +22,7 @@ void ClickableLabel::mousePressEvent(QMouseEvent *event) {
         float currentAngleY = LpsParameters::GetInstance().GetAngleY();
         ScriptCommands::GetInstance().SetAngleEncoder_V(currentAngleY-deltaAngle.y());
 
+
+
     }
 }

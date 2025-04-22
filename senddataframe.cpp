@@ -6,11 +6,62 @@
 SendDataFrame::SendDataFrame() {}
 
 
+ std::vector<uint8_t> SendDataFrame::CreateHeaderCannelloni(uint8_t countPacks){
+    std::vector<uint8_t> header;
+
+    header.push_back(0x02);//version
+    header.push_back(0x00);//tupe of frame
+    header.push_back(0x6E);//seq number
+    header.push_back(0x00);//number of CAN frames (2 byte)
+    header.push_back(countPacks);
+    return header;
+
+}
+
+ void SendDataFrame::AddCanFrame(uint16_t can_id, uint8_t can_len, const std::vector<uint8_t>& payload){
+    uint8_t can_id_high = (can_id >> 8) & 0xFF;
+    uint8_t can_id_low  = can_id & 0xFF;
+
+    // Додаємо адресу CAN кадру: 0x00 0x00 0x02 0x38
+    dataCanFrames.push_back(0x00);
+    dataCanFrames.push_back(0x00);
+    dataCanFrames.push_back(can_id_high);
+    dataCanFrames.push_back(can_id_low);
+
+    // Додаємо Count byte: 0x08 (8 байт в повідомленні)
+    dataCanFrames.push_back(can_len);
+
+    dataCanFrames.insert(dataCanFrames.end(), payload.begin(), payload.end());
+
+ }
 
 
+ void SendDataFrame::ClearCanFrame(){
+     dataCanFrames.clear();
+ }
+
+
+ void SendDataFrame::SendAllFrames(int countPacks){
+    std::vector<uint8_t> header = CreateHeaderCannelloni(countPacks);
+    dataCanFrames.insert(dataCanFrames.begin(), header.begin(), header.end());
+    QByteArray byteArray(reinterpret_cast<const char*>(dataCanFrames.data()), static_cast<int>(dataCanFrames.size()));
+
+    udpSocket.writeDatagram(byteArray, QHostAddress("192.168.144.10"), 14500);
+
+    std::cout << "Відправлено через UDP: Count=" << countPacks << " [";
+    for (size_t i = 0; i < dataCanFrames.size(); i++) {
+        printf(" %02X", dataCanFrames[i]);
+    }
+    std::cout << " ]" << std::endl;
+
+    ClearCanFrame();
+ }
 
 void SendDataFrame::Send(uint16_t can_id, uint8_t can_len, const std::vector<uint8_t>& payload) {
     std::vector<uint8_t> data;
+    // Додаємо Header
+    //std::vector<uint8_t> header = CreateHeaderCannelloni(countPacks);
+    //data.insert(data.end(), header.begin(), header.end());
 
     uint8_t can_id_high = (can_id >> 8) & 0xFF;
     uint8_t can_id_low  = can_id & 0xFF;

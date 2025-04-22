@@ -39,6 +39,104 @@ void putTextStroked(InputOutputArray img, const String& text, Point point, int f
     if (lineType == STROKED) putText(img, text, point, fontFace, fontScale, Scalar(0, 0, 0), thickness * 2, LINE_AA);
     putText(img, text, point, fontFace, fontScale, color, thickness, LINE_AA);
 }
+void putTextStrokedRotated(InputOutputArray img, const std::string& text, cv::Point org,
+                              int fontFace, double fontScale, const cv::Scalar& color,
+                              int thickness, int lineType)
+{
+    thickness = std::max(thickness, 0);
+
+    int baseline = 0;
+    cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
+
+    // Створюємо прозору картинку з альфа-каналом (BGR, без альфи, як у звичайному putText)
+    cv::Mat textImg(textSize.height + baseline, textSize.width, CV_8UC3, cv::Scalar(0, 0, 0));
+
+    // Якщо треба обводку — малюємо чорний текст потовщено
+    if (lineType == STROKED)
+        cv::putText(textImg, text, cv::Point(0, textSize.height), fontFace, fontScale,
+                    cv::Scalar(0, 0, 0), thickness * 2, cv::LINE_AA);
+
+    // Малюємо основний кольоровий текст
+    cv::putText(textImg, text, cv::Point(0, textSize.height), fontFace, fontScale,
+                color, thickness, cv::LINE_AA);
+
+    // Повертаємо на 180°
+    cv::Mat rotated;
+    cv::rotate(textImg, rotated, cv::ROTATE_180);
+
+    // Розраховуємо позицію так само, як і OpenCV це робить
+    int x = org.x - rotated.cols + 1;
+    int y = org.y - rotated.rows + baseline;
+
+    // Доступ до зображення
+    cv::Mat& dst = img.getMatRef();
+
+    // Просто копіюємо пікселі, без прозорості — як `putText`
+    for (int i = 0; i < rotated.rows; ++i)
+    {
+        for (int j = 0; j < rotated.cols; ++j)
+        {
+            int dstY = y + i;
+            int dstX = x + j;
+            if (dstX >= 0 && dstX < dst.cols && dstY >= 0 && dstY < dst.rows)
+            {
+                cv::Vec3b px = rotated.at<cv::Vec3b>(i, j);
+                if (px != cv::Vec3b(0, 0, 0))  // пропускаємо чорне тло
+                    dst.at<cv::Vec3b>(dstY, dstX) = px;
+            }
+        }
+    }
+}
+
+
+
+
+// void putTextStrokedRotated(cv::InputOutputArray img, const std::string& text, cv::Point org,
+//                               int fontFace, double fontScale, const cv::Scalar& color,
+//                               int thickness, int lineType)
+// {
+//     thickness = std::max(thickness, 0);
+
+//     int baseline = 0;
+//     cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
+
+//     cv::Mat textImg(textSize.height + baseline, textSize.width, CV_8UC4, cv::Scalar(0, 0, 0, 0));
+
+//     if (lineType == STROKED)
+//         cv::putText(textImg, text, cv::Point(0, textSize.height), fontFace, fontScale,
+//                     cv::Scalar(0, 0, 0, 255), thickness * 2, cv::LINE_AA);
+
+//     cv::putText(textImg, text, cv::Point(0, textSize.height), fontFace, fontScale,
+//                 cv::Scalar(color[0], color[1], color[2], 255), thickness, cv::LINE_AA);
+
+//     cv::Mat rotated;
+//     cv::rotate(textImg, rotated, cv::ROTATE_180);
+
+//     int x = org.x - rotated.cols + 1;
+//     int y = org.y - rotated.rows + baseline;
+
+//     // ОТРИМУЄМО Мат для прямого доступу до пікселів
+//     cv::Mat& dst = img.getMatRef();
+
+//     for (int i = 0; i < rotated.rows; ++i)
+//     {
+//         for (int j = 0; j < rotated.cols; ++j)
+//         {
+//             cv::Vec4b &px = rotated.at<cv::Vec4b>(i, j);
+//             if (px[3] > 0)
+//             {
+//                 int dstY = y + i;
+//                 int dstX = x + j;
+//                 if (dstX >= 0 && dstX < dst.cols && dstY >= 0 && dstY < dst.rows)
+//                 {
+//                     dst.at<cv::Vec3b>(dstY, dstX) = cv::Vec3b(px[0], px[1], px[2]);
+//                 }
+//             }
+//         }
+//     }
+// }
+
+
 
 
 void drawRectStroked(InputOutputArray img, Rect2d rect, const Scalar& color,

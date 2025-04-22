@@ -33,6 +33,8 @@ void VideoThread::setHorizontMarkerValue(float value) {
     } else {
         horizontMarkerValue = value;
     }
+    emit horizontMarkerValueChanged(static_cast<int>(horizontMarkerValue));
+
 }
 
 void VideoThread::setVerticalMarkerValue(float value){
@@ -43,6 +45,9 @@ void VideoThread::setVerticalMarkerValue(float value){
     } else {
         verticalMarkerValue = value;
     }
+    emit verticalMarkerValueChanged(static_cast<int>(verticalMarkerValue));
+
+
 }
 
 void VideoThread::run() {
@@ -84,15 +89,15 @@ void VideoThread::run() {
 
         // Draw the scale and markers
 
-        if(isRotated){
-            scaleVertical.drawScaleRotated(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
-            scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
+        // if(isRotated){
+        //     scaleVertical.drawScaleRotated(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
+        //     scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
 
-        }
-        else{
-            scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
-            scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
-        }
+        // }
+        // else{
+        //     scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
+        //     scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
+        // }
 
 
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
@@ -128,6 +133,47 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->videoLabel, &ClickableLabel::clickedAt,
             this, &MainWindow::onLabelClicked);
+
+
+
+
+    // // Встановлюємо позначки під слайдером
+    // ui->horizontalSlider->setTickPosition(QSlider::TicksBelow);
+    // ui->horizontalSlider->setTickInterval(10);  // Інтервал між позначками
+    // ui->horizontalSlider->setRange(-30, 30);    // Встановлюємо діапазон слайдера
+
+    // // Додаємо підписи вручну через QLabel
+    // int min = -30;
+    // int max = 30;
+    // int step = 10;
+
+    // // Зачекаємо, поки слайдер буде повністю відображений, щоб отримати коректну ширину
+    // QTimer::singleShot(0, [=]() {
+    //     int sliderWidth = ui->horizontalSlider->width();
+    //     QFontMetrics fm(this->font()); // Отримуємо метрики шрифту для обчислення ширини тексту
+
+    //     for (int i = min; i <= max; i += step) {
+    //         QLabel *label = new QLabel(QString::number(i), this);
+    //         label->setAlignment(Qt::AlignCenter);
+
+    //         // Обчислюємо бажану позицію центру лейбла
+    //         double ratio = static_cast<double>(i - min) / (max - min);
+    //         int centerPos = static_cast<int>(ratio * sliderWidth);
+
+    //         // Отримуємо ширину тексту лейбла
+    //         int textWidth = fm.horizontalAdvance(label->text());
+    //         int labelHalfWidth = textWidth / 2;
+
+    //         // Встановлюємо позицію лівого краю лейбла, щоб його центр був на потрібному місці
+    //         int xPos = ui->horizontalSlider->x() + centerPos - labelHalfWidth;
+    //         int yPos = ui->horizontalSlider->y() + ui->horizontalSlider->height();
+
+    //         label->move(xPos, yPos);
+    //         label->show();
+    //     }
+    // });
+
+
 
 
 
@@ -382,6 +428,10 @@ void MainWindow::onHorizontMarkerChanged(const QString &text) {
     if (ok) {
         ui->horizont_marker_input->setStyleSheet("");
         horizontMarkerValue = value;
+        ui->horizontalSlider->setValue(static_cast<int>(-value));
+        ui->hor_out->setText(QString::number(value, 'f', 1));
+
+
 
         // Update marker values for both video threads
         if (videoThread1) videoThread1->setHorizontMarkerValue(value);
@@ -404,9 +454,14 @@ void MainWindow::onVerticalMarkerChanged(const QString &text) {
 
     if (ok) {
         ui->vertical_marker_input->setStyleSheet("");
-        value = -value;
+        //value = value;
 
         verticalMarkerValue = value;
+        ui->verticalSlider->setValue(static_cast<int>(value));
+        ui->vert_out->setText(QString::number(value, 'f', 1));
+
+
+
 
         // Update marker values for both video threads
         if (videoThread1) videoThread1->setVerticalMarkerValue(value);

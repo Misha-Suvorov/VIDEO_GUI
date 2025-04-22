@@ -21,6 +21,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -34,6 +35,12 @@ public:
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout;
     QGridLayout *gridLayout_2;
+    QGridLayout *gridLayout_12;
+    QLabel *label_15;
+    QLabel *label_8;
+    QLabel *hor_out;
+    QSlider *horizontalSlider;
+    ClickableLabel *videoLabel;
     QFrame *frame;
     QVBoxLayout *verticalLayout;
     QGridLayout *gridLayout_6;
@@ -107,7 +114,11 @@ public:
     QGridLayout *gridLayout_10;
     QLabel *label_7;
     QComboBox *step_input;
-    ClickableLabel *videoLabel;
+    QSlider *verticalSlider;
+    QVBoxLayout *verticalLayout_4;
+    QLabel *label_14;
+    QLabel *vert_out;
+    QLabel *label_11;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -130,6 +141,54 @@ public:
         horizontalLayout->setObjectName("horizontalLayout");
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName("gridLayout_2");
+        gridLayout_12 = new QGridLayout();
+        gridLayout_12->setObjectName("gridLayout_12");
+        label_15 = new QLabel(centralwidget);
+        label_15->setObjectName("label_15");
+
+        gridLayout_12->addWidget(label_15, 0, 0, 1, 1, Qt::AlignLeft);
+
+        label_8 = new QLabel(centralwidget);
+        label_8->setObjectName("label_8");
+
+        gridLayout_12->addWidget(label_8, 0, 2, 1, 1, Qt::AlignRight);
+
+        hor_out = new QLabel(centralwidget);
+        hor_out->setObjectName("hor_out");
+        QFont font;
+        font.setPointSize(17);
+        hor_out->setFont(font);
+
+        gridLayout_12->addWidget(hor_out, 0, 1, 1, 1, Qt::AlignHCenter);
+
+
+        gridLayout_2->addLayout(gridLayout_12, 1, 1, 1, 1);
+
+        horizontalSlider = new QSlider(centralwidget);
+        horizontalSlider->setObjectName("horizontalSlider");
+        horizontalSlider->setStyleSheet(QString::fromUtf8(""));
+        horizontalSlider->setMinimum(-30);
+        horizontalSlider->setMaximum(30);
+        horizontalSlider->setSingleStep(1);
+        horizontalSlider->setOrientation(Qt::Horizontal);
+        horizontalSlider->setInvertedAppearance(false);
+        horizontalSlider->setInvertedControls(false);
+        horizontalSlider->setTickPosition(QSlider::TicksAbove);
+        horizontalSlider->setTickInterval(10);
+
+        gridLayout_2->addWidget(horizontalSlider, 2, 1, 1, 1);
+
+        videoLabel = new ClickableLabel(centralwidget);
+        videoLabel->setObjectName("videoLabel");
+        videoLabel->setEnabled(true);
+        sizePolicy.setHeightForWidth(videoLabel->sizePolicy().hasHeightForWidth());
+        videoLabel->setSizePolicy(sizePolicy);
+        videoLabel->setMinimumSize(QSize(0, 0));
+        videoLabel->setAutoFillBackground(false);
+        videoLabel->setFrameShape(QFrame::NoFrame);
+
+        gridLayout_2->addWidget(videoLabel, 3, 1, 1, 1);
+
         frame = new QFrame(centralwidget);
         frame->setObjectName("frame");
         QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
@@ -730,18 +789,40 @@ public:
         verticalLayout->addLayout(gridLayout_3);
 
 
-        gridLayout_2->addWidget(frame, 0, 1, 1, 1);
+        gridLayout_2->addWidget(frame, 3, 4, 1, 1);
 
-        videoLabel = new ClickableLabel(centralwidget);
-        videoLabel->setObjectName("videoLabel");
-        videoLabel->setEnabled(true);
-        sizePolicy.setHeightForWidth(videoLabel->sizePolicy().hasHeightForWidth());
-        videoLabel->setSizePolicy(sizePolicy);
-        videoLabel->setMinimumSize(QSize(0, 0));
-        videoLabel->setAutoFillBackground(false);
-        videoLabel->setFrameShape(QFrame::NoFrame);
+        verticalSlider = new QSlider(centralwidget);
+        verticalSlider->setObjectName("verticalSlider");
+        verticalSlider->setMinimum(-30);
+        verticalSlider->setMaximum(30);
+        verticalSlider->setOrientation(Qt::Vertical);
+        verticalSlider->setTickPosition(QSlider::TicksAbove);
+        verticalSlider->setTickInterval(10);
 
-        gridLayout_2->addWidget(videoLabel, 0, 0, 1, 1);
+        gridLayout_2->addWidget(verticalSlider, 3, 2, 1, 1);
+
+        verticalLayout_4 = new QVBoxLayout();
+        verticalLayout_4->setObjectName("verticalLayout_4");
+        label_14 = new QLabel(centralwidget);
+        label_14->setObjectName("label_14");
+
+        verticalLayout_4->addWidget(label_14, 0, Qt::AlignTop);
+
+        vert_out = new QLabel(centralwidget);
+        vert_out->setObjectName("vert_out");
+        vert_out->setMinimumSize(QSize(30, 0));
+        vert_out->setMaximumSize(QSize(99999, 16777215));
+        vert_out->setFont(font);
+
+        verticalLayout_4->addWidget(vert_out, 0, Qt::AlignVCenter);
+
+        label_11 = new QLabel(centralwidget);
+        label_11->setObjectName("label_11");
+
+        verticalLayout_4->addWidget(label_11, 0, Qt::AlignBottom);
+
+
+        gridLayout_2->addLayout(verticalLayout_4, 3, 3, 1, 1);
 
 
         horizontalLayout->addLayout(gridLayout_2);
@@ -763,6 +844,10 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        label_15->setText(QCoreApplication::translate("MainWindow", "30", nullptr));
+        label_8->setText(QCoreApplication::translate("MainWindow", "-30", nullptr));
+        hor_out->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        videoLabel->setText(QString());
         status_label->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         videoLabel2->setText(QString());
         l_vid_turn->setText(QCoreApplication::translate("MainWindow", "\342\237\263", nullptr));
@@ -872,7 +957,9 @@ public:
         step_input->setItemText(7, QCoreApplication::translate("MainWindow", "2", nullptr));
         step_input->setItemText(8, QCoreApplication::translate("MainWindow", "3", nullptr));
 
-        videoLabel->setText(QString());
+        label_14->setText(QCoreApplication::translate("MainWindow", "20", nullptr));
+        vert_out->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        label_11->setText(QCoreApplication::translate("MainWindow", "-20", nullptr));
     } // retranslateUi
 
 };

@@ -10,9 +10,12 @@ public:
     static ScriptCommands& GetInstance();
     void SetAngleEncoder_H(float value);
     void SetAngleEncoder_V(float value);
+    void SetAngleEncoder(float value_H, float value_V);
+
     void SetMode(ModePlatform mode);
     void GetMode();
     void SetLaserEnergy(uint8_t value);
+
 
 
     //ScriptCommands();

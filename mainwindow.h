@@ -43,6 +43,10 @@ public:
 
 signals:
     void frameReady(const QImage &image);
+    void horizontMarkerValueChanged(int value);
+    void verticalMarkerValueChanged(int value);
+
+
 
 private:
     bool running;

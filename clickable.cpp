@@ -17,10 +17,15 @@ void ClickableLabel::mousePressEvent(QMouseEvent *event) {
         qDebug() << " Вивід пікселів через Angle:" << deltaAngle;
 
         float currentAngleX =  LpsParameters::GetInstance().GetAngleX();
-        ScriptCommands::GetInstance().SetAngleEncoder_H(currentAngleX+deltaAngle.x());
+        float newAngleX = currentAngleX+deltaAngle.x();
+        //ScriptCommands::GetInstance().SetAngleEncoder_H(currentAngleX+deltaAngle.x());
+
 
         float currentAngleY = LpsParameters::GetInstance().GetAngleY();
-        ScriptCommands::GetInstance().SetAngleEncoder_V(currentAngleY-deltaAngle.y());
+        float newAngleY = currentAngleY-deltaAngle.y();
+        //ScriptCommands::GetInstance().SetAngleEncoder_V(currentAngleY-deltaAngle.y());
+
+        ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
 
 
 

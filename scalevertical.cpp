@@ -103,7 +103,7 @@ void ScaleVertical::drawScaleRotated(cv::InputOutputArray img, const Scalar& col
         std::string text = std::to_string(tickValue);
         Size textSize = getTextSize(text, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
         Point ptText = Point(startX + 15, tickPosY + textSize.height / 2);
-        cv::putTextStroked(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
+        cv::putTextStrokedRotated(img, text, ptText, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
     }
 
     for (int i = 0; i < numTicks - 1; i++)
@@ -113,10 +113,10 @@ void ScaleVertical::drawScaleRotated(cv::InputOutputArray img, const Scalar& col
     }
     std::string textValue = convertValueToText(-value);
     Size textSize = getTextSize(textValue, FONT_HERSHEY_SIMPLEX, 0.5, 3, nullptr);
-    Point textPosition = Point(startX - 20, centerY);  // Center-aligned text, static position
+    Point textPosition = Point(startX + 20, centerY);  // Center-aligned text, static position
 
     // Draw the text at the calculated static position
-    cv::putTextStroked(img, textValue, textPosition, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
+    cv::putTextStrokedRotated(img, textValue, textPosition, FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1, lineType);
 
 
     float markerPosY = value * coefY + centerY;

@@ -311,8 +311,9 @@ void MainWindow::onFrequencyModeChanged(int index){
 
     std::vector<uint8_t> pld = {0x00, 0x02, 0x04, 0x00};
     pld.insert(pld.end(), byteArray.begin(), byteArray.end());
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248, 0x08, pld);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x248, 0x08, pld);
+    SendDataFrame::getInstance().Send(0x248, 0x08, pld);
 
 }
 
@@ -410,6 +411,10 @@ void MainWindow::updateLpsParametersUI() {
         break;
     default:
         break;
+    }
+    if(SendDataFrame::getInstance().GetDataFrameLen() != 0){
+        SendDataFrame::getInstance().SendAllFrames();
+
     }
 
 }
@@ -546,8 +551,10 @@ void MainWindow::on_pointer_b_clicked() {
     std::vector<uint8_t> payload = {0x00, 0x02, 0x13, 0x00, 0x00, 0x00, statePointerByte, 0x04};
 
     // Відправка повідомлення
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x238,0x08, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x238,0x08, payload);
+    SendDataFrame::getInstance().Send(0x238, 0x08, payload);
+
 }
 
 
@@ -573,8 +580,10 @@ void MainWindow::on_start_range_b_clicked()
     };
 
     // Відправка повідомлення
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x238,0x08, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x238,0x08, payload);
+    SendDataFrame::getInstance().Send(0x238, 0x08, payload);
+
 
 }
 
@@ -585,8 +594,10 @@ void MainWindow::on_break_range_b_clicked()
     std::vector<uint8_t> payload = {0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     // Відправка повідомлення
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x238,0x08, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x238,0x08, payload);
+    SendDataFrame::getInstance().Send(0x238, 0x08, payload);
+
 }
 
 
@@ -599,8 +610,10 @@ void MainWindow::on_laser_act_b_clicked()
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte
     };
 
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x248,0x08, payload);
+    SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+
 
 }
 
@@ -615,8 +628,10 @@ void MainWindow::on_pulse_b_clicked()
         0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte
     };
 
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x248,0x08, payload);
+    SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+
 
 }
 
@@ -630,16 +645,20 @@ void MainWindow::on_term_control_b_clicked()
         0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte
     };
 
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x08, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x248,0x08, payload);
+    SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+
 }
 
 
 void MainWindow::on_get_frequency_clicked()
 {
     std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x01};
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248,0x04, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x248,0x04, payload);
+    SendDataFrame::getInstance().Send(0x248, 0x04, payload);
+
 }
 
 
@@ -659,8 +678,10 @@ void MainWindow::on_get_stanag_clicked()
     payload.insert(payload.end(), octalBytes.begin(), octalBytes.end());
 
     // 5. Відправка через SendDataFrame
-    SendDataFrame sendDataFrame;
-    sendDataFrame.Send(0x248, 0x08, payload);
+    // SendDataFrame sendDataFrame;
+    // sendDataFrame.Send(0x248, 0x08, payload);
+    SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+
 
 }
 

@@ -810,6 +810,11 @@ public:
 
         vert_out = new QLabel(centralwidget);
         vert_out->setObjectName("vert_out");
+        QSizePolicy sizePolicy5(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Preferred);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(vert_out->sizePolicy().hasHeightForWidth());
+        vert_out->setSizePolicy(sizePolicy5);
         vert_out->setMinimumSize(QSize(30, 0));
         vert_out->setMaximumSize(QSize(99999, 16777215));
         vert_out->setFont(font);

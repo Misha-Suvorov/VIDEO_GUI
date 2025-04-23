@@ -6,17 +6,28 @@
 SendDataFrame::SendDataFrame() {}
 
 
- std::vector<uint8_t> SendDataFrame::CreateHeaderCannelloni(uint8_t countPacks){
+
+// Реалізація сінглтона
+SendDataFrame& SendDataFrame::getInstance() {
+    static SendDataFrame instance;
+    return instance;
+}
+
+std::vector<uint8_t> SendDataFrame::CreateHeaderCannelloni(uint8_t countPacks){
     std::vector<uint8_t> header;
 
-    header.push_back(0x02);//version
-    header.push_back(0x00);//tupe of frame
-    header.push_back(0x6E);//seq number
-    header.push_back(0x00);//number of CAN frames (2 byte)
+    header.push_back(0x02); // version
+    header.push_back(0x00); // type of frame
+    header.push_back(seqNumber); // seq number
+    header.push_back(0x00); // number of CAN frames (2 bytes)
     header.push_back(countPacks);
-    return header;
 
+    // Збільшуємо seqNumber з обгортанням
+    seqNumber = (seqNumber == 0xFF) ? 0x01 : seqNumber +1;
+
+    return header;
 }
+
 
  void SendDataFrame::AddCanFrame(uint16_t can_id, uint8_t can_len, const std::vector<uint8_t>& payload){
     uint8_t can_id_high = (can_id >> 8) & 0xFF;
@@ -33,17 +44,29 @@ SendDataFrame::SendDataFrame() {}
 
     dataCanFrames.insert(dataCanFrames.end(), payload.begin(), payload.end());
 
+    countPacks++;
+
  }
 
 
  void SendDataFrame::ClearCanFrame(){
-     dataCanFrames.clear();
+    dataCanFrames.clear();
+     countPacks = 0;
+ }
+
+ int SendDataFrame::GetDataFrameLen(){
+     return countPacks;
  }
 
 
- void SendDataFrame::SendAllFrames(int countPacks){
+ void SendDataFrame::SendAllFrames(){
+
+
+
+
     std::vector<uint8_t> header = CreateHeaderCannelloni(countPacks);
     dataCanFrames.insert(dataCanFrames.begin(), header.begin(), header.end());
+
     QByteArray byteArray(reinterpret_cast<const char*>(dataCanFrames.data()), static_cast<int>(dataCanFrames.size()));
 
     udpSocket.writeDatagram(byteArray, QHostAddress("192.168.144.10"), 14500);
@@ -60,18 +83,20 @@ SendDataFrame::SendDataFrame() {}
 void SendDataFrame::Send(uint16_t can_id, uint8_t can_len, const std::vector<uint8_t>& payload) {
     std::vector<uint8_t> data;
     // Додаємо Header
-    //std::vector<uint8_t> header = CreateHeaderCannelloni(countPacks);
-    //data.insert(data.end(), header.begin(), header.end());
+
+
+    std::vector<uint8_t> header = CreateHeaderCannelloni(1);
+    data.insert(data.end(), header.begin(), header.end());
 
     uint8_t can_id_high = (can_id >> 8) & 0xFF;
     uint8_t can_id_low  = can_id & 0xFF;
 
     // Додаємо Header: 0x02 0x00 0x6E 0x00 0x01
-    data.push_back(0x02);
-    data.push_back(0x00);
-    data.push_back(0x6E);
-    data.push_back(0x00);
-    data.push_back(0x01);
+    // data.push_back(0x02);
+    // data.push_back(0x00);
+    // data.push_back(0x6E);
+    // data.push_back(0x00);
+    // data.push_back(0x01);
 
 
 

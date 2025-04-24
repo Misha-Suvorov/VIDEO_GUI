@@ -387,7 +387,7 @@ void MainWindow::updateLpsParametersUI() {
     ui->range_out->setText(QString::number(range, 'f', 4));
     ui->temp_out->setText(QString::number(temp, 'f',4));
 
-    ui->frequency_out->setText(QString::number(freq));
+    ui->frequency_out->setText(QString::number(freq) + " us");
     ui->time_remaining_out->setText(QString::number(time_remaining/1000));
 
     ui->error_label->setText(laser_error_str[laser_error_code]);

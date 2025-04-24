@@ -123,6 +123,8 @@ private slots:
 
     void on_mode_input_currentIndexChanged(int index);
 
+    void on_stop_b_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

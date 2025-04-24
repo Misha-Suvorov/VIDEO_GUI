@@ -133,6 +133,7 @@ public:
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
         MainWindow->setMinimumSize(QSize(0, 0));
+        MainWindow->setAutoFillBackground(false);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         sizePolicy.setHeightForWidth(centralwidget->sizePolicy().hasHeightForWidth());
@@ -173,14 +174,15 @@ public:
 "    border-radius: 5px;\n"
 "}\n"
 ""));
-        horizontalSlider->setMinimum(-30);
-        horizontalSlider->setMaximum(30);
+        horizontalSlider->setMinimum(-300);
+        horizontalSlider->setMaximum(300);
         horizontalSlider->setSingleStep(1);
+        horizontalSlider->setPageStep(1);
         horizontalSlider->setOrientation(Qt::Horizontal);
         horizontalSlider->setInvertedAppearance(false);
         horizontalSlider->setInvertedControls(false);
         horizontalSlider->setTickPosition(QSlider::TicksAbove);
-        horizontalSlider->setTickInterval(10);
+        horizontalSlider->setTickInterval(100);
 
         gridLayout_2->addWidget(horizontalSlider, 2, 1, 1, 1);
 
@@ -1030,11 +1032,12 @@ public:
 "    margin: 0 -2px;\n"
 "    border-radius: 5px;\n"
 "}"));
-        verticalSlider->setMinimum(-20);
-        verticalSlider->setMaximum(20);
+        verticalSlider->setMinimum(-200);
+        verticalSlider->setMaximum(200);
+        verticalSlider->setSingleStep(1);
         verticalSlider->setOrientation(Qt::Vertical);
         verticalSlider->setTickPosition(QSlider::TicksAbove);
-        verticalSlider->setTickInterval(10);
+        verticalSlider->setTickInterval(100);
 
         gridLayout_2->addWidget(verticalSlider, 3, 2, 1, 1);
 

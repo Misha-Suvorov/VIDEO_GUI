@@ -62,6 +62,7 @@ void VideoThread::run() {
 
     ScaleVertical scaleVertical;
     ScaleHorizontal scaleHorizontal;
+    double angle = 0; // Кут обертання у градусах
 
     cv::Mat frame;
     while (running) {
@@ -98,6 +99,7 @@ void VideoThread::run() {
         //     scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
         //     scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
         // }
+
 
 
         cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
@@ -433,7 +435,7 @@ void MainWindow::onHorizontMarkerChanged(const QString &text) {
     if (ok) {
         ui->horizont_marker_input->setStyleSheet("");
         horizontMarkerValue = value;
-        ui->horizontalSlider->setValue(static_cast<int>(-value));
+        ui->horizontalSlider->setValue(static_cast<int>(-value*10));
         ui->hor_out->setText(QString::number(value, 'f', 1));
 
 
@@ -462,7 +464,7 @@ void MainWindow::onVerticalMarkerChanged(const QString &text) {
         //value = value;
 
         verticalMarkerValue = value;
-        ui->verticalSlider->setValue(static_cast<int>(value));
+        ui->verticalSlider->setValue(static_cast<int>(value*10));
         ui->vert_out->setText(QString::number(value, 'f', 1));
 
 
@@ -728,3 +730,10 @@ void MainWindow::on_mode_input_currentIndexChanged(int index)
 {
     ScriptCommands::GetInstance().SetMode((ModePlatform)index);
 }
+
+void MainWindow::on_stop_b_clicked()
+{
+    ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
+
+}
+

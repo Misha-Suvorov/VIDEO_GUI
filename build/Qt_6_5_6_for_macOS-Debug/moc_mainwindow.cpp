@@ -253,11 +253,12 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_energy_3_clicked",
     "on_energy_4_clicked",
     "on_energy_5_clicked",
-    "on_mode_input_currentIndexChanged"
+    "on_mode_input_currentIndexChanged",
+    "on_stop_b_clicked"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
-    uint offsetsAndSizes[64];
+    uint offsetsAndSizes[66];
     char stringdata0[11];
     char stringdata1[14];
     char stringdata2[1];
@@ -290,6 +291,7 @@ struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
     char stringdata29[20];
     char stringdata30[20];
     char stringdata31[34];
+    char stringdata32[18];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSMainWindowENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -326,7 +328,8 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
         QT_MOC_LITERAL(497, 19),  // "on_energy_3_clicked"
         QT_MOC_LITERAL(517, 19),  // "on_energy_4_clicked"
         QT_MOC_LITERAL(537, 19),  // "on_energy_5_clicked"
-        QT_MOC_LITERAL(557, 33)   // "on_mode_input_currentIndexCha..."
+        QT_MOC_LITERAL(557, 33),  // "on_mode_input_currentIndexCha..."
+        QT_MOC_LITERAL(591, 17)   // "on_stop_b_clicked"
     },
     "MainWindow",
     "displayFrame1",
@@ -359,7 +362,8 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
     "on_energy_3_clicked",
     "on_energy_4_clicked",
     "on_energy_5_clicked",
-    "on_mode_input_currentIndexChanged"
+    "on_mode_input_currentIndexChanged",
+    "on_stop_b_clicked"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -371,7 +375,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-      26,   14, // methods
+      27,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -379,32 +383,33 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  170,    2, 0x08,    1 /* Private */,
-       4,    1,  173,    2, 0x08,    3 /* Private */,
-       5,    1,  176,    2, 0x08,    5 /* Private */,
-       7,    0,  179,    2, 0x08,    7 /* Private */,
-       8,    0,  180,    2, 0x08,    8 /* Private */,
-       9,    0,  181,    2, 0x08,    9 /* Private */,
-      10,    0,  182,    2, 0x08,   10 /* Private */,
-      11,    1,  183,    2, 0x08,   11 /* Private */,
-      13,    1,  186,    2, 0x08,   13 /* Private */,
-      14,    0,  189,    2, 0x08,   15 /* Private */,
-      15,    0,  190,    2, 0x08,   16 /* Private */,
-      16,    0,  191,    2, 0x08,   17 /* Private */,
-      17,    1,  192,    2, 0x08,   18 /* Private */,
-      19,    1,  195,    2, 0x08,   20 /* Private */,
-      20,    0,  198,    2, 0x08,   22 /* Private */,
-      21,    0,  199,    2, 0x08,   23 /* Private */,
-      22,    0,  200,    2, 0x08,   24 /* Private */,
-      23,    0,  201,    2, 0x08,   25 /* Private */,
-      24,    0,  202,    2, 0x08,   26 /* Private */,
-      25,    0,  203,    2, 0x08,   27 /* Private */,
-      26,    0,  204,    2, 0x08,   28 /* Private */,
-      27,    0,  205,    2, 0x08,   29 /* Private */,
-      28,    0,  206,    2, 0x08,   30 /* Private */,
-      29,    0,  207,    2, 0x08,   31 /* Private */,
-      30,    0,  208,    2, 0x08,   32 /* Private */,
-      31,    1,  209,    2, 0x08,   33 /* Private */,
+       1,    1,  176,    2, 0x08,    1 /* Private */,
+       4,    1,  179,    2, 0x08,    3 /* Private */,
+       5,    1,  182,    2, 0x08,    5 /* Private */,
+       7,    0,  185,    2, 0x08,    7 /* Private */,
+       8,    0,  186,    2, 0x08,    8 /* Private */,
+       9,    0,  187,    2, 0x08,    9 /* Private */,
+      10,    0,  188,    2, 0x08,   10 /* Private */,
+      11,    1,  189,    2, 0x08,   11 /* Private */,
+      13,    1,  192,    2, 0x08,   13 /* Private */,
+      14,    0,  195,    2, 0x08,   15 /* Private */,
+      15,    0,  196,    2, 0x08,   16 /* Private */,
+      16,    0,  197,    2, 0x08,   17 /* Private */,
+      17,    1,  198,    2, 0x08,   18 /* Private */,
+      19,    1,  201,    2, 0x08,   20 /* Private */,
+      20,    0,  204,    2, 0x08,   22 /* Private */,
+      21,    0,  205,    2, 0x08,   23 /* Private */,
+      22,    0,  206,    2, 0x08,   24 /* Private */,
+      23,    0,  207,    2, 0x08,   25 /* Private */,
+      24,    0,  208,    2, 0x08,   26 /* Private */,
+      25,    0,  209,    2, 0x08,   27 /* Private */,
+      26,    0,  210,    2, 0x08,   28 /* Private */,
+      27,    0,  211,    2, 0x08,   29 /* Private */,
+      28,    0,  212,    2, 0x08,   30 /* Private */,
+      29,    0,  213,    2, 0x08,   31 /* Private */,
+      30,    0,  214,    2, 0x08,   32 /* Private */,
+      31,    1,  215,    2, 0x08,   33 /* Private */,
+      32,    0,  218,    2, 0x08,   35 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QImage,    3,
@@ -433,6 +438,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   18,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -505,7 +511,9 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_mode_input_currentIndexChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'on_stop_b_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -542,6 +550,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 23: _t->on_energy_4_clicked(); break;
         case 24: _t->on_energy_5_clicked(); break;
         case 25: _t->on_mode_input_currentIndexChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 26: _t->on_stop_b_clicked(); break;
         default: ;
         }
     }
@@ -566,13 +575,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 26)
+        if (_id < 27)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 26;
+        _id -= 27;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 26)
+        if (_id < 27)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 26;
+        _id -= 27;
     }
     return _id;
 }

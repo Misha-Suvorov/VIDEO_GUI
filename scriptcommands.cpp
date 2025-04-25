@@ -28,20 +28,21 @@ void ScriptCommands::SetAngleEncoder_V(float value) {
     SendDataFrame::getInstance().Send(0x218, 0x08, payload);
 }
 
-void ScriptCommands::SetAngleEncoder(float value_H, float value_V) {
+//встановлення кутів енкодера в градусах
+void ScriptCommands::SetAngleEncoder(float angle_encoder_H, float angle_encoder_V) {
     // Отримуємо сінглтон
     SendDataFrame& sendDataFrame = SendDataFrame::getInstance();
 
     std::vector<uint8_t> byteArray(4);
 
     // Value H
-    std::memcpy(byteArray.data(), &value_H, sizeof(float));
+    std::memcpy(byteArray.data(), &angle_encoder_H, sizeof(float));
     std::vector<uint8_t> payload_H = {0x00, 0x11, 0x02, 0x00};
     payload_H.insert(payload_H.end(), byteArray.begin(), byteArray.end());
     sendDataFrame.AddCanFrame(0x218, 0x08, payload_H);
 
     // Value V
-    std::memcpy(byteArray.data(), &value_V, sizeof(float));
+    std::memcpy(byteArray.data(), &angle_encoder_V, sizeof(float));
     std::vector<uint8_t> payload_V = {0x00, 0x21, 0x02, 0x00};
     payload_V.insert(payload_V.end(), byteArray.begin(), byteArray.end());
     sendDataFrame.AddCanFrame(0x218, 0x08, payload_V);
@@ -49,6 +50,35 @@ void ScriptCommands::SetAngleEncoder(float value_H, float value_V) {
     // Відправка обох кадрів
     //sendDataFrame.SendAllFrames(2);
 }
+
+void ScriptCommands::SetVoltageEncoder(float voltage_encoder_H, float voltage_encoder_V)
+{
+    std::vector<uint8_t> payload;
+    std::vector<uint8_t> byteArray(4);
+
+
+    //передача координати X
+
+    std::memcpy(byteArray.data(), &voltage_encoder_H, sizeof(float));
+
+    payload = {0x00, 0x10, 0x02, 0x00};
+    payload.insert(payload.end(), byteArray.begin(), byteArray.end());
+
+
+    SendDataFrame::getInstance().AddCanFrame(0x118, 0x08, payload);
+
+    //передача координати Y вгору
+    std::memcpy(byteArray.data(), &voltage_encoder_V, sizeof(float));
+
+    payload = {0x00, 0x20, 0x02, 0x00};
+    payload.insert(payload.end(), byteArray.begin(), byteArray.end());
+
+    SendDataFrame::getInstance().AddCanFrame(0x118, 0x08, payload);
+    //SendDataFrame::getInstance().SendAllFrames();
+}
+
+
+
 
 void ScriptCommands::GetMode() {
     std::vector<uint8_t> payload = {0x00, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};

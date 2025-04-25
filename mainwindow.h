@@ -125,6 +125,17 @@ private slots:
 
     void on_stop_b_clicked();
 
+    void on_r_b_clicked();
+
+
+    void on_step_input_currentTextChanged(const QString &arg1);
+
+    void on_up_b_clicked();
+
+    void on_l_l_clicked();
+
+    void on_d_b_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

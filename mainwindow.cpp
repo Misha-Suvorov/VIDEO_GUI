@@ -320,6 +320,18 @@ void MainWindow::onFrequencyModeChanged(int index){
 }
 
 
+void MainWindow::on_step_input_currentTextChanged(const QString &arg1)
+{
+    bool ok;
+    float value = arg1.toFloat(&ok);
+    if (ok) {
+        LpsParameters::GetInstance().SetVoltageX(value);
+        LpsParameters::GetInstance().SetVoltageY(value);
+
+    }
+}
+
+
 // void MainWindow::on_first_STANAG_Changed(int index)
 // {
 //     int first_stanag_input[8] = {1,2,3,4,5,6,7,8};
@@ -512,6 +524,7 @@ void MainWindow::on_l_vid_turn_clicked() {
     videoThread1->isRotated = !videoThread1->isRotated;
     rotationAngle -= 180;
     if (rotationAngle < 0) rotationAngle += 360;
+
 }
 
 
@@ -735,5 +748,41 @@ void MainWindow::on_stop_b_clicked()
 {
     ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
 
+}
+
+
+void MainWindow::on_r_b_clicked()
+{
+    float voltage_x = -LpsParameters::GetInstance().GetVoltageX();
+    if(videoThread1->isRotated) voltage_x = -voltage_x;
+    ScriptCommands::GetInstance().SetVoltageEncoder(voltage_x, 0);
+
+}
+
+void MainWindow::on_l_l_clicked()
+{
+    float voltage_x = LpsParameters::GetInstance().GetVoltageX();
+
+    if(videoThread1->isRotated) voltage_x = -voltage_x;
+    ScriptCommands::GetInstance().SetVoltageEncoder(voltage_x, 0);
+}
+
+
+
+
+void MainWindow::on_up_b_clicked()
+{
+
+    float voltage_y = LpsParameters::GetInstance().GetVoltageY();
+    if(videoThread1->isRotated) voltage_y = -voltage_y;
+    ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
+}
+
+
+void MainWindow::on_d_b_clicked()
+{
+    float voltage_y = -LpsParameters::GetInstance().GetVoltageY();
+    if(videoThread1->isRotated) voltage_y = -voltage_y;
+    ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
 }
 

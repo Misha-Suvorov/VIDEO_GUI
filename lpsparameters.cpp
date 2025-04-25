@@ -24,6 +24,10 @@ void LpsParameters::SetLaserCountPulses(uint32_t value) { laser_pulses = value;}
 void LpsParameters::SetTimeRemaining(uint32_t value) {time_remaining = value;}
 void LpsParameters::SetLaserError(uint8_t value) {laser_error = value;}
 
+void LpsParameters::SetVoltageX(float value) {voltage.x = value;}
+void LpsParameters::SetVoltageY(float value) {voltage.y = value;}
+
+
 
 // Методи отримання значень
 float LpsParameters::GetAngleX() const { return angleX; }
@@ -35,6 +39,11 @@ ModePlatform LpsParameters::GetModePlatform() const { return mode_platform;}
 
 float LpsParameters::GetRange() const { return range; }
 float LpsParameters::GetTemperature() const { return temperature;}
+
+float LpsParameters::GetVoltageX() const {return voltage.x;}
+float LpsParameters::GetVoltageY() const {return voltage.y;}
+Voltage LpsParameters::GetVoltage() const {return voltage;}
+
 
 uint32_t LpsParameters::GetLaserFrequency() const { return laser_frequency;}
 uint32_t LpsParameters::GetLaserStanag() const { return laser_stanag;}

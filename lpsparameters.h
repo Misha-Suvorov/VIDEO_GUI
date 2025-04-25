@@ -42,6 +42,12 @@ public:
     uint32_t GetTimeRemaining () const;
     uint8_t GetLaserError() const;
 
+    void SetVoltageX(float value);
+    void SetVoltageY(float value);
+    float GetVoltageX() const;
+    float GetVoltageY() const;
+    Voltage GetVoltage() const;
+
 
 
 
@@ -53,6 +59,8 @@ private:
     float speedX = 0.0f;
     float speedY = 0.0f;
     ModePlatform mode_platform ;
+
+    Voltage voltage;
 
     float range = 0.0f;
     float temperature = 0.0f;

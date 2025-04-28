@@ -61,6 +61,7 @@ SOURCES       = ../../base.cpp \
 		../../canthread.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
+		../../laserparameters.cpp \
 		../../lpsparameters.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
@@ -82,6 +83,7 @@ OBJECTS       = base.o \
 		canthread.o \
 		clickable.o \
 		drawsymbols.o \
+		laserparameters.o \
 		lpsparameters.o \
 		main.o \
 		mainwindow.o \
@@ -419,6 +421,7 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../canthread.h \
 		../../clickable.h \
 		../../drawsymbols.h \
+		../../laserparameters.h \
 		../../lpsparameters.h \
 		../../mainwindow.h \
 		../../pixeltoangleconverter.h \
@@ -436,6 +439,7 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../canthread.cpp \
 		../../clickable.cpp \
 		../../drawsymbols.cpp \
+		../../laserparameters.cpp \
 		../../lpsparameters.cpp \
 		../../main.cpp \
 		../../mainwindow.cpp \
@@ -1136,8 +1140,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../CircularBuffer.h ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canparserworker.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../lpsparameters.h ../../mainwindow.h ../../pixeltoangleconverter.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../scriptcommands.h ../../senddataframe.h ../../structs.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canparserworker.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../pixeltoangleconverter.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp ../../scriptcommands.cpp ../../senddataframe.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../CircularBuffer.h ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canparserworker.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../laserparameters.h ../../lpsparameters.h ../../mainwindow.h ../../pixeltoangleconverter.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../scriptcommands.h ../../senddataframe.h ../../structs.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canparserworker.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../laserparameters.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../pixeltoangleconverter.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp ../../scriptcommands.cpp ../../senddataframe.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1339,6 +1343,7 @@ moc_mainwindow.cpp: ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../canthread.h \
 		../../lpsparameters.h \
+		../../structs.h \
 		../../scalehorizontal.h \
 		../../base.h \
 		../../senddataframe.h \
@@ -1527,7 +1532,8 @@ canbus.o: ../../canbus.cpp ../../canbus.h \
 
 canmessagegeneric.o: ../../canmessagegeneric.cpp ../../canmessagegeneric.h \
 		../../BaseCanMessage.h \
-		../../lpsparameters.h
+		../../lpsparameters.h \
+		../../structs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canmessagegeneric.o ../../canmessagegeneric.cpp
 
 cannelloniframe.o: ../../cannelloniframe.cpp ../../cannelloniframe.h \
@@ -1548,7 +1554,8 @@ canparserworker.o: ../../canparserworker.cpp ../../canparserworker.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qdebug.h \
 		../../canmessagegeneric.h \
 		../../BaseCanMessage.h \
-		../../lpsparameters.h
+		../../lpsparameters.h \
+		../../structs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canparserworker.o ../../canparserworker.cpp
 
 canthread.o: ../../canthread.cpp ../../canthread.h \
@@ -1686,6 +1693,7 @@ canthread.o: ../../canthread.cpp ../../canthread.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/QString \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../lpsparameters.h \
+		../../structs.h \
 		../../scalehorizontal.h \
 		../../base.h \
 		../../senddataframe.h \
@@ -1841,7 +1849,12 @@ drawsymbols.o: ../../drawsymbols.cpp ../../drawsymbols.h \
 		../../../Downloads/opencv-4.10.0/build/install/include/opencv4/opencv2/video/background_segm.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o drawsymbols.o ../../drawsymbols.cpp
 
-lpsparameters.o: ../../lpsparameters.cpp ../../lpsparameters.h
+laserparameters.o: ../../laserparameters.cpp ../../laserparameters.h \
+		../../structs.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o laserparameters.o ../../laserparameters.cpp
+
+lpsparameters.o: ../../lpsparameters.cpp ../../lpsparameters.h \
+		../../structs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lpsparameters.o ../../lpsparameters.cpp
 
 main.o: ../../main.cpp ../../mainwindow.h \
@@ -1979,6 +1992,7 @@ main.o: ../../main.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../canthread.h \
 		../../lpsparameters.h \
+		../../structs.h \
 		../../scalehorizontal.h \
 		../../base.h \
 		../../senddataframe.h \
@@ -2136,6 +2150,7 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qstring.h \
 		../../canthread.h \
 		../../lpsparameters.h \
+		../../structs.h \
 		../../scalehorizontal.h \
 		../../base.h \
 		../../senddataframe.h \
@@ -2161,7 +2176,7 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qtimer.h \
 		../../scalevertical.h \
 		../../cannelloniframe.h \
-		../../structs.h
+		../../scriptcommands.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
 pixeltoangleconverter.o: ../../pixeltoangleconverter.cpp ../../PixelToAngleConverter.h \

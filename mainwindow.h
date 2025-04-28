@@ -10,12 +10,14 @@
 #include "canbus.h"
 #include "canthread.h"
 #include "lpsparameters.h"
+#include "laserparameters.h"
 #include "scalehorizontal.h"
 #include "senddataframe.h"
 #include "canparserworker.h"
 #include "CircularBuffer.h"
 #include "clickable.h"
 #include "pixeltoangleconverter.h"
+
 
 
 
@@ -176,6 +178,7 @@ CircularBuffer<std::vector<uint8_t>> localMessageQueue;
     void startBothVideos();
     void stopBothVideos();
     void updateLpsParametersUI();
+    void updateLaserParametersUI();
     //void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
     ScaleHorizontal scaleHorizontal;
 

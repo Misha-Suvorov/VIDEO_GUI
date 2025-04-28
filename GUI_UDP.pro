@@ -39,6 +39,7 @@ SOURCES += \
     canthread.cpp \
     clickable.cpp \
     drawsymbols.cpp \
+    laserparameters.cpp \
     lpsparameters.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     canthread.h \
     clickable.h \
     drawsymbols.h \
+    laserparameters.h \
     lpsparameters.h \
     mainwindow.h \
     pixeltoangleconverter.h \

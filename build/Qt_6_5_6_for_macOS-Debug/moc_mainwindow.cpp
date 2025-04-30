@@ -45,11 +45,14 @@ constexpr auto qt_meta_stringdata_CLASSVideoThreadENDCLASS = QtMocHelpers::strin
     "image",
     "horizontMarkerValueChanged",
     "value",
-    "verticalMarkerValueChanged"
+    "verticalMarkerValueChanged",
+    "onLabelClick",
+    "pos",
+    "labelSize"
 );
 #else  // !QT_MOC_HAS_STRING_DATA
 struct qt_meta_stringdata_CLASSVideoThreadENDCLASS_t {
-    uint offsetsAndSizes[14];
+    uint offsetsAndSizes[20];
     char stringdata0[12];
     char stringdata1[11];
     char stringdata2[1];
@@ -57,6 +60,9 @@ struct qt_meta_stringdata_CLASSVideoThreadENDCLASS_t {
     char stringdata4[27];
     char stringdata5[6];
     char stringdata6[27];
+    char stringdata7[13];
+    char stringdata8[4];
+    char stringdata9[10];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_CLASSVideoThreadENDCLASS_t::offsetsAndSizes) + ofs), len 
@@ -68,7 +74,10 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSVideoThreadENDCLASS_t qt_meta_s
         QT_MOC_LITERAL(24, 5),  // "image"
         QT_MOC_LITERAL(30, 26),  // "horizontMarkerValueChanged"
         QT_MOC_LITERAL(57, 5),  // "value"
-        QT_MOC_LITERAL(63, 26)   // "verticalMarkerValueChanged"
+        QT_MOC_LITERAL(63, 26),  // "verticalMarkerValueChanged"
+        QT_MOC_LITERAL(90, 12),  // "onLabelClick"
+        QT_MOC_LITERAL(103, 3),  // "pos"
+        QT_MOC_LITERAL(107, 9)   // "labelSize"
     },
     "VideoThread",
     "frameReady",
@@ -76,7 +85,10 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSVideoThreadENDCLASS_t qt_meta_s
     "image",
     "horizontMarkerValueChanged",
     "value",
-    "verticalMarkerValueChanged"
+    "verticalMarkerValueChanged",
+    "onLabelClick",
+    "pos",
+    "labelSize"
 };
 #undef QT_MOC_LITERAL
 #endif // !QT_MOC_HAS_STRING_DATA
@@ -88,7 +100,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSVideoThreadENDCLASS[] = {
       11,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -96,14 +108,20 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSVideoThreadENDCLASS[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   32,    2, 0x06,    1 /* Public */,
-       4,    1,   35,    2, 0x06,    3 /* Public */,
-       6,    1,   38,    2, 0x06,    5 /* Public */,
+       1,    1,   38,    2, 0x06,    1 /* Public */,
+       4,    1,   41,    2, 0x06,    3 /* Public */,
+       6,    1,   44,    2, 0x06,    5 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags, initial metatype offsets
+       7,    2,   47,    2, 0x0a,    7 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QImage,    3,
     QMetaType::Void, QMetaType::Int,    5,
     QMetaType::Void, QMetaType::Int,    5,
+
+ // slots: parameters
+    QMetaType::Void, QMetaType::QPoint, QMetaType::QSize,    8,    9,
 
        0        // eod
 };
@@ -125,7 +143,11 @@ Q_CONSTINIT const QMetaObject VideoThread::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'verticalMarkerValueChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'onLabelClick'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QPoint, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QSize, std::false_type>
     >,
     nullptr
 } };
@@ -139,6 +161,7 @@ void VideoThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 0: _t->frameReady((*reinterpret_cast< std::add_pointer_t<QImage>>(_a[1]))); break;
         case 1: _t->horizontMarkerValueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 2: _t->verticalMarkerValueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 3: _t->onLabelClick((*reinterpret_cast< std::add_pointer_t<QPoint>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QSize>>(_a[2]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -186,13 +209,13 @@ int VideoThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }

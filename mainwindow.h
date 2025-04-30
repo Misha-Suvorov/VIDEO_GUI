@@ -28,6 +28,9 @@ QT_END_NAMESPACE
 class VideoThread : public QThread {
     Q_OBJECT
 
+public slots:
+    void onLabelClick(QPoint pos, QSize labelSize); // новий слот
+
 public:
     explicit VideoThread(QObject *parent = nullptr);
     ~VideoThread();
@@ -57,6 +60,13 @@ private:
     float horizontMarkerValue = 0;
     float verticalMarkerValue = 0;
     int rotationAngle = 0;
+
+
+    cv::Ptr<cv::Tracker> tracker;
+    bool tracking = false;
+    cv::Rect trackedBox;
+    cv::Mat currentFrame;
+    QMutex trackerMutex;
 
 
 

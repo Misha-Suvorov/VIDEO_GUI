@@ -10,6 +10,7 @@
 #include "canthread.h"
 #include "structs.h"
 #include "scriptcommands.h"
+#include <opencv2/tracking.hpp>
 
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
@@ -50,6 +51,34 @@ void VideoThread::setVerticalMarkerValue(float value){
 
 }
 
+
+
+
+void VideoThread::onLabelClick(QPoint pos, QSize labelSize) {
+    QMutexLocker locker(&trackerMutex);
+
+    if (currentFrame.empty()) return;
+
+    double scaleX = double(currentFrame.cols) / labelSize.width();
+    double scaleY = double(currentFrame.rows) / labelSize.height();
+
+    int x = pos.x() * scaleX;
+    int y = pos.y() * scaleY;
+
+    int w = 100, h = 100;
+    int left = std::max(0, x - w / 2);
+    int top = std::max(0, y - h / 2);
+    int width = std::min(w, currentFrame.cols - left);
+    int height = std::min(h, currentFrame.rows - top);
+
+    trackedBox = cv::Rect2d(left, top, width, height);
+    tracker = cv::TrackerCSRT::create();
+    tracker->init(currentFrame, trackedBox);
+    tracking = true;
+}
+
+
+
 void VideoThread::run() {
     running = true;
     cap.open(gstPipeline, cv::CAP_GSTREAMER);
@@ -65,6 +94,56 @@ void VideoThread::run() {
     double angle = 0; // Кут обертання у градусах
 
     cv::Mat frame;
+
+
+
+
+    // while (running) {
+    //     cap >> frame;
+    //     if (frame.empty()) continue;
+
+    //     {
+    //         QMutexLocker locker(&trackerMutex);
+    //         currentFrame = frame.clone(); // для кліку
+
+    //         if (tracking && tracker) {
+    //             bool ok = tracker->update(frame, trackedBox);
+    //             if (ok) {
+    //                 int centerX = trackedBox.x + trackedBox.width / 2;
+    //                 int centerY = trackedBox.y + trackedBox.height / 2;
+
+    //                 // Зміщення кадру, щоб об’єкт був по центру
+    //                 int shiftX = std::clamp(centerX - frame.cols / 2, 0, frame.cols);
+    //                 int shiftY = std::clamp(centerY - frame.rows / 2, 0, frame.rows);
+
+    //                 cv::Rect roi(shiftX, shiftY, frame.cols, frame.rows);
+    //                 roi &= cv::Rect(0, 0, frame.cols, frame.rows); // обрізання до меж
+    //                 if (roi.width > 0 && roi.height > 0)
+    //                     frame = frame(roi).clone();
+
+    //                 // Позначення об'єкта
+    //                 cv::rectangle(frame, trackedBox, cv::Scalar(0, 255, 0), 2);
+    //             } else {
+    //                 tracking = false; // втрачено
+    //             }
+    //         }
+    //     }
+
+    //     // Хрест в центрі
+    //     cv::Point center(frame.cols / 2, frame.rows / 2);
+    //     cv::line(frame, cv::Point(center.x - 15, center.y), cv::Point(center.x + 15, center.y), {255, 255, 0}, 1);
+    //     cv::line(frame, cv::Point(center.x, center.y - 15), cv::Point(center.x, center.y + 15), {255, 255, 0}, 1);
+
+    //     cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+    //     QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+    //     emit frameReady(image.copy());
+    // }
+
+
+
+
+
+
     while (running) {
         cap >> frame;
         if (frame.empty()) continue;
@@ -135,6 +214,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->videoLabel, &ClickableLabel::clickedAt,
             this, &MainWindow::onLabelClicked);
+
+
 
 
 
@@ -368,6 +449,14 @@ void MainWindow::displayFrame2(const QImage &image) {
     if (!image.isNull()) {
         ui->videoLabel2->setPixmap(QPixmap::fromImage(image).scaled(ui->videoLabel2->size(), Qt::KeepAspectRatio));
     }
+}
+
+
+void MainWindow::updateLaserParametersUI() {
+    LaserParameters& manager = LaserParameters::GetInstance();
+
+    uint32_t freq = manager.GetLaserFrequency();
+
 }
 
 

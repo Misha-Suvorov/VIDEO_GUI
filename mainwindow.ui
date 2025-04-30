@@ -396,6 +396,45 @@ QPushButton:checked:hover {
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: none; /* Дефолтний колір */
+    border: none;
+    color: black;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+	border-top:1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
+}
+
+QPushButton:checked {
+    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
+    border-left: 1px solid rgb(110, 144, 76);
+    border-right: 1px solid rgb(110, 144, 76);
+    border-bottom: 1px solid rgb(110, 144, 76);
+	border-top: 1px solid rgb(110, 144, 76);
+    color: white;
+}
+
+QPushButton:checked:hover {
+    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
+}
+</string>
+             </property>
+             <property name="text">
+              <string>Tracking</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>
@@ -1393,7 +1432,7 @@ QPushButton:checked:hover {
              <item row="1" column="0" alignment="Qt::AlignHCenter">
               <widget class="QComboBox" name="step_input">
                <property name="currentText">
-                <string>1</string>
+                <string>0.001</string>
                </property>
                <item>
                 <property name="text">

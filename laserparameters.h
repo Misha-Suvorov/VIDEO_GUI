@@ -10,7 +10,7 @@ public:
 
     LaserParameters();
     void SetTemperature(float value);
-    void SetLaserFrequency(uint32_t value) { pulse_repetition_frequency = value;}
+    void SetLaserFrequency(uint32_t value);
     void SetLaserStanag(uint32_t value);
     void SetLaserCountWorkPulses(uint32_t value);
     void SetTimeRemaining(uint32_t value);

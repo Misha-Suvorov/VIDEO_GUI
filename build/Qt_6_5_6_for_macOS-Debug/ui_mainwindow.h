@@ -52,6 +52,7 @@ public:
     QPushButton *start_b;
     QPushButton *stop_b_2;
     QPushButton *switch_vid;
+    QPushButton *pushButton;
     QGridLayout *gridLayout_4;
     QPushButton *break_range_b;
     QLabel *label;
@@ -390,6 +391,40 @@ public:
 ""));
 
         horizontalLayout_2->addWidget(switch_vid);
+
+        pushButton = new QPushButton(frame);
+        pushButton->setObjectName("pushButton");
+        pushButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
+"    border: none;\n"
+"    color: black;\n"
+"    border-left: 1px solid gray;\n"
+"    border-right: 1px solid gray;\n"
+"	border-top:1px solid gray;\n"
+"    border-bottom: 1px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(0, 0, 0, 0.1); /* \320\233\320\265\320\263\320\272\320\265 \320\267\320\260\321\202\320\265\320\274\320\275\320\265\320\275\320\275\321\217 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 */\n"
+"}\n"
+"\n"
+"QPushButton:checked {\n"
+"    background-color: rgb(130, 170, 90); /* \320\227\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\321\202\320\270\321\201\320\272\320\260\320\275\320\275\321\226 */\n"
+"    border-left: 1px solid rgb(110, 144, 76);\n"
+"    border-right: 1px solid rgb(110, 144, 76);\n"
+"    bo"
+                        "rder-bottom: 1px solid rgb(110, 144, 76);\n"
+"	border-top: 1px solid rgb(110, 144, 76);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:checked:hover {\n"
+"    background-color: rgb(138, 181, 96); /* \320\241\320\262\321\226\321\202\320\273\321\226\321\210\320\270\320\271 \320\267\320\265\320\273\320\265\320\275\320\270\320\271 \320\277\321\200\320\270 \320\275\320\260\320\262\320\265\320\264\320\265\320\275\320\275\321\226 \320\262 \320\260\320\272\321\202\320\270\320\262\320\275\320\276\320\274\321\203 \321\201\321\202\320\260\320\275\321\226 */\n"
+"}\n"
+""));
+        pushButton->setCheckable(true);
+
+        horizontalLayout_2->addWidget(pushButton);
 
 
         verticalLayout->addLayout(horizontalLayout_2);
@@ -1097,6 +1132,7 @@ public:
         start_b->setText(QCoreApplication::translate("MainWindow", "Start", nullptr));
         stop_b_2->setText(QCoreApplication::translate("MainWindow", "Stop", nullptr));
         switch_vid->setText(QCoreApplication::translate("MainWindow", "Switch Videos", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "Tracking", nullptr));
         break_range_b->setText(QCoreApplication::translate("MainWindow", "Break Range", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Mesurement Mode", nullptr));
         pulse_b->setText(QCoreApplication::translate("MainWindow", "Pulse\n"
@@ -1200,7 +1236,7 @@ public:
         step_input->setItemText(7, QCoreApplication::translate("MainWindow", "2", nullptr));
         step_input->setItemText(8, QCoreApplication::translate("MainWindow", "3", nullptr));
 
-        step_input->setCurrentText(QCoreApplication::translate("MainWindow", "1", nullptr));
+        step_input->setCurrentText(QCoreApplication::translate("MainWindow", "0.001", nullptr));
         label_15->setText(QCoreApplication::translate("MainWindow", "30", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "-30", nullptr));
         hor_out->setText(QCoreApplication::translate("MainWindow", "0", nullptr));

@@ -20,7 +20,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
@@ -44,8 +43,6 @@ public:
     QLabel *label_11;
     QFrame *frame;
     QVBoxLayout *verticalLayout;
-    QGridLayout *gridLayout_6;
-    QLabel *status_label;
     QLabel *videoLabel2;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *l_vid_turn;
@@ -65,14 +62,6 @@ public:
     QLabel *error_label;
     QPushButton *start_range_b;
     QLineEdit *time_remaining_out;
-    QGridLayout *gridLayout_5;
-    QLabel *label_9;
-    QRadioButton *energy_4;
-    QRadioButton *energy_5;
-    QRadioButton *energy_3;
-    QRadioButton *energy_2;
-    QRadioButton *energy_0;
-    QRadioButton *energy_1;
     QPushButton *pointer_b;
     QComboBox *frequency_mode;
     QLabel *label_6;
@@ -120,6 +109,7 @@ public:
     QLabel *label_15;
     QLabel *label_8;
     QLabel *hor_out;
+    QLabel *status_label;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -234,16 +224,6 @@ public:
         frame->setFrameShadow(QFrame::Raised);
         verticalLayout = new QVBoxLayout(frame);
         verticalLayout->setObjectName("verticalLayout");
-        gridLayout_6 = new QGridLayout();
-        gridLayout_6->setObjectName("gridLayout_6");
-        status_label = new QLabel(frame);
-        status_label->setObjectName("status_label");
-
-        gridLayout_6->addWidget(status_label, 0, 0, 1, 1);
-
-
-        verticalLayout->addLayout(gridLayout_6);
-
         videoLabel2 = new QLabel(frame);
         videoLabel2->setObjectName("videoLabel2");
         QSizePolicy sizePolicy3(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Preferred);
@@ -471,7 +451,7 @@ public:
 
         pulse_b = new QPushButton(frame);
         pulse_b->setObjectName("pulse_b");
-        pulse_b->setEnabled(false);
+        pulse_b->setEnabled(true);
         pulse_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
@@ -598,46 +578,6 @@ public:
         time_remaining_out->setObjectName("time_remaining_out");
 
         gridLayout_4->addWidget(time_remaining_out, 2, 1, 1, 1, Qt::AlignHCenter);
-
-        gridLayout_5 = new QGridLayout();
-        gridLayout_5->setObjectName("gridLayout_5");
-        label_9 = new QLabel(frame);
-        label_9->setObjectName("label_9");
-
-        gridLayout_5->addWidget(label_9, 0, 0, 1, 1);
-
-        energy_4 = new QRadioButton(frame);
-        energy_4->setObjectName("energy_4");
-
-        gridLayout_5->addWidget(energy_4, 3, 0, 1, 1);
-
-        energy_5 = new QRadioButton(frame);
-        energy_5->setObjectName("energy_5");
-
-        gridLayout_5->addWidget(energy_5, 3, 1, 1, 1);
-
-        energy_3 = new QRadioButton(frame);
-        energy_3->setObjectName("energy_3");
-
-        gridLayout_5->addWidget(energy_3, 2, 1, 1, 1);
-
-        energy_2 = new QRadioButton(frame);
-        energy_2->setObjectName("energy_2");
-
-        gridLayout_5->addWidget(energy_2, 2, 0, 1, 1);
-
-        energy_0 = new QRadioButton(frame);
-        energy_0->setObjectName("energy_0");
-
-        gridLayout_5->addWidget(energy_0, 1, 0, 1, 1);
-
-        energy_1 = new QRadioButton(frame);
-        energy_1->setObjectName("energy_1");
-
-        gridLayout_5->addWidget(energy_1, 1, 1, 1, 1);
-
-
-        gridLayout_4->addLayout(gridLayout_5, 2, 3, 1, 1);
 
         pointer_b = new QPushButton(frame);
         pointer_b->setObjectName("pointer_b");
@@ -1102,6 +1042,11 @@ public:
 
         gridLayout_2->addLayout(gridLayout_12, 1, 1, 1, 1);
 
+        status_label = new QLabel(centralwidget);
+        status_label->setObjectName("status_label");
+
+        gridLayout_2->addWidget(status_label, 2, 4, 1, 1);
+
 
         horizontalLayout->addLayout(gridLayout_2);
 
@@ -1126,7 +1071,6 @@ public:
         label_14->setText(QCoreApplication::translate("MainWindow", "20", nullptr));
         vert_out->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         label_11->setText(QCoreApplication::translate("MainWindow", "-20", nullptr));
-        status_label->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
         videoLabel2->setText(QString());
         l_vid_turn->setText(QCoreApplication::translate("MainWindow", "\342\237\263", nullptr));
         start_b->setText(QCoreApplication::translate("MainWindow", "Start", nullptr));
@@ -1155,13 +1099,6 @@ public:
         error_label->setText(QCoreApplication::translate("MainWindow", "Error: NONE", nullptr));
         start_range_b->setText(QCoreApplication::translate("MainWindow", "Start Range", nullptr));
         time_remaining_out->setText(QCoreApplication::translate("MainWindow", "N/A", nullptr));
-        label_9->setText(QCoreApplication::translate("MainWindow", "ENERGY", nullptr));
-        energy_4->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
-        energy_5->setText(QCoreApplication::translate("MainWindow", "5", nullptr));
-        energy_3->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
-        energy_2->setText(QCoreApplication::translate("MainWindow", "2", nullptr));
-        energy_0->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
-        energy_1->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
         pointer_b->setText(QCoreApplication::translate("MainWindow", "Pointer", nullptr));
         frequency_mode->setItemText(0, QCoreApplication::translate("MainWindow", "1 HZ", nullptr));
         frequency_mode->setItemText(1, QCoreApplication::translate("MainWindow", "2 Hz", nullptr));
@@ -1240,6 +1177,7 @@ public:
         label_15->setText(QCoreApplication::translate("MainWindow", "30", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "-30", nullptr));
         hor_out->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
+        status_label->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
     } // retranslateUi
 
 };

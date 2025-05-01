@@ -734,7 +734,12 @@ void MainWindow::on_pulse_b_clicked()
 
     // SendDataFrame sendDataFrame;
     // sendDataFrame.Send(0x248,0x08, payload);
+    if (pulseOn) ScriptCommands::GetInstance().SetLaserEnergy(5);
+    else ScriptCommands::GetInstance().SetLaserEnergy(0);
+
+
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+
 
 
 }

@@ -1,5 +1,7 @@
 #include "canmessagegeneric.h"
 #include "lpsparameters.h"
+#include "laserparameters.h"
+
 
 #include <iostream>
 #include <cstring>
@@ -69,6 +71,29 @@ uint8_t CanMessageGeneric::GetByteFromPayload() {
     return byteValue;
 }
 
+uint8_t CanMessageGeneric::ParseByte() {
+    uint8_t byteValue = GetByteFromPayload();
+    LaserParameters& manager = LaserParameters::GetInstance();
+    if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER) && Dir == 0) {
+        switch (Message.ID) {
+        case static_cast<uint8_t>(IdNode4::LASER_ACTIVE):
+            manager.SetLaserActive(byteValue);
+            break;
+        case static_cast<uint8_t>(IdNode4::PULSE_ON):
+            manager.SetPulseOn(byteValue);
+            break;
+        case static_cast<uint8_t>(IdNode4::THERMAL_CONTROLE):
+            manager.SetThermocontrolOn(byteValue);
+            break;
+        case static_cast<uint8_t>(IdNode4::BLIND_ON):
+            manager.SetBlindOn(byteValue);
+            break;
+        }
+    }
+
+}
+
+
 float CanMessageGeneric::ParseFloat() {
     float floatValue = GetFloatFromPayload();
     LpsParameters& manager = LpsParameters::GetInstance();
@@ -131,6 +156,7 @@ uint32_t CanMessageGeneric::ParseULong(){
         case static_cast<uint8_t>(IdNode4::TIME_RADIATION_REMAINING):
             manager.SetTimeRemaining(uLongValue);
             break;
+
         }
 
     }

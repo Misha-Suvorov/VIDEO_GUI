@@ -77,6 +77,7 @@ enum class IdNode4{
     STANAG = 0x3,
     TIME_RADIATION_REMAINING = 0x4,
     TIME_DELAY_REMAINING = 0x5,
+    PULSE_CYCLE_COUNT = 0x6,
     ENERGY = 0x0E,
     BLIND_ON = 0x0F,
     THERMAL_CONTROLE = 0xC0,
@@ -105,6 +106,7 @@ public:
 
     float ParseFloat();
     uint32_t ParseULong();
+    uint8_t ParseByte();
 
     void PrintParsedValue();
     float GetFloatFromPayload();

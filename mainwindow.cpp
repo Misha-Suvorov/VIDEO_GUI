@@ -98,46 +98,6 @@ void VideoThread::run() {
 
 
 
-    // while (running) {
-    //     cap >> frame;
-    //     if (frame.empty()) continue;
-
-    //     {
-    //         QMutexLocker locker(&trackerMutex);
-    //         currentFrame = frame.clone(); // для кліку
-
-    //         if (tracking && tracker) {
-    //             bool ok = tracker->update(frame, trackedBox);
-    //             if (ok) {
-    //                 int centerX = trackedBox.x + trackedBox.width / 2;
-    //                 int centerY = trackedBox.y + trackedBox.height / 2;
-
-    //                 // Зміщення кадру, щоб об’єкт був по центру
-    //                 int shiftX = std::clamp(centerX - frame.cols / 2, 0, frame.cols);
-    //                 int shiftY = std::clamp(centerY - frame.rows / 2, 0, frame.rows);
-
-    //                 cv::Rect roi(shiftX, shiftY, frame.cols, frame.rows);
-    //                 roi &= cv::Rect(0, 0, frame.cols, frame.rows); // обрізання до меж
-    //                 if (roi.width > 0 && roi.height > 0)
-    //                     frame = frame(roi).clone();
-
-    //                 // Позначення об'єкта
-    //                 cv::rectangle(frame, trackedBox, cv::Scalar(0, 255, 0), 2);
-    //             } else {
-    //                 tracking = false; // втрачено
-    //             }
-    //         }
-    //     }
-
-    //     // Хрест в центрі
-    //     cv::Point center(frame.cols / 2, frame.rows / 2);
-    //     cv::line(frame, cv::Point(center.x - 15, center.y), cv::Point(center.x + 15, center.y), {255, 255, 0}, 1);
-    //     cv::line(frame, cv::Point(center.x, center.y - 15), cv::Point(center.x, center.y + 15), {255, 255, 0}, 1);
-
-    //     cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
-    //     QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
-    //     emit frameReady(image.copy());
-    // }
 
 
 
@@ -167,17 +127,6 @@ void VideoThread::run() {
                  crossColor, thickness);
 
 
-        // Draw the scale and markers
-
-        // if(isRotated){
-        //     scaleVertical.drawScaleRotated(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
-        //     scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
-
-        // }
-        // else{
-        //     scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
-        //     scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
-        // }
 
 
 

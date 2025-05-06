@@ -52,7 +52,8 @@ SOURCES += \
     scalevertical.cpp \
     scalingfactor.cpp \
     scriptcommands.cpp \
-    senddataframe.cpp
+    senddataframe.cpp \
+    tracking.cpp
 
 HEADERS += \
     CircularBuffer.h \
@@ -74,7 +75,8 @@ HEADERS += \
     scalingfactor.h \
     scriptcommands.h \
     senddataframe.h \
-    structs.h
+    structs.h \
+    tracking.h
 
 FORMS += \
     mainwindow.ui

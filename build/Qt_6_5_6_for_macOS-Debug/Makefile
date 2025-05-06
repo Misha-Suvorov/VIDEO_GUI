@@ -70,7 +70,8 @@ SOURCES       = ../../base.cpp \
 		../../scalevertical.cpp \
 		../../scalingfactor.cpp \
 		../../scriptcommands.cpp \
-		../../senddataframe.cpp moc_canbus.cpp \
+		../../senddataframe.cpp \
+		../../tracking.cpp moc_canbus.cpp \
 		moc_canparserworker.cpp \
 		moc_clickable.cpp \
 		moc_mainwindow.cpp
@@ -93,6 +94,7 @@ OBJECTS       = base.o \
 		scalingfactor.o \
 		scriptcommands.o \
 		senddataframe.o \
+		tracking.o \
 		moc_canbus.o \
 		moc_canparserworker.o \
 		moc_clickable.o \
@@ -430,7 +432,8 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../scalingfactor.h \
 		../../scriptcommands.h \
 		../../senddataframe.h \
-		../../structs.h ../../base.cpp \
+		../../structs.h \
+		../../tracking.h ../../base.cpp \
 		../../basecanmessage.cpp \
 		../../canbus.cpp \
 		../../canmessagegeneric.cpp \
@@ -448,7 +451,8 @@ DIST          = /Qt/6.5.6/macos/mkspecs/features/spec_pre.prf \
 		../../scalevertical.cpp \
 		../../scalingfactor.cpp \
 		../../scriptcommands.cpp \
-		../../senddataframe.cpp
+		../../senddataframe.cpp \
+		../../tracking.cpp
 QMAKE_TARGET  = GUI_UDP
 DESTDIR       = 
 TARGET        = GUI_UDP.app/Contents/MacOS/GUI_UDP
@@ -1140,8 +1144,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../CircularBuffer.h ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canparserworker.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../laserparameters.h ../../lpsparameters.h ../../mainwindow.h ../../pixeltoangleconverter.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../scriptcommands.h ../../senddataframe.h ../../structs.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canparserworker.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../laserparameters.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../pixeltoangleconverter.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp ../../scriptcommands.cpp ../../senddataframe.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../CircularBuffer.h ../../base.h ../../basecanmessage.h ../../canbus.h ../../canmessagegeneric.h ../../cannelloniframe.h ../../canparserworker.h ../../canthread.h ../../clickable.h ../../drawsymbols.h ../../laserparameters.h ../../lpsparameters.h ../../mainwindow.h ../../pixeltoangleconverter.h ../../scalehorizontal.h ../../scalevertical.h ../../scalingfactor.h ../../scriptcommands.h ../../senddataframe.h ../../structs.h ../../tracking.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../base.cpp ../../basecanmessage.cpp ../../canbus.cpp ../../canmessagegeneric.cpp ../../cannelloniframe.cpp ../../canparserworker.cpp ../../canthread.cpp ../../clickable.cpp ../../drawsymbols.cpp ../../laserparameters.cpp ../../lpsparameters.cpp ../../main.cpp ../../mainwindow.cpp ../../pixeltoangleconverter.cpp ../../scalehorizontal.cpp ../../scalevertical.cpp ../../scalingfactor.cpp ../../scriptcommands.cpp ../../senddataframe.cpp ../../tracking.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../../mainwindow.ui $(DISTDIR)/
 
 
@@ -1534,7 +1538,8 @@ canbus.o: ../../canbus.cpp ../../canbus.h \
 canmessagegeneric.o: ../../canmessagegeneric.cpp ../../canmessagegeneric.h \
 		../../BaseCanMessage.h \
 		../../lpsparameters.h \
-		../../structs.h
+		../../structs.h \
+		../../laserparameters.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o canmessagegeneric.o ../../canmessagegeneric.cpp
 
 cannelloniframe.o: ../../cannelloniframe.cpp ../../cannelloniframe.h \
@@ -2180,7 +2185,8 @@ mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		../../../Qt/6.5.6/macos/lib/QtCore.framework/Headers/qtimer.h \
 		../../scalevertical.h \
 		../../cannelloniframe.h \
-		../../scriptcommands.h
+		../../scriptcommands.h \
+		../../../Downloads/opencv-4.10.0-contrib/build/install/include/opencv4/opencv2/tracking.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../../mainwindow.cpp
 
 pixeltoangleconverter.o: ../../pixeltoangleconverter.cpp ../../PixelToAngleConverter.h \
@@ -2564,6 +2570,9 @@ senddataframe.o: ../../senddataframe.cpp ../../senddataframe.h \
 		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/QHostAddress \
 		../../../Qt/6.5.6/macos/lib/QtNetwork.framework/Headers/qhostaddress.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o senddataframe.o ../../senddataframe.cpp
+
+tracking.o: ../../tracking.cpp ../../tracking.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tracking.o ../../tracking.cpp
 
 moc_canbus.o: moc_canbus.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_canbus.o moc_canbus.cpp

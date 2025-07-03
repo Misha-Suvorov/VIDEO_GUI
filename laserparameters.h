@@ -1,12 +1,12 @@
 #ifndef LASERPARAMETERS_H
 #define LASERPARAMETERS_H
-#include <cstdint>
 #include "structs.h"
+#include <cstdint>
 
 class LaserParameters
 {
 public:
-    static LaserParameters& GetInstance();
+    static LaserParameters &GetInstance();
 
     LaserParameters();
     void SetTemperature(float value);
@@ -25,7 +25,7 @@ public:
     uint32_t GetLaserFrequency() const;
     uint32_t GetLaserStanag() const;
     uint32_t GetLaserCountWorkPulses() const;
-    uint32_t GetTimeRemaining () const;
+    uint32_t GetTimeRemaining() const;
     uint8_t GetLaserError() const;
     uint32_t GetDelayRemaining() const;
     uint32_t GetCountCycles() const;
@@ -33,9 +33,6 @@ public:
     bool GetPulseOn() const;
     bool GetThermocontrolOn() const;
     bool GetBlindOn() const;
-
-
-
 
 private:
     uint32_t pulse_repetition_frequency = 0;
@@ -51,7 +48,6 @@ private:
     bool is_pulse_on = false;
     bool is_thermocontrol_on = false;
     bool is_blind_on = false;
-
 };
 
 #endif // LASERPARAMETERS_H

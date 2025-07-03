@@ -1,7 +1,10 @@
 #include "PixelToAngleConverter.h"
 
 PixelToAngleConverter::PixelToAngleConverter(int width, int height, double fovX_deg, double fovY_deg)
-    : imageWidth(width), imageHeight(height), fovX(fovX_deg), fovY(fovY_deg)
+    : imageWidth(width)
+    , imageHeight(height)
+    , fovX(fovX_deg)
+    , fovY(fovY_deg)
 {
     updateScaling();
 }
@@ -28,7 +31,7 @@ QPointF PixelToAngleConverter::pixelToAngle(QPoint pixelPoint) const
     double angleX = deltaX * degPerPixelX;
     double angleY = -deltaY * degPerPixelY; // minus because Y grows down
 
-    return { angleX, angleY };
+    return {angleX, angleY};
 }
 
 void PixelToAngleConverter::setImageSize(int width, int height)

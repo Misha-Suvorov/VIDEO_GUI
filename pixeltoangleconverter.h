@@ -1,6 +1,6 @@
 #pragma once
-#include <QSize>
 #include <QPointF>
+#include <QSize>
 #include <utility>
 
 class PixelToAngleConverter

@@ -16,13 +16,11 @@ void CANParserWorker::enqueueMessage(const std::vector<uint8_t> &message)
 
 void CANParserWorker::process()
 {
-
-    while (running)
-    {
+    while (running) {
         mutex.lock();
         if (queue.isEmpty()) {
             mutex.unlock();
-            QThread::msleep(10);  // Щоб не грузити CPU
+            QThread::msleep(10); // Щоб не грузити CPU
             continue;
         }
 
@@ -32,7 +30,7 @@ void CANParserWorker::process()
         // Тут розбір повідомлення:
         try {
             // 🎯 Actual message processing:
-             CanMessageGeneric canMessage(message);
+            CanMessageGeneric canMessage(message);
             switch (canMessage.Message.TYPE) {
             case ParamType::NoneType:
                 //LpsParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());

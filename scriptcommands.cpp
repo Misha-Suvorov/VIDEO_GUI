@@ -1,14 +1,14 @@
 #include "scriptcommands.h"
 #include "senddataframe.h"
 
-
-ScriptCommands& ScriptCommands::GetInstance() {
+ScriptCommands &ScriptCommands::GetInstance()
+{
     static ScriptCommands instance;
     return instance;
 }
 
-
-void ScriptCommands::SetAngleEncoder_H(float value) {
+void ScriptCommands::SetAngleEncoder_H(float value)
+{
     std::vector<uint8_t> byteArray(4);
     std::memcpy(byteArray.data(), &value, sizeof(float));
 
@@ -18,7 +18,8 @@ void ScriptCommands::SetAngleEncoder_H(float value) {
     SendDataFrame::getInstance().Send(0x218, 0x08, payload);
 }
 
-void ScriptCommands::SetAngleEncoder_V(float value) {
+void ScriptCommands::SetAngleEncoder_V(float value)
+{
     std::vector<uint8_t> byteArray(4);
     std::memcpy(byteArray.data(), &value, sizeof(float));
 
@@ -29,9 +30,10 @@ void ScriptCommands::SetAngleEncoder_V(float value) {
 }
 
 //встановлення кутів енкодера в градусах
-void ScriptCommands::SetAngleEncoder(float angle_encoder_H, float angle_encoder_V) {
+void ScriptCommands::SetAngleEncoder(float angle_encoder_H, float angle_encoder_V)
+{
     // Отримуємо сінглтон
-    SendDataFrame& sendDataFrame = SendDataFrame::getInstance();
+    SendDataFrame &sendDataFrame = SendDataFrame::getInstance();
 
     std::vector<uint8_t> byteArray(4);
 
@@ -56,14 +58,12 @@ void ScriptCommands::SetVoltageEncoder(float voltage_encoder_H, float voltage_en
     std::vector<uint8_t> payload;
     std::vector<uint8_t> byteArray(4);
 
-
     //передача координати X
 
     std::memcpy(byteArray.data(), &voltage_encoder_H, sizeof(float));
 
     payload = {0x00, 0x10, 0x02, 0x00};
     payload.insert(payload.end(), byteArray.begin(), byteArray.end());
-
 
     SendDataFrame::getInstance().AddCanFrame(0x118, 0x08, payload);
 
@@ -77,21 +77,21 @@ void ScriptCommands::SetVoltageEncoder(float voltage_encoder_H, float voltage_en
     //SendDataFrame::getInstance().SendAllFrames();
 }
 
-
-
-
-void ScriptCommands::GetMode() {
+void ScriptCommands::GetMode()
+{
     std::vector<uint8_t> payload = {0x00, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
     SendDataFrame::getInstance().Send(0x118, 0x08, payload);
 }
 
-void ScriptCommands::SetMode(ModePlatform mode) {
-    std::vector<uint8_t> payload = {0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, static_cast<uint8_t>(mode)};
+void ScriptCommands::SetMode(ModePlatform mode)
+{
+    std::vector<uint8_t> payload
+        = {0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, static_cast<uint8_t>(mode)};
     SendDataFrame::getInstance().Send(0x118, 0x08, payload);
 }
 
-void ScriptCommands::SetLaserEnergy(uint8_t value) {
+void ScriptCommands::SetLaserEnergy(uint8_t value)
+{
     std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, value};
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
 }
-

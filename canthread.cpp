@@ -1,6 +1,6 @@
 #include "canthread.h"
-#include "mainwindow.h"
 #include "canmessagegeneric.h"
+#include "mainwindow.h"
 
 //CANThread::CANThread() {}
 
@@ -16,10 +16,8 @@
 //     }
 // }
 
-
-
-
-void CANThread::run(){
+void CANThread::run()
+{
     running = true;
     while (running) {
         std::queue<std::vector<uint8_t>> localQueue;
@@ -35,11 +33,9 @@ void CANThread::run(){
             ProcessMessage(localQueue);
         }
 
-        msleep(10);  // важливо, щоб дати іншим потокам виконатись
+        msleep(10); // важливо, щоб дати іншим потокам виконатись
     }
 }
-
-
 
 // void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& messageQueue){
 
@@ -68,10 +64,8 @@ void CANThread::run(){
 //     }
 // }
 
-
-
-
-void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& queueCopy) {
+void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>> &queueCopy)
+{
     std::queue<std::vector<uint8_t>> localCopy = queueCopy;
 
     while (!localCopy.empty()) {
@@ -95,10 +89,8 @@ void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& queueCopy
     }
 }
 
-
-
-
-void CANThread::stop(){
+void CANThread::stop()
+{
     running = false;
     wait();
 }

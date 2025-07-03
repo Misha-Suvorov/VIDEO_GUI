@@ -1,10 +1,10 @@
 // canparserworker.h
 #pragma once
 
-#include <QObject>
-#include <QThread>
 #include <QMutex>
+#include <QObject>
 #include <QQueue>
+#include <QThread>
 #include <vector>
 
 class CANParserWorker : public QObject

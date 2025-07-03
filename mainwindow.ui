@@ -62,7 +62,7 @@
          <number>1</number>
         </property>
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="invertedAppearance">
          <bool>false</bool>
@@ -71,7 +71,7 @@
          <bool>false</bool>
         </property>
         <property name="tickPosition">
-         <enum>QSlider::TicksAbove</enum>
+         <enum>QSlider::TickPosition::TicksAbove</enum>
         </property>
         <property name="tickInterval">
          <number>100</number>
@@ -98,10 +98,10 @@
          <number>1</number>
         </property>
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Orientation::Vertical</enum>
         </property>
         <property name="tickPosition">
-         <enum>QSlider::TicksAbove</enum>
+         <enum>QSlider::TickPosition::TicksAbove</enum>
         </property>
         <property name="tickInterval">
          <number>100</number>
@@ -129,7 +129,7 @@
          <bool>false</bool>
         </property>
         <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+         <enum>QFrame::Shape::NoFrame</enum>
         </property>
         <property name="text">
          <string/>
@@ -138,14 +138,14 @@
       </item>
       <item row="3" column="3">
        <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item alignment="Qt::AlignTop">
+        <item alignment="Qt::AlignmentFlag::AlignTop">
          <widget class="QLabel" name="label_14">
           <property name="text">
            <string>20</string>
           </property>
          </widget>
         </item>
-        <item alignment="Qt::AlignVCenter">
+        <item alignment="Qt::AlignmentFlag::AlignVCenter">
          <widget class="QLabel" name="vert_out">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -175,7 +175,7 @@
           </property>
          </widget>
         </item>
-        <item alignment="Qt::AlignBottom">
+        <item alignment="Qt::AlignmentFlag::AlignBottom">
          <widget class="QLabel" name="label_11">
           <property name="text">
            <string>-20</string>
@@ -199,13 +199,13 @@
          </size>
         </property>
         <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+         <enum>QFrame::Shadow::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
-         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+         <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
           <widget class="QLabel" name="videoLabel2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -464,7 +464,7 @@ QPushButton:checked:hover {
              </property>
             </widget>
            </item>
-           <item row="6" column="0" alignment="Qt::AlignHCenter">
+           <item row="6" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
             <widget class="QLabel" name="label">
              <property name="text">
               <string>Mesurement Mode</string>
@@ -502,7 +502,7 @@ QPushButton:hover {
              </property>
             </widget>
            </item>
-           <item row="2" column="2" alignment="Qt::AlignHCenter">
+           <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter">
             <widget class="QLineEdit" name="temp_out">
              <property name="enabled">
               <bool>true</bool>
@@ -561,14 +561,14 @@ QPushButton:hover {
              </item>
             </widget>
            </item>
-           <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignTop">
+           <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
             <widget class="QLabel" name="label_4">
              <property name="text">
               <string>pulse frequency</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1" alignment="Qt::AlignHCenter|Qt::AlignTop">
+           <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Time remaining (sec)</string>
@@ -618,7 +618,7 @@ Activation</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="3" alignment="Qt::AlignHCenter|Qt::AlignTop">
+           <item row="1" column="3" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
             <widget class="QLabel" name="error_label">
              <property name="text">
               <string>Error: NONE</string>
@@ -661,7 +661,7 @@ QPushButton:checked:hover {
              </property>
             </widget>
            </item>
-           <item row="2" column="1" alignment="Qt::AlignHCenter">
+           <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
             <widget class="QLineEdit" name="time_remaining_out">
              <property name="text">
               <string>N/A</string>
@@ -754,7 +754,7 @@ QPushButton:checked:hover {
              </item>
             </widget>
            </item>
-           <item row="1" column="2" alignment="Qt::AlignHCenter|Qt::AlignTop">
+           <item row="1" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
             <widget class="QLabel" name="label_6">
              <property name="text">
               <string>Temperature °C</string>
@@ -844,7 +844,7 @@ Control</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="2" alignment="Qt::AlignLeft">
+           <item row="6" column="2" alignment="Qt::AlignmentFlag::AlignLeft">
             <widget class="QLineEdit" name="range_out"/>
            </item>
            <item row="4" column="2">
@@ -883,7 +883,7 @@ QPushButton:checked:hover {
              </property>
             </widget>
            </item>
-           <item row="4" column="3" alignment="Qt::AlignHCenter">
+           <item row="4" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
             <widget class="QLineEdit" name="frequency_out"/>
            </item>
            <item row="4" column="0">
@@ -941,7 +941,7 @@ QPushButton:checked:hover {
                </item>
               </widget>
              </item>
-             <item row="1" column="3" alignment="Qt::AlignRight">
+             <item row="1" column="3" alignment="Qt::AlignmentFlag::AlignRight">
               <widget class="QComboBox" name="second_STANAG">
                <property name="maximumSize">
                 <size>
@@ -991,7 +991,7 @@ QPushButton:checked:hover {
                </item>
               </widget>
              </item>
-             <item row="1" column="2" alignment="Qt::AlignRight">
+             <item row="1" column="2" alignment="Qt::AlignmentFlag::AlignRight">
               <widget class="QComboBox" name="first_STANAG">
                <property name="maximumSize">
                 <size>
@@ -1041,7 +1041,7 @@ QPushButton:checked:hover {
                </item>
               </widget>
              </item>
-             <item row="1" column="1" alignment="Qt::AlignRight">
+             <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignRight">
               <widget class="QLabel" name="label_3">
                <property name="maximumSize">
                 <size>
@@ -1096,56 +1096,56 @@ QPushButton:checked:hover {
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="1" column="1" alignment="Qt::AlignLeft">
+           <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
             <widget class="QLineEdit" name="horizont_marker_input">
              <property name="enabled">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="1" column="0" alignment="Qt::AlignRight">
+           <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignRight">
             <widget class="QLabel" name="horizontal_mark">
              <property name="text">
               <string>Horizontal Marker</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="1" alignment="Qt::AlignLeft">
+           <item row="3" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
             <widget class="QLineEdit" name="omega_horizontal_input">
              <property name="enabled">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="3" column="0" alignment="Qt::AlignRight">
+           <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignRight">
             <widget class="QLabel" name="omega_horizontal">
              <property name="text">
               <string>ω H</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1" alignment="Qt::AlignLeft">
+           <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
             <widget class="QLineEdit" name="vertical_marker_input">
              <property name="enabled">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="2" column="0" alignment="Qt::AlignRight">
+           <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignRight">
             <widget class="QLabel" name="vertical_mark">
              <property name="text">
               <string>Vertical Marker</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1" alignment="Qt::AlignLeft">
+           <item row="4" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
             <widget class="QLineEdit" name="omega_vertical_input">
              <property name="enabled">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="4" column="0" alignment="Qt::AlignRight">
+           <item row="4" column="0" alignment="Qt::AlignmentFlag::AlignRight">
             <widget class="QLabel" name="omega_vertical">
              <property name="text">
               <string>ω V</string>
@@ -1158,7 +1158,7 @@ QPushButton:checked:hover {
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="1" column="2">
             <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item alignment="Qt::AlignRight|Qt::AlignBottom">
+             <item alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignBottom">
               <widget class="QPushButton" name="up_b">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1189,7 +1189,7 @@ QPushButton:checked:hover {
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignLeft|Qt::AlignBottom">
+             <item alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignBottom">
               <widget class="QPushButton" name="up_2_b">
                <property name="minimumSize">
                 <size>
@@ -1219,7 +1219,7 @@ QPushButton:checked:hover {
            </item>
            <item row="2" column="1">
             <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item alignment="Qt::AlignRight">
+             <item alignment="Qt::AlignmentFlag::AlignRight">
               <widget class="QPushButton" name="l_l">
                <property name="minimumSize">
                 <size>
@@ -1232,7 +1232,7 @@ QPushButton:checked:hover {
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignRight">
+             <item alignment="Qt::AlignmentFlag::AlignRight">
               <widget class="QPushButton" name="l_2_b">
                <property name="minimumSize">
                 <size>
@@ -1247,7 +1247,7 @@ QPushButton:checked:hover {
              </item>
             </layout>
            </item>
-           <item row="2" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+           <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
             <widget class="QPushButton" name="stop_b">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1268,7 +1268,7 @@ QPushButton:checked:hover {
            </item>
            <item row="2" column="3">
             <layout class="QVBoxLayout" name="verticalLayout_8">
-             <item alignment="Qt::AlignLeft">
+             <item alignment="Qt::AlignmentFlag::AlignLeft">
               <widget class="QPushButton" name="r_b">
                <property name="minimumSize">
                 <size>
@@ -1281,7 +1281,7 @@ QPushButton:checked:hover {
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignLeft">
+             <item alignment="Qt::AlignmentFlag::AlignLeft">
               <widget class="QPushButton" name="r_2_b">
                <property name="minimumSize">
                 <size>
@@ -1298,7 +1298,7 @@ QPushButton:checked:hover {
            </item>
            <item row="3" column="2">
             <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item alignment="Qt::AlignRight|Qt::AlignTop">
+             <item alignment="Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTop">
               <widget class="QPushButton" name="d_2_b">
                <property name="minimumSize">
                 <size>
@@ -1311,7 +1311,7 @@ QPushButton:checked:hover {
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignLeft|Qt::AlignTop">
+             <item alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop">
               <widget class="QPushButton" name="d_b">
                <property name="minimumSize">
                 <size>
@@ -1328,14 +1328,14 @@ QPushButton:checked:hover {
            </item>
            <item row="1" column="1">
             <layout class="QGridLayout" name="gridLayout_9">
-             <item row="0" column="0" alignment="Qt::AlignHCenter">
+             <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
               <widget class="QLabel" name="label_2">
                <property name="text">
                 <string>Mode</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0" alignment="Qt::AlignHCenter">
+             <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
               <widget class="QComboBox" name="mode_input">
                <item>
                 <property name="text">
@@ -1352,20 +1352,25 @@ QPushButton:checked:hover {
                  <string>EARTH</string>
                 </property>
                </item>
+               <item>
+                <property name="text">
+                 <string>TRACKING</string>
+                </property>
+               </item>
               </widget>
              </item>
             </layout>
            </item>
            <item row="1" column="3">
             <layout class="QGridLayout" name="gridLayout_10">
-             <item row="0" column="0" alignment="Qt::AlignHCenter">
+             <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
               <widget class="QLabel" name="label_7">
                <property name="text">
                 <string>Step (°/s)</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0" alignment="Qt::AlignHCenter">
+             <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
               <widget class="QComboBox" name="step_input">
                <property name="currentText">
                 <string>0.001</string>
@@ -1426,21 +1431,21 @@ QPushButton:checked:hover {
       </item>
       <item row="1" column="1">
        <layout class="QGridLayout" name="gridLayout_12">
-        <item row="0" column="0" alignment="Qt::AlignLeft">
+        <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft">
          <widget class="QLabel" name="label_15">
           <property name="text">
            <string>30</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="2" alignment="Qt::AlignRight">
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string>-30</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" alignment="Qt::AlignHCenter">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
          <widget class="QLabel" name="hor_out">
           <property name="font">
            <font>
@@ -1471,7 +1476,7 @@ QPushButton:checked:hover {
      <x>0</x>
      <y>0</y>
      <width>1950</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

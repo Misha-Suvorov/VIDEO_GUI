@@ -11,27 +11,25 @@ CONFIG += c++17
 
 
 
-# OpenCV configuration
-#INCLUDEPATH += /Users/mac/Downloads/opencv-4.10.0/build/install/include/opencv4
-#LIBS += -L/Users/mac/Downloads/opencv-4.10.0/build/install/lib \
-#        -lopencv_world
+INCLUDEPATH += C:\opencv_complete_gst\opencv-4.10.0\build\install\include
+DEPENDPATH += C:\opencv_complete_gst\opencv-4.10.0\build\install\include
+LIBS += C:\opencv_complete_gst\opencv-4.10.0\build\install\x64\vc17\lib\opencv_world4100.lib
 
-INCLUDEPATH += /Users/mac/Downloads/opencv-4.10.0-contrib/build/install/include/opencv4
-LIBS += -L/Users/mac/Downloads/opencv-4.10.0-contrib/build/install/lib \
-        -lopencv_world
+INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include
+DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include
+INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include\QtGui
+DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtGui
 
-# FFplay configuration
-unix {
-    # Add Homebrew binary path to the PATH environment variable
-    QMAKE_PATH = /opt/homebrew/bin
-    QMAKE_ENV_PATH = $$system("echo $$PATH")
-    QMAKE_ENV_PATH = $$QMAKE_ENV_PATH:/opt/homebrew/bin
-    QMAKE_ENV_PATH = $$unique(QMAKE_ENV_PATH)
-    PATH = $$QMAKE_ENV_PATH
+INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include\QtWidgets
+DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtWidgets
 
-    # Define a macro for FFplay path
-    DEFINES += FFMPEG_PATH="\\\"/opt/homebrew/bin/ffplay\\\""
-}
+INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include\QtCore
+DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtCore
+
+INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include\QtNetwork
+DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtNetwork
+
+
 
 SOURCES += \
     base.cpp \

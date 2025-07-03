@@ -1,12 +1,15 @@
 // ClickableLabel.cpp
 #include "clickable.h"
+#include "lpsparameters.h"
 #include "pixeltoangleconverter.h"
 #include "scriptcommands.h"
-#include "lpsparameters.h"
 
-ClickableLabel::ClickableLabel(QWidget *parent) : QLabel(parent) {}
+ClickableLabel::ClickableLabel(QWidget *parent)
+    : QLabel(parent)
+{}
 
-void ClickableLabel::mousePressEvent(QMouseEvent *event) {
+void ClickableLabel::mousePressEvent(QMouseEvent *event)
+{
     if (event->button() == Qt::LeftButton) {
         emit clickedAt(event->pos());
         int labelWidth = this->width();
@@ -16,18 +19,14 @@ void ClickableLabel::mousePressEvent(QMouseEvent *event) {
         QPointF deltaAngle = converter.pixelToAngle(event->pos());
         qDebug() << " Вивід пікселів через Angle:" << deltaAngle;
 
-        float currentAngleX =  LpsParameters::GetInstance().GetAngleX();
-        float newAngleX = currentAngleX+deltaAngle.x();
+        float currentAngleX = LpsParameters::GetInstance().GetAngleX();
+        float newAngleX = currentAngleX + deltaAngle.x();
         //ScriptCommands::GetInstance().SetAngleEncoder_H(currentAngleX+deltaAngle.x());
 
-
         float currentAngleY = LpsParameters::GetInstance().GetAngleY();
-        float newAngleY = currentAngleY-deltaAngle.y();
+        float newAngleY = currentAngleY - deltaAngle.y();
         //ScriptCommands::GetInstance().SetAngleEncoder_V(currentAngleY-deltaAngle.y());
 
         ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
-
-
-
     }
 }

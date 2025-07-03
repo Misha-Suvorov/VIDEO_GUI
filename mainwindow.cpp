@@ -10,7 +10,6 @@
 #include "canthread.h"
 #include "structs.h"
 #include "scriptcommands.h"
-#include <opencv2/tracking.hpp>
 
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent), running(false), horizontMarkerValue(0), verticalMarkerValue(0) {}
@@ -51,34 +50,6 @@ void VideoThread::setVerticalMarkerValue(float value){
 
 }
 
-
-
-
-void VideoThread::onLabelClick(QPoint pos, QSize labelSize) {
-    QMutexLocker locker(&trackerMutex);
-
-    if (currentFrame.empty()) return;
-
-    double scaleX = double(currentFrame.cols) / labelSize.width();
-    double scaleY = double(currentFrame.rows) / labelSize.height();
-
-    int x = pos.x() * scaleX;
-    int y = pos.y() * scaleY;
-
-    int w = 100, h = 100;
-    int left = std::max(0, x - w / 2);
-    int top = std::max(0, y - h / 2);
-    int width = std::min(w, currentFrame.cols - left);
-    int height = std::min(h, currentFrame.rows - top);
-
-    trackedBox = cv::Rect2d(left, top, width, height);
-    tracker = cv::TrackerCSRT::create();
-    tracker->init(currentFrame, trackedBox);
-    tracking = true;
-}
-
-
-
 void VideoThread::run() {
     running = true;
     cap.open(gstPipeline, cv::CAP_GSTREAMER);
@@ -94,16 +65,6 @@ void VideoThread::run() {
     double angle = 0; // Кут обертання у градусах
 
     cv::Mat frame;
-
-
-
-
-
-
-
-
-
-
     while (running) {
         cap >> frame;
         if (frame.empty()) continue;
@@ -127,6 +88,17 @@ void VideoThread::run() {
                  crossColor, thickness);
 
 
+        // Draw the scale and markers
+
+        // if(isRotated){
+        //     scaleVertical.drawScaleRotated(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
+        //     scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
+
+        // }
+        // else{
+        //     scaleVertical.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, verticalMarkerValue);
+        //     scaleHorizontal.drawScale(frame, cv::Scalar(0, 0, 0), 2, STROKED, horizontMarkerValue);
+        // }
 
 
 
@@ -163,8 +135,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->videoLabel, &ClickableLabel::clickedAt,
             this, &MainWindow::onLabelClicked);
-
-
 
 
 
@@ -401,14 +371,6 @@ void MainWindow::displayFrame2(const QImage &image) {
 }
 
 
-void MainWindow::updateLaserParametersUI() {
-    LaserParameters& manager = LaserParameters::GetInstance();
-
-    uint32_t freq = manager.GetLaserFrequency();
-
-}
-
-
 
 void MainWindow::updateLpsParametersUI() {
     LpsParameters& manager = LpsParameters::GetInstance();
@@ -459,6 +421,9 @@ void MainWindow::updateLpsParametersUI() {
         break;
     case EARTH:
         ui->status_label->setText("Mode: EARTH");
+        break;
+    case TRACKING:
+        ui->status_label->setText("Mode: TRACKING");
 
         break;
     default:
@@ -683,12 +648,7 @@ void MainWindow::on_pulse_b_clicked()
 
     // SendDataFrame sendDataFrame;
     // sendDataFrame.Send(0x248,0x08, payload);
-    if (pulseOn) ScriptCommands::GetInstance().SetLaserEnergy(5);
-    else ScriptCommands::GetInstance().SetLaserEnergy(0);
-
-
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
-
 
 
 }
@@ -828,4 +788,11 @@ void MainWindow::on_d_b_clicked()
     if(videoThread1->isRotated) voltage_y = -voltage_y;
     ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
 }
+
+
+
+
+
+
+
 

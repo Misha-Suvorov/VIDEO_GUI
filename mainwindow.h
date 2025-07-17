@@ -1,31 +1,31 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QThread>
 #include <QImage>
-#include <QMutex>
 #include <QLineEdit>
-#include <opencv2/opencv.hpp>
+#include <QMainWindow>
+#include <QMutex>
+#include <QThread>
+#include "CircularBuffer.h"
 #include "canbus.h"
+#include "canparserworker.h"
 #include "canthread.h"
-#include "lpsparameters.h"
+#include "clickable.h"
 #include "laserparameters.h"
+#include "lpsparameters.h"
+#include "pixeltoangleconverter.h"
 #include "scalehorizontal.h"
 #include "senddataframe.h"
-#include "canparserworker.h"
-#include "CircularBuffer.h"
-#include "clickable.h"
-#include "pixeltoangleconverter.h"
-
-
-
+#include <opencv2/opencv.hpp>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+class MainWindow;
+}
 QT_END_NAMESPACE
 
-class VideoThread : public QThread {
+class VideoThread : public QThread
+{
     Q_OBJECT
 
 public:
@@ -41,14 +41,10 @@ public:
     void setRotationAngle(int angle);
     bool isRotated = false;
 
-
-
 signals:
     void frameReady(const QImage &image);
     void horizontMarkerValueChanged(int value);
     void verticalMarkerValueChanged(int value);
-
-
 
 private:
     bool running;
@@ -57,12 +53,10 @@ private:
     float horizontMarkerValue = 0;
     float verticalMarkerValue = 0;
     int rotationAngle = 0;
-
-
-
 };
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:
@@ -85,7 +79,6 @@ private slots:
     void onHorizontMarkerChanged(const QString &text);
     void onVerticalMarkerChanged(const QString &text);
 
-
     void on_pointer_b_clicked();
 
     void on_start_range_b_clicked();
@@ -94,7 +87,6 @@ private slots:
 
     void onMeasureModeChanged(int index);
     void onFrequencyModeChanged(int index);
-
 
     void on_laser_act_b_clicked();
 
@@ -122,13 +114,11 @@ private slots:
 
     void on_energy_5_clicked();
 
-
     void on_mode_input_currentIndexChanged(int index);
 
     void on_stop_b_clicked();
 
     void on_r_b_clicked();
-
 
     void on_step_input_currentTextChanged(const QString &arg1);
 
@@ -145,22 +135,18 @@ private:
     CANThread *canThread;
     CanBus *canBus;
     QTimer *updateTimer;
-    SendDataFrame *sendDataFrame;  // Об'єкт для відправки даних
+    SendDataFrame *sendDataFrame; // Об'єкт для відправки даних
 
     CANParserWorker *parserWorker;
     QThread *parserThread;
 
     ClickableLabel *videoLabel;
 
-
-
     //std::queue<std::vector<uint8_t>> localMessageQueue;
     CircularBuffer<std::vector<uint8_t>> localMessageQueue;
     QMutex queueMutex;
 
-
     QString code;
-
 
     int rotationAngle = 0;
     bool isSwitched = false;
@@ -169,7 +155,6 @@ private:
     bool pulseOn = false;
     bool termOn = false;
     bool isLittleEndian();
-
 
     // New variables for marker values
     float horizontMarkerValue = 0;
@@ -181,11 +166,6 @@ private:
     void updateLaserParametersUI();
     //void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
     ScaleHorizontal scaleHorizontal;
-
-
-
-
-
 };
 
 #endif // MAINWINDOW_H

@@ -2,9 +2,9 @@
 #define CANTHREAD_H
 #include <QMutex>
 #include <QThread>
+#include <cstdint>
 #include <queue>
 #include <vector>
-#include <cstdint>
 class CANThread : public QThread
 {
 public:

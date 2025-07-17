@@ -24,9 +24,7 @@ float CanMessageGeneric::GetFloatFromPayload()
 {
     float floatValue;
     std::memcpy(&floatValue, Message.PL, sizeof(float));
-    if (floatValue == 0) {
-        floatValue = 10;
-    }
+
     return floatValue;
 }
 
@@ -78,7 +76,7 @@ uint8_t CanMessageGeneric::ParseByte()
 {
     uint8_t byteValue = GetByteFromPayload();
     LaserParameters &manager = LaserParameters::GetInstance();
-    if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER) && Dir == 0) {
+    if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER) && Message.ACTION == 0) {
         switch (Message.ID) {
         case static_cast<uint8_t>(IdNode4::LASER_ACTIVE):
             manager.SetLaserActive(byteValue);
@@ -96,9 +94,8 @@ uint8_t CanMessageGeneric::ParseByte()
             break;
         }
     }
-    return byteValue;  // 👈 додано
+    return byteValue; // 👈 додано
 }
-
 
 float CanMessageGeneric::ParseFloat()
 {
@@ -144,7 +141,8 @@ uint32_t CanMessageGeneric::ParseULong()
     LpsParameters &manager = LpsParameters::GetInstance();
 
     if (Node == static_cast<uint8_t>(NodeId::PLATFORM) /* && ParamID==0*/) {
-        manager.SetModePlatform((ModePlatform) uLongValue);
+        if(Message.ID == static_cast<uint8_t>(IdNode1::MODE))
+            manager.SetModePlatform((ModePlatform) uLongValue);
     }
 
     if (Node == static_cast<uint8_t>(NodeId::LASER_POINTER)) {

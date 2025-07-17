@@ -6,14 +6,22 @@ QT += serialbus widgets
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
+CONFIG += debug
 
 
+#INCLUDEPATH += C:\opencv_gst_complete_debug\opencv-install-debug\include
+#DEPENDPATH += C:\opencv_gst_complete_debug\opencv-install-debug\include
+#LIBS += C:\opencv_gst_complete_debug\opencv-install-debug\x64\vc17\lib\opencv_world4100d.lib
 
+INCLUDEPATH += C:\opencv_gst_debug\install\include
+DEPENDPATH += C:\opencv_gst_debug\install\include
+LIBS += C:\opencv_gst_debug\install\x64\vc17\lib\opencv_world4100d.lib
 
+#INCLUDEPATH += C:/opencv_gst_complete_debug/opencv-install-debug/include/opencv2
 
-INCLUDEPATH += C:\opencv_complete_gst\opencv-4.10.0\build\install\include
-DEPENDPATH += C:\opencv_complete_gst\opencv-4.10.0\build\install\include
-LIBS += C:\opencv_complete_gst\opencv-4.10.0\build\install\x64\vc17\lib\opencv_world4100.lib
+#INCLUDEPATH += C:\opencv_gst_complete_debug\opencv-4.10.0\build\install\include
+#DEPENDPATH += C:\opencv_gst_complete_debug\opencv-4.10.0\build\install\include
+#LIBS += C:\opencv_gst_complete_debug\opencv-4.10.0\build\install\x64\vc17\lib\opencv_world4100.lib
 
 INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include
 DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include

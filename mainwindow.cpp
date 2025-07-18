@@ -54,7 +54,6 @@ void VideoThread::setVerticalMarkerValue(float value)
 
 void VideoThread::run()
 {
-    char paramString[256];
     running = true;
     cap.open(gstPipeline, cv::CAP_GSTREAMER);
 
@@ -185,16 +184,6 @@ MainWindow::MainWindow(QWidget *parent)
     //     }
     // });
 
-    // Connect QLineEdit to slots for marker changes
-    connect(ui->horizont_marker_input,
-            &QLineEdit::textChanged,
-            this,
-            &MainWindow::onHorizontMarkerChanged);
-    connect(ui->vertical_marker_input,
-            &QLineEdit::textChanged,
-            this,
-            &MainWindow::onVerticalMarkerChanged);
-
     on_start_b_clicked(); // Start video on launch
 
     // Ініціалізація CanBus
@@ -210,6 +199,8 @@ MainWindow::MainWindow(QWidget *parent)
             CannelloniFrame frame(packetData);
 
             QMutexLocker locker(&queueMutex); // Блокуємо доступ до черги
+
+            activeRx = 50;
 
             // Отримуємо тимчасову чергу з кадру
             std::queue<std::vector<uint8_t>> frameQueue = frame.GetMessageQueue();
@@ -269,6 +260,8 @@ MainWindow::MainWindow(QWidget *parent)
     updateTimer = new QTimer(this);
     connect(updateTimer, &QTimer::timeout, this, &MainWindow::updateLpsParametersUI);
     updateTimer->start(100);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -286,12 +279,28 @@ MainWindow::~MainWindow()
         delete canThread;
     }
 
+
+
     parserThread->quit();
     parserThread->wait();
     parserWorker->deleteLater();
     parserThread->deleteLater();
 
     delete ui;
+}
+
+QString MainWindow::circleHtml(bool active, const QString& label) {
+    QString color = active ? "green" : "red";
+    return QString("<span style='color:%1;font-size:14pt;'>●</span> %2")
+        .arg(color).arg(label);
+}
+
+void MainWindow::setRxActive(bool active) {
+    ui->rxLabel->setText(circleHtml(active, "RX"));
+}
+
+void MainWindow::setTxActive(bool active) {
+    ui->txLabel->setText(circleHtml(active, "TX"));
 }
 
 void MainWindow::onLabelClicked(QPoint pos)
@@ -389,6 +398,10 @@ void MainWindow::displayFrame2(const QImage &image)
     }
 }
 
+/**
+ * @brief Заповнює елементи вікна значеннями, отриманими від ЛПС
+ *
+ */
 void MainWindow::updateLpsParametersUI()
 {
     LpsParameters &manager = LpsParameters::GetInstance();
@@ -413,11 +426,6 @@ void MainWindow::updateLpsParametersUI()
     //uint32_t stanag = manager.GetLaserStanag();
 
     // Display values in UI QLineEdit widgets
-    ui->horizont_marker_input->setText(QString::number(angleX, 'f', 2));
-    ui->vertical_marker_input->setText(QString::number(angleY, 'f', 2));
-
-    ui->omega_vertical_input->setText(QString::number(omegaX, 'f', 4));
-    ui->omega_horizontal_input->setText(QString::number(omegaY, 'f', 4));
 
     ui->range_out->setText(QString::number(range, 'f', 4));
     ui->temp_out->setText(QString::number(temp, 'f', 4));
@@ -428,6 +436,8 @@ void MainWindow::updateLpsParametersUI()
     ui->error_label->setText(laser_error_str[laser_error_code]);
 
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
+
+    // Режим роботи MODE
 
     ScriptCommands::GetInstance().GetMode();
 
@@ -449,78 +459,222 @@ void MainWindow::updateLpsParametersUI()
         break;
     }
 
-    // --- status label
+    // Рядок зі значеннями кутів і швидкостей
 
-    QString text = QString("H = %1°, V = %2°, wH = %3°/s, wV = %4°/s")
-                       .arg(LpsParameters::GetInstance().GetAngleX(), 8, 'f', 5)
-                       .arg(LpsParameters::GetInstance().GetAngleY(), 8, 'f', 5)
-                       .arg(LpsParameters::GetInstance().GetSpeedX(), 8, 'f', 5)
-                       .arg(LpsParameters::GetInstance().GetSpeedY(), 8, 'f', 5);
+    // auto formatVal = [](double val) {
+    //     return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
+    // };
 
-    ui->status_label_2->setText(text);
+    // QString cellStyle = "style='"
+    //                     "background-color:#ddd;"         // м'яко-жовтий
+    //                     "color:#333;"                        // темний текст
+    //                     "border-radius:10px;"               // округлість
+    //                     "padding:0 5px;"                // відступи
+    //                     "font-family:monospace;"            // моноширинний
+    //                     "font-size:14pt;"                   // великий шрифт
+    //                     "box-shadow:2px 2px 6px rgba(0,0,0,0.2);" // легка тінь
+    //                     "text-align:center;"
+    //                     "white-space:pre;'";                // зберігає пробіли
+
+    // QString html = QString(
+    //                    "<table cellspacing='15' cellpadding='0'>"
+    //                    "  <tr>"
+    //                    "    <td %1>H:   %2°</td>"
+    //                    "    <td %1>V:   %3°</td>"
+    //                    "    <td %1>wH:  %4°/s</td>"
+    //                    "    <td %1>wV:  %5°/s</td>"
+    //                    "  </tr>"
+    //                    "</table>"
+    //                    )
+    //                    .arg(cellStyle)
+    //                    .arg(formatVal(angleX))
+    //                    .arg(formatVal(angleY))
+    //                    .arg(formatVal(omegaX))
+    //                    .arg(formatVal(omegaY));
+
+    // ui->status_label_2->setTextFormat(Qt::RichText);
+    // ui->status_label_2->setText(html);
+     onHorizontMarkerChanged(angleX);
+     onVerticalMarkerChanged(angleY);
+     showSpeed(omegaX, omegaY);
+
+     if(activeRx>0)
+     {
+         setRxActive(true);
+         activeRx--;
+     }
+     else setRxActive(false);
 
 
+     if(activeTx>0)
+     {
+        setTxActive(true);
+        activeTx--;
+     }
+     else setTxActive(false);
+
+
+    // Відправка пакету по CAN
     if (SendDataFrame::getInstance().GetDataFrameLen() != 0) {
         SendDataFrame::getInstance().SendAllFrames();
+        activeTx = 50;
     }
 }
 
-void MainWindow::onHorizontMarkerChanged(const QString &text)
+/**
+ * @brief Встановлює значення кута енкодера по горизонталі.
+ *
+ * Ця функція оновлює значення кута по горизонту і виводить маркер на горизонтальній шкалі.
+ *
+ * @param value Значення кута енкодера по горизонту.
+ */
+void MainWindow::onHorizontMarkerChanged(const float value)
 {
-    bool ok;
-    //float value = LpsParameters::GetInstance().GetAngleX();
-    float value = text.toFloat(&ok);
+    ui->horizontalSlider->setValue(static_cast<int>(-value * 10)); // Встановлення маркера на шкалі
 
-    if (text.isEmpty()) {
-        value = 0;
-        ok = true;
-    }
+    // Вивід значення кута енкодера зверху (форматований)
+    int intPart = static_cast<int>(value);
+    int fracPart = static_cast<int>(qAbs(value - intPart) * 100 + 0.5); // округлення
 
-    if (ok) {
-        ui->horizont_marker_input->setStyleSheet("");
-        horizontMarkerValue = value;
-        ui->horizontalSlider->setValue(static_cast<int>(-value * 10));
-        ui->hor_out->setText(QString::number(value, 'f', 1));
+    QString text = QString("<span style='font-size:18pt;'>%1</span><span style='font-size:14pt;'>.%2</span>")
+                       .arg(intPart)
+                       .arg(fracPart, 2, 10, QLatin1Char('0'));
 
-        // Update marker values for both video threads
-        if (videoThread1)
-            videoThread1->setHorizontMarkerValue(value);
-        if (videoThread2)
-            videoThread2->setHorizontMarkerValue(value);
-    } else {
-        ui->horizont_marker_input->setStyleSheet("border: 2px solid red;");
-    }
+    ui->hor_out->setText(text);
+
+    // Значення в квадратику
+
+    // Форматування значення з фіксованою шириною
+    auto formatVal = [](double val) {
+        return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
+    };
+
+    // HTML-стиль для прямокутника
+    QString cellStyle = "style='"
+                        "background:#ddd;"             // світло-сірий фон
+                        "color:#000;"                  // чорний текст
+                        "border-radius:6px;"           // округлені кути
+                        "padding:4px 8px;"             // внутрішні відступи
+                        "font-family:monospace;"       // моноширинний шрифт
+                        "font-size:14pt;"              // розмір шрифту
+                        "text-align:center;"
+                        "white-space:pre;'";           // збереження пробілів
+
+    // HTML вивід
+    QString html = QString("<div %1>H: %2°</div>")
+                       .arg(cellStyle)
+                       .arg(formatVal(value));
+
+    // Встановити в QLabel
+    ui->H_label->setTextFormat(Qt::RichText);
+    ui->H_label->setText(html);
+
+
+    // Update marker values for both video threads
+    if (videoThread1)
+        videoThread1->setHorizontMarkerValue(value);
+    if (videoThread2)
+        videoThread2->setHorizontMarkerValue(value);
+
 }
 
-void MainWindow::onVerticalMarkerChanged(const QString &text)
+/**
+ * @brief Встановлює значення кута енкодера по вертикалі.
+ *
+ * Ця функція оновлює значення кута по вертикалі і виводить маркер на вертикальній шкалі.
+ *
+ * @param value Значення кута енкодера по вертикалі.
+ */
+void MainWindow::onVerticalMarkerChanged(const float value)
 {
-    bool ok;
-    //float value = LpsParameters::GetInstance().GetAngleY();
-    float value = text.toFloat(&ok);
-    //ui->horizont_marker_input->setText(QString::number(value, 'f', 2));
+    ui->verticalSlider->setValue(static_cast<int>(value * 10)); // Встановлення маркера на шкалі
 
-    if (text.isEmpty()) {
-        value = 0;
-        ok = true;
-    }
+    // Розділяємо на цілу і дробову частини
+    int intPart = static_cast<int>(value);
+    int fracPart = static_cast<int>(qAbs(value - intPart) * 100 + 0.5);
 
-    if (ok) {
-        ui->vertical_marker_input->setStyleSheet("");
-        //value = value;
+    // Створюємо HTML-рядок з переносом
+    QString text = QString(
+                       "<div align='center'>"
+                       "<span style='font-size:18pt;'>%1.</span><br>"
+                       "<span style='font-size:14pt;'>%2</span>"
+                       "</div>"
+                       ).arg(intPart)
+                       .arg(fracPart, 2, 10, QLatin1Char('0'));
+    ui->vert_out->setText(text);
 
-        verticalMarkerValue = value;
-        ui->verticalSlider->setValue(static_cast<int>(value * 10));
-        ui->vert_out->setText(QString::number(value, 'f', 1));
+    // Значення в квадратику
 
-        // Update marker values for both video threads
-        if (videoThread1)
-            videoThread1->setVerticalMarkerValue(value);
-        if (videoThread2)
-            videoThread2->setVerticalMarkerValue(value);
-    } else {
-        ui->vertical_marker_input->setStyleSheet("border: 2px solid red;");
-    }
+    // Форматування значення з фіксованою шириною
+    auto formatVal = [](double val) {
+        return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
+    };
+
+    // HTML-стиль для прямокутника
+    QString cellStyle = "style='"
+                        "background:#ddd;"             // світло-сірий фон
+                        "color:#000;"                  // чорний текст
+                        "border-radius:6px;"           // округлені кути
+                        "padding:4px 8px;"             // внутрішні відступи
+                        "font-family:monospace;"       // моноширинний шрифт
+                        "font-size:14pt;"              // розмір шрифту
+                        "text-align:center;"
+                        "white-space:pre;'";           // збереження пробілів
+
+    // HTML вивід
+    QString html = QString("<div %1>V: %2°</div>")
+                       .arg(cellStyle)
+                       .arg(formatVal(value));
+
+    // Встановити в QLabel
+    ui->V_label->setTextFormat(Qt::RichText);
+    ui->V_label->setText(html);
+
+
+    // Update marker values for both video threads
+    if (videoThread1)
+        videoThread1->setVerticalMarkerValue(value);
+    if (videoThread2)
+        videoThread2->setVerticalMarkerValue(value);
 }
+
+void MainWindow::showSpeed(const float wH, const float wV)
+{
+    // Форматування значення з фіксованою шириною
+    auto formatVal = [](double val) {
+        return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
+    };
+
+    // HTML-стиль для прямокутника
+    QString cellStyle = "style='"
+                        "background:#ddd;"             // світло-сірий фон
+                        "color:#000;"                  // чорний текст
+                        "border-radius:6px;"           // округлені кути
+                        "padding:4px 8px;"             // внутрішні відступи
+                        "font-family:monospace;"       // моноширинний шрифт
+                        "font-size:14pt;"              // розмір шрифту
+                        "text-align:center;"
+                        "white-space:pre;'";           // збереження пробілів
+
+    // HTML вивід
+    QString html = QString("<div %1>wH: %2°</div>")
+                       .arg(cellStyle)
+                       .arg(formatVal(wH));
+
+    // Встановити в QLabel
+    ui->wH_label->setTextFormat(Qt::RichText);
+    ui->wH_label->setText(html);
+
+    html = QString("<div %1>wV: %2°</div>")
+               .arg(cellStyle)
+               .arg(formatVal(wV));
+
+    // Встановити в QLabel
+    ui->wV_label->setTextFormat(Qt::RichText);
+    ui->wV_label->setText(html);
+}
+
+
 
 void MainWindow::on_start_b_clicked()
 {

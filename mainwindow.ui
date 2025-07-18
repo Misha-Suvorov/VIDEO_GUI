@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>LPS Control</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -38,14 +38,39 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="2" column="4">
-       <widget class="QLabel" name="status_label">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
+      <item row="3" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QLabel" name="H_label">
+          <property name="text">
+           <string>H:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="V_label">
+          <property name="text">
+           <string>V:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="wH_label">
+          <property name="text">
+           <string>wH:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="wV_label">
+          <property name="text">
+           <string>wV:</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="4" column="4">
+      <item row="4" column="5">
        <widget class="QFrame" name="frame">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -90,202 +115,6 @@
             <string/>
            </property>
           </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QPushButton" name="l_vid_turn">
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    background-color: none; /* Дефолтний колір */
-    border: none;
-    color: black;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-	border-top:1px solid gray;
-    border-bottom: 1px solid gray;
-}
-
-QPushButton:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
-}
-
-QPushButton:checked {
-    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
-    border-left: 1px solid rgb(110, 144, 76);
-    border-right: 1px solid rgb(110, 144, 76);
-    border-bottom: 1px solid rgb(110, 144, 76);
-	border-top: 1px solid rgb(110, 144, 76);
-    color: white;
-}
-
-QPushButton:checked:hover {
-    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
-}
-</string>
-             </property>
-             <property name="text">
-              <string>⟳</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="start_b">
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    background-color: none; /* Дефолтний колір */
-    border: none;
-    color: black;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-	border-top:1px solid gray;
-    border-bottom: 1px solid gray;
-}
-
-QPushButton:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
-}
-
-QPushButton:checked {
-    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
-    border-left: 1px solid rgb(110, 144, 76);
-    border-right: 1px solid rgb(110, 144, 76);
-    border-bottom: 1px solid rgb(110, 144, 76);
-	border-top: 1px solid rgb(110, 144, 76);
-    color: white;
-}
-
-QPushButton:checked:hover {
-    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
-}
-</string>
-             </property>
-             <property name="text">
-              <string>Start</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="stop_b_2">
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    background-color: none; /* Дефолтний колір */
-    border: none;
-    color: black;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-	border-top:1px solid gray;
-    border-bottom: 1px solid gray;
-}
-
-QPushButton:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
-}
-
-QPushButton:checked {
-    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
-    border-left: 1px solid rgb(110, 144, 76);
-    border-right: 1px solid rgb(110, 144, 76);
-    border-bottom: 1px solid rgb(110, 144, 76);
-	border-top: 1px solid rgb(110, 144, 76);
-    color: white;
-}
-
-QPushButton:checked:hover {
-    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
-}
-</string>
-             </property>
-             <property name="text">
-              <string>Stop</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="switch_vid">
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    background-color: none; /* Дефолтний колір */
-    border: none;
-    color: black;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-	border-top:1px solid gray;
-    border-bottom: 1px solid gray;
-}
-
-QPushButton:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
-}
-
-QPushButton:checked {
-    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
-    border-left: 1px solid rgb(110, 144, 76);
-    border-right: 1px solid rgb(110, 144, 76);
-    border-bottom: 1px solid rgb(110, 144, 76);
-	border-top: 1px solid rgb(110, 144, 76);
-    color: white;
-}
-
-QPushButton:checked:hover {
-    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
-}
-</string>
-             </property>
-             <property name="text">
-              <string>Switch Videos</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    background-color: none; /* Дефолтний колір */
-    border: none;
-    color: black;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-	border-top:1px solid gray;
-    border-bottom: 1px solid gray;
-}
-
-QPushButton:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
-}
-
-QPushButton:checked {
-    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
-    border-left: 1px solid rgb(110, 144, 76);
-    border-right: 1px solid rgb(110, 144, 76);
-    border-bottom: 1px solid rgb(110, 144, 76);
-	border-top: 1px solid rgb(110, 144, 76);
-    color: white;
-}
-
-QPushButton:checked:hover {
-    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
-}
-</string>
-             </property>
-             <property name="text">
-              <string>Tracking</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_4">
@@ -931,66 +760,6 @@ QPushButton:checked:hover {
           </layout>
          </item>
          <item>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
-            <widget class="QLineEdit" name="horizont_marker_input">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignRight">
-            <widget class="QLabel" name="horizontal_mark">
-             <property name="text">
-              <string>Horizontal Marker</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
-            <widget class="QLineEdit" name="omega_horizontal_input">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignRight">
-            <widget class="QLabel" name="omega_horizontal">
-             <property name="text">
-              <string>ω H</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
-            <widget class="QLineEdit" name="vertical_marker_input">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignRight">
-            <widget class="QLabel" name="vertical_mark">
-             <property name="text">
-              <string>Vertical Marker</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1" alignment="Qt::AlignmentFlag::AlignLeft">
-            <widget class="QLineEdit" name="omega_vertical_input">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0" alignment="Qt::AlignmentFlag::AlignRight">
-            <widget class="QLabel" name="omega_vertical">
-             <property name="text">
-              <string>ω V</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="1" column="2">
             <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -1265,115 +1034,7 @@ QPushButton:checked:hover {
         </layout>
        </widget>
       </item>
-      <item row="1" column="1">
-       <layout class="QGridLayout" name="gridLayout_12">
-        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>-30</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft">
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string>30</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter">
-         <widget class="QLabel" name="hor_out">
-          <property name="font">
-           <font>
-            <pointsize>17</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="4" column="3">
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item alignment="Qt::AlignmentFlag::AlignTop">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>20</string>
-          </property>
-         </widget>
-        </item>
-        <item alignment="Qt::AlignmentFlag::AlignVCenter">
-         <widget class="QLabel" name="vert_out">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>40</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>17</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item alignment="Qt::AlignmentFlag::AlignBottom">
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>-20</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="4" column="2">
-       <widget class="QSlider" name="verticalSlider">
-        <property name="styleSheet">
-         <string notr="true">QSlider::handle:vertical {
-    background: red;
-    height: 14px;
-    margin: 0 -2px;
-    border-radius: 5px;
-}</string>
-        </property>
-        <property name="minimum">
-         <number>-200</number>
-        </property>
-        <property name="maximum">
-         <number>200</number>
-        </property>
-        <property name="singleStep">
-         <number>1</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Orientation::Vertical</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TickPosition::TicksAbove</enum>
-        </property>
-        <property name="tickInterval">
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
+      <item row="2" column="0">
        <widget class="QSlider" name="horizontalSlider">
         <property name="styleSheet">
          <string notr="true">QSlider::handle:horizontal {
@@ -1413,7 +1074,91 @@ QPushButton:checked:hover {
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="4" column="2">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item alignment="Qt::AlignmentFlag::AlignTop">
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>20</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignmentFlag::AlignVCenter">
+         <widget class="QLabel" name="vert_out">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignmentFlag::AlignBottom">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>-20</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+         <widget class="QLabel" name="hor_out">
+          <property name="font">
+           <font>
+            <pointsize>17</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LayoutDirection::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft">
+         <widget class="QLabel" name="label_15">
+          <property name="text">
+           <string>30</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignRight">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>-30</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="4" column="0">
        <widget class="ClickableLabel" name="videoLabel">
         <property name="enabled">
          <bool>true</bool>
@@ -1441,15 +1186,256 @@ QPushButton:checked:hover {
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="status_label_2">
-        <property name="enabled">
-         <bool>true</bool>
+      <item row="4" column="1">
+       <widget class="QSlider" name="verticalSlider">
+        <property name="styleSheet">
+         <string notr="true">QSlider::handle:vertical {
+    background: red;
+    height: 14px;
+    margin: 0 -2px;
+    border-radius: 5px;
+}</string>
         </property>
-        <property name="text">
-         <string>TextLabel</string>
+        <property name="minimum">
+         <number>-200</number>
+        </property>
+        <property name="maximum">
+         <number>200</number>
+        </property>
+        <property name="singleStep">
+         <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TickPosition::TicksAbove</enum>
+        </property>
+        <property name="tickInterval">
+         <number>100</number>
         </property>
        </widget>
+      </item>
+      <item row="1" column="5">
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <widget class="QLabel" name="status_label">
+          <property name="text">
+           <string>Mode:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="rxLabel">
+          <property name="text">
+           <string>RX</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="txLabel">
+          <property name="text">
+           <string>TX</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="5">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QPushButton" name="l_vid_turn">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: none; /* Дефолтний колір */
+    border: none;
+    color: black;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+	border-top:1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
+}
+
+QPushButton:checked {
+    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
+    border-left: 1px solid rgb(110, 144, 76);
+    border-right: 1px solid rgb(110, 144, 76);
+    border-bottom: 1px solid rgb(110, 144, 76);
+	border-top: 1px solid rgb(110, 144, 76);
+    color: white;
+}
+
+QPushButton:checked:hover {
+    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
+}
+</string>
+          </property>
+          <property name="text">
+           <string>⟳</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="start_b">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: none; /* Дефолтний колір */
+    border: none;
+    color: black;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+	border-top:1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
+}
+
+QPushButton:checked {
+    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
+    border-left: 1px solid rgb(110, 144, 76);
+    border-right: 1px solid rgb(110, 144, 76);
+    border-bottom: 1px solid rgb(110, 144, 76);
+	border-top: 1px solid rgb(110, 144, 76);
+    color: white;
+}
+
+QPushButton:checked:hover {
+    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Start</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="stop_b_2">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: none; /* Дефолтний колір */
+    border: none;
+    color: black;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+	border-top:1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
+}
+
+QPushButton:checked {
+    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
+    border-left: 1px solid rgb(110, 144, 76);
+    border-right: 1px solid rgb(110, 144, 76);
+    border-bottom: 1px solid rgb(110, 144, 76);
+	border-top: 1px solid rgb(110, 144, 76);
+    color: white;
+}
+
+QPushButton:checked:hover {
+    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Stop</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="switch_vid">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: none; /* Дефолтний колір */
+    border: none;
+    color: black;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+	border-top:1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
+}
+
+QPushButton:checked {
+    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
+    border-left: 1px solid rgb(110, 144, 76);
+    border-right: 1px solid rgb(110, 144, 76);
+    border-bottom: 1px solid rgb(110, 144, 76);
+	border-top: 1px solid rgb(110, 144, 76);
+    color: white;
+}
+
+QPushButton:checked:hover {
+    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Switch Videos</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: none; /* Дефолтний колір */
+    border: none;
+    color: black;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+	border-top:1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+QPushButton:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Легке затемнення при наведенні */
+}
+
+QPushButton:checked {
+    background-color: rgb(130, 170, 90); /* Зелений при натисканні */
+    border-left: 1px solid rgb(110, 144, 76);
+    border-right: 1px solid rgb(110, 144, 76);
+    border-bottom: 1px solid rgb(110, 144, 76);
+	border-top: 1px solid rgb(110, 144, 76);
+    color: white;
+}
+
+QPushButton:checked:hover {
+    background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
+}
+</string>
+          </property>
+          <property name="text">
+           <string>Tracking</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -1464,8 +1450,50 @@ QPushButton:checked:hover {
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuLPS_Control">
+    <property name="title">
+     <string>LPS Control</string>
+    </property>
+    <addaction name="actionSet_program_0"/>
+    <addaction name="actionBias_calibration"/>
+    <addaction name="actionZero_set_H"/>
+    <addaction name="actionZero_set_V"/>
+    <addaction name="actionZero_reset_H"/>
+    <addaction name="actionZero_reset_V"/>
+   </widget>
+   <addaction name="menuLPS_Control"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSet_program_0">
+   <property name="text">
+    <string>Set program 0</string>
+   </property>
+  </action>
+  <action name="actionBias_calibration">
+   <property name="text">
+    <string>Bias calibration</string>
+   </property>
+  </action>
+  <action name="actionZero_set_H">
+   <property name="text">
+    <string>Zero set (H)</string>
+   </property>
+  </action>
+  <action name="actionZero_set_V">
+   <property name="text">
+    <string>Zero set (V)</string>
+   </property>
+  </action>
+  <action name="actionZero_reset_H">
+   <property name="text">
+    <string>Zero reset (H)</string>
+   </property>
+  </action>
+  <action name="actionZero_reset_V">
+   <property name="text">
+    <string>Zero reset (V)</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

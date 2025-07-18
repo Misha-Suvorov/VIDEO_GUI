@@ -64,6 +64,8 @@ public:
     //std::queue<std::vector<uint8_t>>& messageQueue;
 
     ~MainWindow();
+    void setRxActive(bool active);
+    void setTxActive(bool active);
 
 private slots:
     void displayFrame1(const QImage &image);
@@ -76,8 +78,9 @@ private slots:
     void on_stop_b_2_clicked();
 
     // Slot to update the horizontal marker position
-    void onHorizontMarkerChanged(const QString &text);
-    void onVerticalMarkerChanged(const QString &text);
+    void onHorizontMarkerChanged(const float); // const QString &text);
+    void onVerticalMarkerChanged(const float);
+    void showSpeed(const float, const float);
 
     void on_pointer_b_clicked();
 
@@ -166,6 +169,10 @@ private:
     void updateLaserParametersUI();
     //void PrintMessageQueue(const std::queue<std::vector<uint8_t>>& messageQueue);
     ScaleHorizontal scaleHorizontal;
+
+    QString circleHtml(bool active, const QString& label);
+    int activeRx = 0;
+    int activeTx = 0;
 };
 
 #endif // MAINWINDOW_H

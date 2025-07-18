@@ -1,6 +1,6 @@
 #ifndef BASE_H
 #define BASE_H
-#include <opencv2/opencv.hpp>>
+#include <opencv2/opencv.hpp>
 class baseElement
 {
 protected:

@@ -34,7 +34,7 @@ void ScaleHorizontal::drawScale(
     int endX = 620;
     int endY = 60;
     int centerX = (startX + endX) / 2; // Center of the entire scale
-    float coefX = ((endX - startX) / 2) / 30.0;
+    float coefX = ((endX - startX) / 2) / 30.0f;
 
     // Draw the main line (horizontal in this case)
     cv::drawLineStroked(img,

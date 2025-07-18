@@ -8,7 +8,7 @@ class ScaleHorizontal : public baseElement
 {
 private:
     int countStepsForHorizontalScale = 4;
-    float lineLengthForHorizontalScale = 20;
+    int lineLengthForHorizontalScale = 20;
     int markerPosition = 0; // Marker position for the horizontal
 
     float omegaX = 0.0f;

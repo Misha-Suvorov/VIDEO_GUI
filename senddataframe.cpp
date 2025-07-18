@@ -70,7 +70,7 @@ void SendDataFrame::SendAllFrames()
 
     udpSocket.writeDatagram(byteArray, QHostAddress("192.168.144.10"), 14500);
 
-    std::cout << "Відправлено через UDP: Count=" << countPacks << " [";
+    std::cout << "Send by UDP: Count=" << countPacks << " [";
     for (size_t i = 0; i < dataCanFrames.size(); i++) {
         printf(" %02X", dataCanFrames[i]);
     }
@@ -112,7 +112,7 @@ void SendDataFrame::Send(uint16_t can_id, uint8_t can_len, const std::vector<uin
 
     udpSocket.writeDatagram(byteArray, QHostAddress("192.168.144.10"), 14500);
 
-    std::cout << "Відправлено через UDP: ID=" << std::hex << can_id << " [";
+    std::cout << "Send by UDP: ID=" << std::hex << can_id << " [";
     for (size_t i = 0; i < data.size(); i++) {
         printf(" %02X", data[i]);
     }

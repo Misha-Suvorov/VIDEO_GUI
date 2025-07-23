@@ -131,6 +131,8 @@ private slots:
 
     void on_d_b_clicked();
 
+    void on_actionBias_calibration_triggered();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;
@@ -145,7 +147,6 @@ private:
 
     ClickableLabel *videoLabel;
 
-    //std::queue<std::vector<uint8_t>> localMessageQueue;
     CircularBuffer<std::vector<uint8_t>> localMessageQueue;
     QMutex queueMutex;
 

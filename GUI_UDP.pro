@@ -42,6 +42,7 @@ DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtNetwork
 SOURCES += \
     base.cpp \
     basecanmessage.cpp \
+    biascalibration.cpp \
     canbus.cpp \
     canmessagegeneric.cpp \
     cannelloniframe.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
     CircularBuffer.h \
     base.h \
     basecanmessage.h \
+    biascalibration.h \
     canbus.h \
     canmessagegeneric.h \
     cannelloniframe.h \
@@ -85,6 +87,7 @@ HEADERS += \
     tracking.h
 
 FORMS += \
+    biascalibration.ui \
     mainwindow.ui
 
 # Default rules for deployment

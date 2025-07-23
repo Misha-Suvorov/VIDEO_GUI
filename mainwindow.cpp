@@ -9,6 +9,7 @@
 #include "scriptcommands.h"
 #include "structs.h"
 #include "ui_mainwindow.h"
+#include "biascalibration.h"
 #include <opencv2/opencv.hpp>
 
 VideoThread::VideoThread(QObject *parent)
@@ -930,4 +931,11 @@ void MainWindow::on_d_b_clicked()
     if (videoThread1->isRotated)
         voltage_y = -voltage_y;
     ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
+}
+
+void MainWindow::on_actionBias_calibration_triggered()
+{
+    BiasCalibration *form = new BiasCalibration(this); // створюємо об'єкт вікна
+    form->setModal(true);                    // або setModal(false) для не-блокуючого
+    form->show();                            // відображаємо вікно
 }

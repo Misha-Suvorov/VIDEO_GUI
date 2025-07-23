@@ -1218,7 +1218,7 @@ QPushButton:checked:hover {
       </item>
       <item row="1" column="5">
        <layout class="QHBoxLayout" name="horizontalLayout_9">
-        <item>
+        <item alignment="Qt::AlignmentFlag::AlignHCenter">
          <widget class="QLabel" name="status_label">
           <property name="text">
            <string>Mode:</string>
@@ -1228,20 +1228,20 @@ QPushButton:checked:hover {
         <item>
          <widget class="QLabel" name="rxLabel">
           <property name="text">
-           <string>RX</string>
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="txLabel">
           <property name="text">
-           <string>TX</string>
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="3" column="5">
+      <item row="2" column="5">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QPushButton" name="l_vid_turn">

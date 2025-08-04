@@ -518,7 +518,7 @@ void MainWindow::updateLpsParametersUI()
     // Відправка пакету по CAN
     if (SendDataFrame::getInstance().GetDataFrameLen() != 0) {
         SendDataFrame::getInstance().SendAllFrames();
-        activeTx = 50;
+        activeTx = 30;
     }
 }
 

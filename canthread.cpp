@@ -1,6 +1,6 @@
 #include "canthread.h"
 #include "canmessagegeneric.h"
-#include "mainwindow.h"
+#include "lpsparameters.h"
 
 //CANThread::CANThread() {}
 

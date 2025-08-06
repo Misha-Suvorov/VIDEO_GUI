@@ -939,3 +939,8 @@ void MainWindow::on_actionBias_calibration_triggered()
     form->setModal(true);                    // або setModal(false) для не-блокуючого
     form->show();                            // відображаємо вікно
 }
+
+void MainWindow::on_actionSet_program_0_triggered()
+{
+    ScriptCommands::GetInstance().SetProgrammZero();
+}

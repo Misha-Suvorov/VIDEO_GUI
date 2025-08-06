@@ -71,12 +71,12 @@ void BiasCalibration::startCalibration(int timeSec, int offset1, int offset2)
 
      ui->labelComment->setText("Set platform to ZERO. Wait 30 sec");
 
-     waitAndProgress(30000); //30000 очікування 30 сек з прогресбаром
+     waitAndProgress(10000); //30000 очікування 30 сек з прогресбаром
 
      // 2. Set offset Δ1
-     sendCommandCalibration(offset1, offset1, 0);
-     QThread::msleep(10); // Затримка 10 мс
      ScriptCommands::GetInstance().SetMode(INERT);
+     QThread::msleep(10); // Затримка 10 мс
+     sendCommandCalibration(offset1, offset1, 0);
 
      // 3. Wait timeForRecordMsec and record data to array
      ui->labelComment->setText(
@@ -98,24 +98,34 @@ void BiasCalibration::startCalibration(int timeSec, int offset1, int offset2)
      MonitorResult result2 = startMonitoring(timeForRecordMsec);
 
      // 6. Calculate Delta for H channel
-     int biasH = computeDelta(result1.valuesH, result2.valuesH, offset1, offset2);
+     int biasH, biasV;
+     Result resultBiasH = computeDelta(biasH, result1.valuesH, result2.valuesH, offset1, offset2);
 
      // 7. Calculate Delta for V channel
-     int biasV = computeDelta(result1.valuesV, result2.valuesV, offset1, offset2);
+     Result resultBiasV = computeDelta(biasV, result1.valuesV, result2.valuesV, offset1, offset2);
 
      ui->lineEditBiasH->setText(QString::number(biasH));
      ui->lineEditBiasV->setText(QString::number(biasV));
 
      // 8. Error checking
-     if (biasH == 0)
+     switch(resultBiasH)
      {
-         ui->labelComment->setText("Error in H channel");
-         return;
+     case S_FAIL: ui->labelComment->setText("Error in H channel (b1=b2)"); return;
+     case S_FAIL_OFFSET: ui->labelComment->setText("Error in H channel. Increase range (Δ1..Δ2) "); return;
+         break;
+
+     case S_OK:
+         break;
      }
-     else if (biasV == 0)
+
+     switch(resultBiasV)
      {
-          ui->labelComment->setText("Error in V channel");
-         return;
+     case S_FAIL: ui->labelComment->setText("Error in V channel (b1=b2)"); return;
+     case S_FAIL_OFFSET: ui->labelComment->setText("Error in V channel. Increase range (Δ1..Δ2) "); return;
+         break;
+
+     case S_OK:
+         break;
      }
 
      // 9. Apply
@@ -215,40 +225,66 @@ BiasCalibration::MonitorResult BiasCalibration::startMonitoring(int durationMs)
     ui->progressBar->setMaximum(stepCount);
     ui->progressBar->setValue(0);
 
-    // запуск таймера і моніторингу
-    elapsed.start();
-    qint64 startTime = elapsed.elapsed();
+    // // запуск таймера і моніторингу
+    // elapsed.start();
+    // qint64 startTime = elapsed.elapsed();
 
-    for (int i = 0; i < stepCount; ++i)
-    {
-        // Зчитуємо поточні кути
+    // for (int i = 0; i < stepCount; ++i)
+    // {
+    //     // Зчитуємо поточні кути
+    //     result.valuesH.append(LpsParameters::GetInstance().GetAngleX());
+    //     result.valuesV.append(LpsParameters::GetInstance().GetAngleY());
+
+    //     // Оновлюємо прогрес-бар, якщо є вікно
+    //     QMetaObject::invokeMethod(ui->progressBar, [this, i, stepCount]() {
+    //         ui->progressBar->setMinimum(0);
+    //         ui->progressBar->setMaximum(stepCount);
+    //         if (ui->progressBar->value() < ui->progressBar->maximum())
+    //             ui->progressBar->setValue(i + 1);
+    //     }, Qt::QueuedConnection);
+
+    //     // Обчислюємо час затримки до наступного кроку
+    //     qint64 nextTargetTime = startTime + ((i + 1) * interval);
+    //     qint64 sleepTime = nextTargetTime - elapsed.elapsed();
+    //     if (sleepTime > 0)
+    //         QThread::msleep(static_cast<unsigned long>(sleepTime));
+
+    //     // Щоб інтерфейс залишався чуйним
+    //     QCoreApplication::processEvents();
+    // }
+
+    QEventLoop loop;
+    QElapsedTimer timer;
+    timer.start();
+
+    std::function<void()> stepFunc;
+
+    stepFunc = [&]() {
+        // Зчитуємо кути
         result.valuesH.append(LpsParameters::GetInstance().GetAngleX());
         result.valuesV.append(LpsParameters::GetInstance().GetAngleY());
 
-        // Оновлюємо прогрес-бар, якщо є вікно
-        QMetaObject::invokeMethod(ui->progressBar, [this, i, stepCount]() {
-            ui->progressBar->setMinimum(0);
-            ui->progressBar->setMaximum(stepCount);
-            if (ui->progressBar->value() < ui->progressBar->maximum())
-                ui->progressBar->setValue(i + 1);
-        }, Qt::QueuedConnection);
+        // Оновлюємо прогрес-бар
+        ui->progressBar->setValue(currentStep + 1);
+        currentStep++;
 
-        // Обчислюємо час затримки до наступного кроку
-        qint64 nextTargetTime = startTime + ((i + 1) * interval);
-        qint64 sleepTime = nextTargetTime - elapsed.elapsed();
-        if (sleepTime > 0)
-            QThread::msleep(static_cast<unsigned long>(sleepTime));
+        if (currentStep >= stepCount) {
+            loop.quit();
+            return;
+        }
 
-        // Щоб інтерфейс залишався чуйним
-        QCoreApplication::processEvents();
-    }
+        // Обчислюємо точну затримку до наступного кроку
+        qint64 expectedElapsed = currentStep * interval;
+        qint64 actualElapsed = timer.elapsed();
+        qint64 delay = expectedElapsed - actualElapsed;
+        if (delay < 0) delay = 0;
 
+        QTimer::singleShot(delay, stepFunc);
+    };
 
-    // if (!monitorTimer) {
-    //     monitorTimer = new QTimer(this);
-    //     connect(monitorTimer, &QTimer::timeout, this, &BiasCalibration::monitorStep);
-    // }
-    // monitorTimer->start(durationMs); //intervalMs
+    QTimer::singleShot(0, stepFunc); // початковий запуск
+    loop.exec();
+
     return result;
 }
 
@@ -259,14 +295,20 @@ BiasCalibration::MonitorResult BiasCalibration::startMonitoring(int durationMs)
  *
  * @return MonitorResult Структура з накопиченими значеннями кутів по горизонталі (H) та вертикалі (V).
  */
-int BiasCalibration::computeDelta(QVector<float> A1, QVector<float> A2, int offset1, int offset2)
+Result BiasCalibration::computeDelta(int & bias, QVector<float> A1, QVector<float> A2, int offset1, int offset2)
 {
     float delta = 0;
     float b1 = computeCoefficientB(A1);
     float b2 = computeCoefficientB(A2);
     float k = computeCoefficientB(QList<float>{ b1, b2 });
-    if (k == 0) return 0;
-    else return (int)(offset1 - b1 * (offset2 - offset1) / k);
+
+    if (k == 0) bias = 0;
+    else bias = (int)(offset1 - b1 * (offset2 - offset1) / k);
+
+
+    if(b1 == b2) return S_FAIL;
+    else if(bias<offset1 || bias>offset2) return S_FAIL_OFFSET;
+    else return S_OK;
 }
 
 float BiasCalibration::computeCoefficientB(QVector<float> A)
@@ -284,6 +326,13 @@ float BiasCalibration::computeCoefficientB(QVector<float> A)
     return b;
 }
 
+/**
+ * @brief Порівняти застосовані значення bias
+ *
+ * Функція накопичує в структуру result кути X i Y поки відраховує таймер
+ * Вираховує коефіцієнти, які повинні бути близькими до нуля.
+ *
+ */
 void BiasCalibration::compareMonitorValues(int durationInMsec)
 {
     MonitorResult result3 = startMonitoring(durationInMsec);
@@ -293,3 +342,76 @@ void BiasCalibration::compareMonitorValues(int durationInMsec)
     ui->lineEditBiasVVerify->setText(QString::number(b3_V, 'f', 4));
 
 }
+
+
+/**
+ * @brief Зберегти значення bias в пам'ять
+ *
+ * Функція зчитує з полів biasH i biasV значення і зберігає їх в пам'ять
+ *
+ */
+void BiasCalibration::on_saveButton_clicked()
+{
+    bool okBiasH, okBiasV;
+    int biasH = ui->lineEditBiasH->text().trimmed().toInt(&okBiasH);
+    int biasV = ui->lineEditBiasV->text().trimmed().toInt(&okBiasV);
+
+    if (okBiasH && okBiasV) {
+        sendCommandCalibration(biasH, biasV, 0x02); // Save
+
+    } else {
+        // Повідомлення про помилки
+        QString errorMsg = "Error in fields:\n";
+        if (!okBiasH) errorMsg += "- biasH\n";
+        if (!okBiasV) errorMsg += "- biasV\n";
+
+        QMessageBox::warning(this, "Incorrect input", errorMsg);
+    }
+
+}
+
+/**
+ * @brief Застосувати значення bias без збереження в пам'ять
+ *
+ * Функція зчитує з полів biasH i biasV значення і застосовує їх
+ *
+ */
+void BiasCalibration::on_setBiasButton_clicked()
+{
+    bool okBiasH, okBiasV;
+    int biasH = ui->lineEditBiasH->text().trimmed().toInt(&okBiasH);
+    int biasV = ui->lineEditBiasV->text().trimmed().toInt(&okBiasV);
+
+    if (okBiasH && okBiasV) {
+        sendCommandCalibration(biasH, biasV, 0x0); // Apply
+
+    } else {
+        // Повідомлення про помилки
+        QString errorMsg = "Error in fields:\n";
+        if (!okBiasH) errorMsg += "- biasH\n";
+        if (!okBiasV) errorMsg += "- biasV\n";
+
+        QMessageBox::warning(this, "Incorrect input", errorMsg);
+    }
+}
+
+
+void BiasCalibration::on_checkButton_clicked()
+{
+    bool okTime;
+
+    int time = ui->lineEditTime->text().trimmed().toInt(&okTime);
+    if (okTime) {
+        ui->labelComment->setText("Check in progress");
+        compareMonitorValues(time*1000);
+        ui->labelComment->setText("Done");
+
+    } else {
+        // Повідомлення про помилки
+        QString errorMsg = "Error in fields:\n";
+        if (!okTime) errorMsg += "- time\n";
+
+        QMessageBox::warning(this, "Incorrect input", errorMsg);
+    }
+}
+

@@ -132,6 +132,7 @@ private slots:
     void on_d_b_clicked();
 
     void on_actionBias_calibration_triggered();
+    void on_actionSet_program_0_triggered();
 
 private:
     Ui::MainWindow *ui;

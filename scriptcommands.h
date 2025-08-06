@@ -1,7 +1,7 @@
 #ifndef SCRIPTCOMMANDS_H
 #define SCRIPTCOMMANDS_H
 #include "structs.h"
-#include <vector>
+#include <cstdint>
 
 class ScriptCommands
 {
@@ -15,6 +15,8 @@ public:
     void SetMode(ModePlatform mode);
     void GetMode();
     void SetLaserEnergy(uint8_t value);
+
+    void SetProgrammZero();
 
     //ScriptCommands();
 };

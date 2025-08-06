@@ -1,4 +1,5 @@
 #include "scriptcommands.h"
+#include "qthread.h"
 #include "senddataframe.h"
 
 ScriptCommands &ScriptCommands::GetInstance()
@@ -7,6 +8,12 @@ ScriptCommands &ScriptCommands::GetInstance()
     return instance;
 }
 
+/**
+ * @brief Встановлює значення кута енкодера по горизонталі в градусах
+ *
+ * @param value Значення енкодеру по горизонталі (градуси)
+ *
+ */
 void ScriptCommands::SetAngleEncoder_H(float value)
 {
     std::vector<uint8_t> byteArray(4);
@@ -18,6 +25,12 @@ void ScriptCommands::SetAngleEncoder_H(float value)
     SendDataFrame::getInstance().Send(0x218, 0x08, payload);
 }
 
+/**
+ * @brief Встановлює значення кута енкодера по вертикалі в градусах
+ *
+ * @param value Значення енкодеру по вертикалі (градуси)
+ *
+ */
 void ScriptCommands::SetAngleEncoder_V(float value)
 {
     std::vector<uint8_t> byteArray(4);
@@ -29,30 +42,44 @@ void ScriptCommands::SetAngleEncoder_V(float value)
     SendDataFrame::getInstance().Send(0x218, 0x08, payload);
 }
 
-//встановлення кутів енкодера в градусах
+/**
+ * @brief Встановлює значення кутів енкодерів в градусах
+ *
+ * @param voltage_encoder_H Значення енкодеру по горизонталі (градуси)
+ * @param voltage_encoder_V Значення енкодеру по вертикалі (градуси)
+ *
+ */
 void ScriptCommands::SetAngleEncoder(float angle_encoder_H, float angle_encoder_V)
 {
-    // Отримуємо сінглтон
-    SendDataFrame &sendDataFrame = SendDataFrame::getInstance();
+    SetAngleEncoder_H(angle_encoder_H);
+    SetAngleEncoder_V(angle_encoder_V);
 
-    std::vector<uint8_t> byteArray(4);
+    // // Отримуємо сінглтон
+    // SendDataFrame &sendDataFrame = SendDataFrame::getInstance();
 
-    // Value H
-    std::memcpy(byteArray.data(), &angle_encoder_H, sizeof(float));
-    std::vector<uint8_t> payload_H = {0x00, 0x11, 0x02, 0x00};
-    payload_H.insert(payload_H.end(), byteArray.begin(), byteArray.end());
-    sendDataFrame.AddCanFrame(0x218, 0x08, payload_H);
+    // std::vector<uint8_t> byteArray(4);
 
-    // Value V
-    std::memcpy(byteArray.data(), &angle_encoder_V, sizeof(float));
-    std::vector<uint8_t> payload_V = {0x00, 0x21, 0x02, 0x00};
-    payload_V.insert(payload_V.end(), byteArray.begin(), byteArray.end());
-    sendDataFrame.AddCanFrame(0x218, 0x08, payload_V);
+    // // Value H
+    // std::memcpy(byteArray.data(), &angle_encoder_H, sizeof(float));
+    // std::vector<uint8_t> payload_H = {0x00, 0x11, 0x02, 0x00};
+    // payload_H.insert(payload_H.end(), byteArray.begin(), byteArray.end());
+    // sendDataFrame.AddCanFrame(0x218, 0x08, payload_H);
 
-    // Відправка обох кадрів
-    //sendDataFrame.SendAllFrames(2);
+    // // Value V
+    // std::memcpy(byteArray.data(), &angle_encoder_V, sizeof(float));
+    // std::vector<uint8_t> payload_V = {0x00, 0x21, 0x02, 0x00};
+    // payload_V.insert(payload_V.end(), byteArray.begin(), byteArray.end());
+    // sendDataFrame.AddCanFrame(0x218, 0x08, payload_V);
+
 }
 
+/**
+ * @brief Встановлює значення кутів енкодерів в вольтах
+ *
+ * @param voltage_encoder_H Значення енкодеру по горизонталі (вольти)
+ * @param voltage_encoder_V Значення енкодеру по вертикалі (вольти)
+ *
+ */
 void ScriptCommands::SetVoltageEncoder(float voltage_encoder_H, float voltage_encoder_V)
 {
     std::vector<uint8_t> payload;
@@ -77,12 +104,24 @@ void ScriptCommands::SetVoltageEncoder(float voltage_encoder_H, float voltage_en
     //SendDataFrame::getInstance().SendAllFrames();
 }
 
+/**
+ * @brief Команда-запрос для того, щоб платформа надіслала режим роботи
+ *
+ * Надсилається постійно для контролю зміни режиму
+ *
+ */
 void ScriptCommands::GetMode()
 {
     std::vector<uint8_t> payload = {0x00, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
     SendDataFrame::getInstance().Send(0x118, 0x08, payload);
 }
 
+/**
+ * @brief Встановлює режим платформи
+ *
+ * @param mode Значення режиму
+ *
+ */
 void ScriptCommands::SetMode(ModePlatform mode)
 {
     std::vector<uint8_t> payload
@@ -90,8 +129,32 @@ void ScriptCommands::SetMode(ModePlatform mode)
     SendDataFrame::getInstance().Send(0x118, 0x08, payload);
 }
 
+/**
+ * @brief Встановлює потужність лазера
+ *
+ * @param value Значення потужності від 0 до 5. По замовчуванню станція працює на потужності 5
+ *
+ */
 void ScriptCommands::SetLaserEnergy(uint8_t value)
 {
     std::vector<uint8_t> payload = {0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, value};
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+}
+
+/**
+ * @brief Встановлює програмний нуль
+ *
+ * Функція обнуляє поточне положення станції. Тепер ці координати стануть нулем.
+ *
+ */
+void ScriptCommands::SetProgrammZero()
+{
+    std::vector<uint8_t> payload
+        = {0x00, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame::getInstance().Send(0x218, 0x08, payload);
+
+    QThread::msleep(200); // Затримка 200 мс
+
+    payload = {0x00, 0x25, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame::getInstance().Send(0x218, 0x08, payload);
 }

@@ -8,25 +8,51 @@ ClickableLabel::ClickableLabel(QWidget *parent)
     : QLabel(parent)
 {}
 
+void ClickableLabel::setVideoFrameSize(int width, int height)
+{
+    videoFrameWidth = width;
+    videoFrameHeight = height;
+}
+
+void ClickableLabel::setFOV(bool isSwitched)
+{
+    this->isSwitched = isSwitched;
+    if(isSwitched)
+    {
+        FOVWidth = 0.56f; //34`
+        FOVHeight = 0.416f; //25`
+    }
+    else
+    {
+        FOVWidth = 8;
+        FOVHeight = 6;
+    }
+}
+
 void ClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         emit clickedAt(event->pos());
-        int labelWidth = this->width();
-        int labelHeight = this->height();
-        PixelToAngleConverter converter(labelWidth, labelHeight, 8.0, 6.0);
 
-        QPointF deltaAngle = converter.pixelToAngle(event->pos());
-        qDebug() << " Вивід пікселів через Angle:" << deltaAngle;
+        if (videoFrameWidth > 0 && videoFrameHeight > 0) {
+            //int labelWidth = this->width();
+            //int labelHeight = this->height();
+            //PixelToAngleConverter converter(labelWidth, labelHeight, 8.0, 6.0);
 
-        float currentAngleX = LpsParameters::GetInstance().GetAngleX();
-        float newAngleX = currentAngleX + deltaAngle.x();
-        //ScriptCommands::GetInstance().SetAngleEncoder_H(currentAngleX+deltaAngle.x());
+            PixelToAngleConverter converter(videoFrameWidth, videoFrameHeight, FOVWidth, FOVHeight);
 
-        float currentAngleY = LpsParameters::GetInstance().GetAngleY();
-        float newAngleY = currentAngleY - deltaAngle.y();
-        //ScriptCommands::GetInstance().SetAngleEncoder_V(currentAngleY-deltaAngle.y());
+            QPointF deltaAngle = converter.pixelToAngle(event->pos());
+            qDebug() << " Вивід пікселів через Angle:" << deltaAngle;
 
-        ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+            float currentAngleX = LpsParameters::GetInstance().GetAngleX();
+            float newAngleX = currentAngleX + deltaAngle.x();
+            //ScriptCommands::GetInstance().SetAngleEncoder_H(currentAngleX+deltaAngle.x());
+
+            float currentAngleY = LpsParameters::GetInstance().GetAngleY();
+            float newAngleY = currentAngleY - deltaAngle.y();
+            //ScriptCommands::GetInstance().SetAngleEncoder_V(currentAngleY-deltaAngle.y());
+
+            ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+        }
     }
 }

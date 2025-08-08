@@ -27,6 +27,8 @@ private slots:
 
     void on_checkButton_clicked();
 
+    void startMonitoringAsync(int durationMs);
+
 private:
     Ui::BiasCalibration *ui;
 
@@ -34,9 +36,11 @@ private:
         QVector<float> valuesH;
         QVector<float> valuesV;
     };
+    MonitorResult result;
+
     QTimer* monitorTimer;
     QElapsedTimer elapsed;
-    MonitorResult result;
+
 
 
     void startCalibration(int timeSec, int offset1, int offset2);
@@ -44,10 +48,15 @@ private:
     void sendCommandCalibration(int dx, int dy, unsigned char cmd);
     void monitorStep();
     MonitorResult startMonitoring(int durationMs);
+
     //int computeDelta(QVector<float> A1, QVector<float> A2, int offset1, int offset2);
     Result computeDelta(int & bias, QVector<float> A1, QVector<float> A2, int offset1, int offset2);
     float computeCoefficientB(QVector<float> A);
     void compareMonitorValues(int durationInMsec);
+
+signals:
+    //void monitoringFinished(const MonitorResult &result);
+
 };
 
 #endif // BIASCALIBRATION_H

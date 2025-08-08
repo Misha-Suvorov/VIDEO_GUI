@@ -74,11 +74,13 @@ void VideoThread::run()
         if (frame.empty())
             continue;
 
+        emit frameSizeAvailable(frame.cols, frame.rows); // передаємо розміри кадра для кліка мішкою
+
         // Draw crosshair in the center
         cv::Point center(frame.cols / 2, frame.rows / 2);
         cv::Scalar crossColor(255, 255, 0); // Червоний колір
         int thickness = 1;
-        int length = 15;
+        int length = 250;
 
         // Horizontal line
         cv::line(frame,
@@ -147,6 +149,11 @@ MainWindow::MainWindow(QWidget *parent)
             &MainWindow::onFrequencyModeChanged);
     onFrequencyModeChanged(ui->frequency_mode->currentIndex());
 
+    on_start_b_clicked(); // Start video on launch
+
+    connect(videoThread1, &VideoThread::frameSizeAvailable, this, &MainWindow::onFrameSizeAvailable);
+    connect(videoThread2, &VideoThread::frameSizeAvailable, this, &MainWindow::onFrameSizeAvailable);
+
     connect(ui->videoLabel, &ClickableLabel::clickedAt, this, &MainWindow::onLabelClicked);
 
     // // Встановлюємо позначки під слайдером
@@ -185,7 +192,7 @@ MainWindow::MainWindow(QWidget *parent)
     //     }
     // });
 
-    on_start_b_clicked(); // Start video on launch
+
 
     // Ініціалізація CanBus
     canBus = new CanBus(this);
@@ -723,7 +730,7 @@ void MainWindow::on_l_vid_turn_clicked()
 
 void MainWindow::on_switch_vid_clicked()
 {
-    static bool isSwitched = false;
+    //static bool isSwitched = false;
     isSwitched = !isSwitched;
 
     disconnect(videoThread1, &VideoThread::frameReady, this, nullptr);
@@ -736,6 +743,9 @@ void MainWindow::on_switch_vid_clicked()
         connect(videoThread1, &VideoThread::frameReady, this, &MainWindow::displayFrame1);
         connect(videoThread2, &VideoThread::frameReady, this, &MainWindow::displayFrame2);
     }
+
+    // Передаємо в ClickableLabel:
+    ui->videoLabel->setFOV(isSwitched);
 }
 
 // void MainWindow::on_pointer_b_clicked() {
@@ -943,4 +953,32 @@ void MainWindow::on_actionBias_calibration_triggered()
 void MainWindow::on_actionSet_program_0_triggered()
 {
     ScriptCommands::GetInstance().SetProgrammZero();
+}
+
+void MainWindow::on_actionZero_set_H_triggered()
+{
+    ScriptCommands::GetInstance().ZeroSet(0x10, 0x2);
+}
+
+void MainWindow::on_actionZero_set_V_triggered()
+{
+    ScriptCommands::GetInstance().ZeroSet(0x20, 0x2);
+}
+
+void MainWindow::on_actionZero_reset_H_triggered()
+{
+    ScriptCommands::GetInstance().ZeroSet(0x10, 0x3);
+}
+
+void MainWindow::on_actionZero_reset_V_triggered()
+{
+    ScriptCommands::GetInstance().ZeroSet(0x20, 0x3);
+}
+
+void MainWindow::onFrameSizeAvailable(int width, int height) {
+    videoFrameWidth = width;
+    videoFrameHeight = height;
+
+    // Передаємо в ClickableLabel:
+    ui->videoLabel->setVideoFrameSize(width, height);
 }

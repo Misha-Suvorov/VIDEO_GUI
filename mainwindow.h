@@ -45,6 +45,8 @@ signals:
     void frameReady(const QImage &image);
     void horizontMarkerValueChanged(int value);
     void verticalMarkerValueChanged(int value);
+    void frameSizeAvailable(int width, int height);
+
 
 private:
     bool running;
@@ -133,6 +135,10 @@ private slots:
 
     void on_actionBias_calibration_triggered();
     void on_actionSet_program_0_triggered();
+    void on_actionZero_set_H_triggered();
+    void on_actionZero_set_V_triggered();
+    void on_actionZero_reset_H_triggered();
+    void on_actionZero_reset_V_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -175,6 +181,13 @@ private:
     QString circleHtml(bool active, const QString& label);
     int activeRx = 0;
     int activeTx = 0;
+
+    int videoFrameWidth = 0;
+    int videoFrameHeight = 0;
+
+
+    void onFrameSizeAvailable(int width, int height);
+
 };
 
 #endif // MAINWINDOW_H

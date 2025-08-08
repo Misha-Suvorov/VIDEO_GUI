@@ -158,3 +158,48 @@ void ScriptCommands::SetProgrammZero()
     payload = {0x00, 0x25, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     SendDataFrame::getInstance().Send(0x218, 0x08, payload);
 }
+
+/**
+ * @brief Виконує zero set
+ *
+ * @param canal Канал: 0х10 - горизонтальний, 0х20 - вертикальний
+ * @param command Команда: 0х2 - set, 0x3 - reset
+ *
+ */
+void ScriptCommands::ZeroSet(uint8_t canal, uint8_t command)
+{
+    uint8_t id;
+
+    // Power off
+    id = ((uint8_t)(canal | 0x4));
+
+    std::vector<uint8_t> payload
+        = {0x00, id, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame::getInstance().Send(0x118, 0x08, payload);
+
+    QThread::msleep(1000); // Затримка 1 c
+
+    // Set 1
+    id = ((uint8_t)(canal | command));
+    payload = {0x00, id, 0x04, 0x00, 0x00, 0x00, 0x00, 0x01};
+    SendDataFrame::getInstance().Send(0x118, 0x08, payload);
+
+    QThread::msleep(500); // Затримка
+
+    // Power on
+    id = ((uint8_t)(canal | 0x4));
+
+    payload = {0x00, id, 0x04, 0x00, 0x00, 0x00, 0x00, 0x01};
+    SendDataFrame::getInstance().Send(0x118, 0x08, payload);
+
+    // Delay 5 sec
+    QThread::msleep(5000); // Затримка 5 сек
+
+    // Set 0
+    id = ((uint8_t)(canal | command));
+    payload = {0x00, id, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame::getInstance().Send(0x118, 0x08, payload);
+
+}
+
+

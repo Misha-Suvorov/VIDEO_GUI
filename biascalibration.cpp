@@ -288,6 +288,38 @@ BiasCalibration::MonitorResult BiasCalibration::startMonitoring(int durationMs)
     return result;
 }
 
+ void BiasCalibration::startMonitoringAsync(int durationMs)
+ {
+//     const int interval = 10;
+//     int stepCount = durationMs / interval;
+//     int currentStep = 0;
+//     result.valuesH.clear();
+//     result.valuesV.clear();
+
+//     ui->progressBar->setMinimum(0);
+//     ui->progressBar->setMaximum(stepCount);
+//     ui->progressBar->setValue(0);
+
+//     monitorTimer = new QTimer(this); // створіть у конструкторі або тут
+//     monitorTimer->setInterval(interval);
+
+//     connect(monitorTimer, &QTimer::timeout, this, [=]() {
+//         result.valuesH.append(LpsParameters::GetInstance().GetAngleX());
+//         result.valuesV.append(LpsParameters::GetInstance().GetAngleY());
+
+//         ui->progressBar->setValue(currentStep + 1);
+//         currentStep++;
+
+//         if (currentStep >= stepCount) {
+//             monitorTimer->stop();
+//             monitorTimer->deleteLater();
+//             emit monitoringFinished(result); // передаємо результат
+//         }
+//     });
+
+//     monitorTimer->start();
+ }
+
 /**
  * @brief Моніторінг кутів
  *

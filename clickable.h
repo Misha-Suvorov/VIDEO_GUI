@@ -12,6 +12,7 @@ public:
     explicit ClickableLabel(QWidget *parent = nullptr);
     void setVideoFrameSize(int width, int height);
     void setFOV(bool isSwitched);
+    void setDebugLabel(QLabel *label);
 
 signals:
     void clickedAt(QPoint pos);
@@ -25,4 +26,7 @@ private:
     bool isSwitched = false;
     float FOVWidth = 8;
     float FOVHeight = 6;
+    QLabel *labelDebug = nullptr;
+
+    QPointF mapClickToAngle(const QPoint &clickPos);
 };

@@ -137,6 +137,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+
+
     connect(ui->measure_mode,
             &QComboBox::currentIndexChanged,
             this,
@@ -154,7 +156,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(videoThread1, &VideoThread::frameSizeAvailable, this, &MainWindow::onFrameSizeAvailable);
     connect(videoThread2, &VideoThread::frameSizeAvailable, this, &MainWindow::onFrameSizeAvailable);
 
+    videoLabel = qobject_cast<ClickableLabel*>(ui->videoLabel);
+    videoLabel->setDebugLabel(ui->labelOutput);
+
     connect(ui->videoLabel, &ClickableLabel::clickedAt, this, &MainWindow::onLabelClicked);
+
+
 
     // // Встановлюємо позначки під слайдером
     // ui->horizontalSlider->setTickPosition(QSlider::TicksBelow);
@@ -394,7 +401,13 @@ void MainWindow::displayFrame1(const QImage &image)
         QPixmap rotatedPixmap = QPixmap::fromImage(image).transformed(QTransform().rotate(
                                                                           rotationAngle),
                                                                       Qt::SmoothTransformation);
-        ui->videoLabel->setPixmap(rotatedPixmap.scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+        //ui->videoLabel->setPixmap(rotatedPixmap.scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+
+         ui->videoLabel->setPixmap(
+             QPixmap::fromImage(image)
+                 .transformed(QTransform().rotate(rotationAngle), Qt::SmoothTransformation)
+                 .scaled(ui->videoLabel->size(), Qt::KeepAspectRatio , Qt::SmoothTransformation)
+             );
     }
 }
 
@@ -527,6 +540,14 @@ void MainWindow::updateLpsParametersUI()
         SendDataFrame::getInstance().SendAllFrames();
         activeTx = 30;
     }
+
+
+    // QString msg = QString("frame: w = %3, h = %4; label: w = %5, h = %6")
+    //                   .arg(videoFrameWidth)
+    //                   .arg(videoFrameHeight)
+    //                   .arg(videoLabel->width())
+    //                   .arg(videoLabel->height());
+    // ui->labelOutput->setText(msg);
 }
 
 /**

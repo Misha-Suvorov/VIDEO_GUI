@@ -55,6 +55,15 @@ private:
     float horizontMarkerValue = 0;
     float verticalMarkerValue = 0;
     int rotationAngle = 0;
+
+    // Встановлюємо roi
+    bool roiSet = false;
+    cv::Rect roi;
+    cv::Rect fullFrame;
+
+    std::map<std::string, int> readROIConfig(const std::string& filename);
+    void initROIFromConfig();
+
 };
 
 class MainWindow : public QMainWindow

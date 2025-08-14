@@ -11,6 +11,7 @@
 #include "ui_mainwindow.h"
 #include "biascalibration.h"
 #include <opencv2/opencv.hpp>
+#include <fstream>
 
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent)
@@ -74,10 +75,71 @@ void VideoThread::run()
         if (frame.empty())
             continue;
 
+
+        // Визначення чорних смуг і автоматичне встановлення ROI по першому кадру
+        if (!roiSet)
+        {
+            //initROIFromConfig();
+
+                // Конвертація в ч/б
+            cv::Mat gray;
+            cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
+            cv::GaussianBlur(gray, gray, cv::Size(5, 5), 0);
+
+            // Пошук контурів
+            cv::Mat thresh;
+            cv::threshold(gray, thresh, 0, 255, cv::THRESH_BINARY + cv::THRESH_OTSU);
+            std::vector<std::vector<cv::Point>> contours;
+            cv::findContours(thresh, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+            if (!contours.empty()) {
+                // Найбільший контур
+                size_t largestContourIdx = 0;
+                double maxArea = 0;
+                for (size_t i = 0; i < contours.size(); ++i) {
+                    double area = cv::contourArea(contours[i]);
+                    if (area > maxArea) {
+                        maxArea = area;
+                        largestContourIdx = i;
+                    }
+                }
+
+                roi = cv::boundingRect(contours[largestContourIdx]);
+
+                roiSet = true;
+
+                // Приклад: установка ROI в cv::VideoCapture (якщо підтримується)
+                cap.set(cv::CAP_PROP_POS_MSEC, 0); // повертаємось на початок потоку
+                cap.set(cv::CAP_PROP_XI_OFFSET_X, roi.x);
+                cap.set(cv::CAP_PROP_XI_OFFSET_Y, roi.y);
+                cap.set(cv::CAP_PROP_XI_WIDTH, roi.width);
+                cap.set(cv::CAP_PROP_XI_HEIGHT, roi.height);
+
+                qDebug() << "ROI found:" << roi.x << roi.y << roi.width << roi.height;
+
+                fullFrame = cv::Rect(0, 0, frame.cols, frame.rows);
+
+            }
+
+        }
+
+
+
+        // Якщо ROI вже знайдено — обрізаємо кадр
+        if (roiSet && roi.width > 0 && roi.height > 0 &&
+            roi.x >= 0 && roi.y >= 0 &&
+            roi.x + roi.width <= frame.cols &&
+            roi.y + roi.height <= frame.rows)
+        {
+            frame = frame(roi);
+        }
+
+
         emit frameSizeAvailable(frame.cols, frame.rows); // передаємо розміри кадра для кліка мішкою
 
         // Draw crosshair in the center
         cv::Point center(frame.cols / 2, frame.rows / 2);
+        //cv::Point center(fullFrame.width / 2, fullFrame.height / 2);
         cv::Scalar crossColor(255, 255, 0); // Червоний колір
         int thickness = 1;
         int length = 250;
@@ -96,6 +158,27 @@ void VideoThread::run()
                  crossColor,
                  thickness);
 
+
+
+        // Центр в обрізаному кадрі
+        // center = cv::Point(frame.cols / 2, frame.rows / 2);
+        // crossColor = cv::Scalar(255, 0, 0); // Червоний колір
+        // thickness = 1;
+        // length = 25;
+
+        // // Horizontal line
+        // cv::line(frame,
+        //          cv::Point(center.x - length, center.y),
+        //          cv::Point(center.x + length, center.y),
+        //          crossColor,
+        //          thickness);
+
+        // // Vertical line
+        // cv::line(frame,
+        //          cv::Point(center.x, center.y - length),
+        //          cv::Point(center.x, center.y + length),
+        //          crossColor,
+        //          thickness);
 
 
         // Draw the scale and markers
@@ -123,6 +206,35 @@ void VideoThread::stop()
 {
     running = false;
     wait();
+}
+
+
+std::map<std::string, int> VideoThread::readROIConfig(const std::string& filename) {
+
+    std::map<std::string, int> roiParams = { {"x",0}, {"y",0}, {"width",0}, {"height",0} };
+
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Не вдалося відкрити файл: " << filename << std::endl;
+        return roiParams;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.empty() || line[0] == '[') continue;
+        size_t eqPos = line.find('=');
+        if (eqPos != std::string::npos) {
+            std::string key = line.substr(0, eqPos);
+            int value = std::stoi(line.substr(eqPos+1));
+            roiParams[key] = value;
+        }
+    }
+    return roiParams;
+}
+
+void VideoThread::initROIFromConfig() {
+    auto roiParams = readROIConfig("C:/qt_projects/git/VIDEO_GUI/config.ini");
+    roi = cv::Rect(roiParams["x"], roiParams["y"], roiParams["width"], roiParams["height"]);
 }
 
 MainWindow::MainWindow(QWidget *parent)

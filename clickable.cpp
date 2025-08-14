@@ -134,7 +134,6 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
 {
     int videoWidthOnLabel;
     int videoHeightOnLabel;
-    int offsetX = 15, offsetY=0;
 
     if (videoFrameWidth <= 0 || videoFrameHeight <= 0)
         return QPointF();
@@ -178,20 +177,20 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
     }
 
     // Перетворення у кути
-    //PixelToAngleConverter converter(videoFrameWidth, videoFrameHeight, FOVWidth, FOVHeight);
+    PixelToAngleConverter converter(videoFrameWidth, videoFrameHeight, FOVWidth, FOVHeight);
     //QPointF deltaAngle = converter.pixelToAngle(QPoint(xInVideo, yInVideo));
-    PixelToAngleConverter converter(videoWidthOnLabel-offsetX, videoHeightOnLabel, FOVWidth, FOVHeight);
-    //QPointF deltaAngle = converter.pixelToAngle(clickPos);
+    //PixelToAngleConverter converter(videoWidthOnLabel, videoHeightOnLabel, FOVWidth, FOVHeight);
+    QPointF deltaAngle = converter.pixelToAngle(clickPos);
 
     //if(clickPos.x() <= videoWidthOnLabel/2) offsetX = -14; else offsetX = 14;
 
-    QPointF deltaAngle = converter.pixelToAngle(QPoint(clickPos.x()-offsetX, clickPos.y()));
+    //QPointF deltaAngle = converter.pixelToAngle(QPoint(clickPos.x(), clickPos.y()));
 
     QString msg = QString("fy = %1, fz = %2; frame: w = %3, h = %4; X = %5 px, Y = %6 px")
                       .arg(deltaAngle.x())
                       .arg(deltaAngle.y())
-                      .arg(videoWidthOnLabel)
-                      .arg(videoHeightOnLabel)
+                      .arg(videoFrameWidth) //videoWidthOnLabel)
+                      .arg(videoFrameHeight) //videoHeightOnLabel)
                       .arg(clickPos.x())
                       .arg(clickPos.y())        ;
                 labelDebug->setText(msg);

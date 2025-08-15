@@ -19,11 +19,23 @@ public:
 
 signals:
     void clickedAt(QPoint pos);
+    void held(QPointF deltaAngle);
+    void clicked(QPointF deltaAngle);
+
+private slots:
+    void mouseHeld();
+    void processClick();
+
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
+
+    QPointF mapClickToAngle(const QPoint &clickPos);
+
+    VideoConfig videoConfig {};
     int videoFrameWidth = 0;
     int videoFrameHeight = 0;
 
@@ -34,7 +46,7 @@ private:
     bool isRotated = false;
 
     QLabel *labelDebug = nullptr;
-    VideoConfig videoConfig {};
-
-    QPointF mapClickToAngle(const QPoint &clickPos);
+    QTimer *holdTimer;
+    bool mousePressed = false;
+    QPointF lastDeltaAngle;
 };

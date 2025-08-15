@@ -50,6 +50,7 @@ SOURCES += \
     canthread.cpp \
     clickable.cpp \
     drawsymbols.cpp \
+    inertMoving.cpp \
     laserparameters.cpp \
     lpsparameters.cpp \
     main.cpp \
@@ -74,6 +75,7 @@ HEADERS += \
     canthread.h \
     clickable.h \
     drawsymbols.h \
+    inertMoving.h \
     laserparameters.h \
     lpsparameters.h \
     mainwindow.h \

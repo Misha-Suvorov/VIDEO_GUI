@@ -22,7 +22,8 @@ void ScriptCommands::SetAngleEncoder_H(float value)
     std::vector<uint8_t> payload = {0x00, 0x11, 0x02, 0x00};
     payload.insert(payload.end(), byteArray.begin(), byteArray.end());
 
-    SendDataFrame::getInstance().Send(0x218, 0x08, payload);
+    //SendDataFrame::getInstance().Send(0x218, 0x08, payload);
+    SendDataFrame::getInstance().AddCanFrame(0x218, 0x08, payload);
 }
 
 /**
@@ -39,7 +40,8 @@ void ScriptCommands::SetAngleEncoder_V(float value)
     std::vector<uint8_t> payload = {0x00, 0x21, 0x02, 0x00};
     payload.insert(payload.end(), byteArray.begin(), byteArray.end());
 
-    SendDataFrame::getInstance().Send(0x218, 0x08, payload);
+    //SendDataFrame::getInstance().Send(0x218, 0x08, payload);
+    SendDataFrame::getInstance().AddCanFrame(0x218, 0x08, payload);
 }
 
 /**

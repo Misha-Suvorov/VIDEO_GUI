@@ -4,9 +4,17 @@
 #include "pixeltoangleconverter.h"
 #include "scriptcommands.h"
 
+#include <QThread>
+#include <QTimer>
+
 ClickableLabel::ClickableLabel(QWidget *parent)
     : QLabel(parent)
-{}
+{
+    holdTimer = new QTimer(this);
+    holdTimer->setInterval(500); // 500 мс до події hold
+    holdTimer->setSingleShot(true);
+    connect(holdTimer, &QTimer::timeout, this, &ClickableLabel::mouseHeld);
+}
 
 void ClickableLabel::setVideoConfig(VideoConfig videoConfig)
 {
@@ -44,22 +52,79 @@ void ClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
 
-        QPointF deltaAngle = mapClickToAngle(event->pos());
-        if (deltaAngle.isNull())
-        {
-            qDebug() << "Click outside video area";
-            return;
+        mousePressed = true;
+
+        lastDeltaAngle = mapClickToAngle(event->pos());
+
+        if (!lastDeltaAngle.isNull()) {
+            holdTimer->start(); // запускаємо відлік до події hold
         }
 
-        float currentAngleX = LpsParameters::GetInstance().GetAngleX();
-        float newAngleX = (isRotated)? currentAngleX + deltaAngle.x() : currentAngleX - deltaAngle.x();
 
-        float currentAngleY = LpsParameters::GetInstance().GetAngleY();
-        float newAngleY = (isRotated)? currentAngleY - deltaAngle.y() : currentAngleY + deltaAngle.y();
+        // if (lastDeltaAngle.isNull())
+        // {
+        //     qDebug() << "Click outside video area";
+        //     return;
+        // }
 
-        ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+        // float currentAngleX = LpsParameters::GetInstance().GetAngleX();
+        // float newAngleX = (isRotated)? currentAngleX + deltaAngle.x() : currentAngleX - deltaAngle.x();
+
+        // float currentAngleY = LpsParameters::GetInstance().GetAngleY();
+        // float newAngleY = (isRotated)? currentAngleY - deltaAngle.y() : currentAngleY + deltaAngle.y();
+
+        // ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
     }
 }
+
+void ClickableLabel::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (mousePressed) {
+        if (holdTimer->isActive()) {
+            holdTimer->stop();
+            emit clicked(lastDeltaAngle); // коротке натискання
+
+            processClick();
+        }
+        mousePressed = false;
+    }
+    QLabel::mouseReleaseEvent(event);
+}
+
+void ClickableLabel::mouseHeld()
+{
+    if (mousePressed) {
+        emit held(lastDeltaAngle); // подія утримання
+    }
+}
+
+void ClickableLabel::processClick()
+{
+    if (lastDeltaAngle.isNull())
+    {
+        qDebug() << "Click outside video area";
+        return;
+    }
+
+    float currentAngleX = LpsParameters::GetInstance().GetAngleX();
+    float newAngleX = (isRotated)? currentAngleX + lastDeltaAngle.x() :
+                          currentAngleX - lastDeltaAngle.x();
+
+    float currentAngleY = LpsParameters::GetInstance().GetAngleY();
+    float newAngleY = (isRotated)? currentAngleY - lastDeltaAngle.y() :
+                          currentAngleY + lastDeltaAngle.y();
+
+    ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+    QThread::msleep(200);
+    ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+
+
+
+    QString msg = QString("newAngleY = %1").arg(newAngleY);
+    labelDebug->setText(msg);
+}
+
+
 
 QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
 {

@@ -40,12 +40,15 @@ public:
     void setVerticalMarkerValue(float value);
     void setRotationAngle(int angle);
     bool isRotated = false;
+    bool isSwitched = false;
+
+    VideoConfig videoConfig {};
 
 signals:
     void frameReady(const QImage &image);
     void horizontMarkerValueChanged(int value);
     void verticalMarkerValueChanged(int value);
-    void frameSizeAvailable(int width, int height);
+    void frameSizeAvailable(int width, int height, VideoConfig);
 
 
 private:
@@ -58,12 +61,16 @@ private:
 
     // Встановлюємо roi
     bool roiSet = false;
-    cv::Rect roi;
-    cv::Rect fullFrame;
+    //cv::Rect roi;
+
 
     std::map<std::string, int> readROIConfig(const std::string& filename);
     void initROIFromConfig();
-
+    cv::Rect initROIAutoDetect(cv::Mat frame);
+    void initFOVVideo1();
+    void initFOVVideo2();
+    VideoConfig loadVideoConfig();
+    cv::Rect getVideo2RectInVideo1(const VideoConfig &cfg);
 };
 
 class MainWindow : public QMainWindow
@@ -77,6 +84,8 @@ public:
     ~MainWindow();
     void setRxActive(bool active);
     void setTxActive(bool active);
+
+    void onFrameSizeAvailable(int width, int height, VideoConfig videoConfig);
 
 private slots:
     void displayFrame1(const QImage &image);
@@ -194,8 +203,6 @@ private:
     int videoFrameWidth = 0;
     int videoFrameHeight = 0;
 
-
-    void onFrameSizeAvailable(int width, int height);
 
 };
 

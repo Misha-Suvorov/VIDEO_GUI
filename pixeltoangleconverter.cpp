@@ -1,52 +1,25 @@
 #include "PixelToAngleConverter.h"
 
-PixelToAngleConverter::PixelToAngleConverter(int width, int height, double fovX_deg, double fovY_deg)
-    : imageWidth(width)
-    , imageHeight(height)
-    , fovX(fovX_deg)
-    , fovY(fovY_deg)
+PixelToAngleConverter::PixelToAngleConverter(cv::Size2f roiSize, cv::Size2f fov, cv::Point opticalCenter)
+    : roiSize(roiSize)
+    , fov(fov)
+    , opticalCenter(opticalCenter)
 {
-    // За замовчуванням ROI = весь кадр (якщо ще не знаємо смуг)
-    roiX = 0; roiY = 0; roiW = width; roiH = height;
-    updateScaling();
-}
-
-void PixelToAngleConverter::setROI(int x, int y, int w, int h) {
-    roiX = x; roiY = y; roiW = w; roiH = h;
+    roi.x = 0; roi.y = 0; roi.width = roiSize.width; roi.height = roiSize.height;
     updateScaling();
 }
 
 void PixelToAngleConverter::updateScaling()
 {
-    // if (imageWidth > 0) {
-    //     degPerPixelX = fovX / static_cast<double>(imageWidth);
-    // }
-
-    // if (imageHeight > 0) {
-    //     degPerPixelY = fovY / static_cast<double>(imageHeight);
-    // }
-
-    if (roiW > 0)  degPerPixelX = fovX / static_cast<double>(roiW);
-    if (roiH > 0)  degPerPixelY = fovY / static_cast<double>(roiH);
+    if (roi.width > 0)  degPerPixelX = fov.width / static_cast<double>(roi.width);
+    if (roi.height > 0)  degPerPixelY = fov.height / static_cast<double>(roi.height);
 }
 
 QPointF PixelToAngleConverter::pixelToAngle(QPoint p) const
 {
-    // double centerX = imageWidth / 2.0;
-    // double centerY = imageHeight / 2.0;
-
-    // double deltaX = pixelPoint.x() - centerX;
-    // double deltaY = pixelPoint.y() - centerY;
-
-    // double angleX = deltaX * degPerPixelX;
-    // double angleY = -deltaY * degPerPixelY; // minus because Y grows down
-
-    // return {angleX, angleY};
-
-
     // Центр активної зони
-    const double cx = roiX + roiW / 2.0;
-    const double cy = roiY + roiH / 2.0;
+    const double cx = opticalCenter.x; //roiX + roiW / 2.0;
+    const double cy = opticalCenter.y; //roiY + roiH / 2.0;
 
     const double dx = p.x() - cx;
     const double dy = p.y() - cy;
@@ -57,16 +30,3 @@ QPointF PixelToAngleConverter::pixelToAngle(QPoint p) const
     return { angleX, angleY };
 }
 
-void PixelToAngleConverter::setImageSize(int width, int height)
-{
-    imageWidth = width;
-    imageHeight = height;
-    updateScaling();
-}
-
-void PixelToAngleConverter::setFOV(double fovX_deg, double fovY_deg)
-{
-    fovX = fovX_deg;
-    fovY = fovY_deg;
-    updateScaling();
-}

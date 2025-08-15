@@ -1,36 +1,27 @@
 #pragma once
 #include <QPointF>
 #include <QSize>
-#include <utility>
+#include <opencv2/opencv.hpp>
 
 class PixelToAngleConverter
 {
 public:
-    // Constructor: image width and height, FOV in degrees
-    PixelToAngleConverter(int width, int height, double fovX_deg, double fovY_deg);
-
-    // Convert pixel (x, y) to angle (xAngle, yAngle)
-    //std::pair<double, double> pixelToAngle(int x, int y) const;
+    // Constructor: image width and height, FOV in degrees, opticalCenter
+    PixelToAngleConverter(cv::Size2f roiSize, cv::Size2f fov, cv::Point opticalCenter);
     QPointF pixelToAngle(QPoint p) const;
 
-    // Optional: setters if image size changes
-    void setImageSize(int width, int height);
-    void setFOV(double fovX_deg, double fovY_deg);
-
-    // Встановити активну область (без чорних полів)
-    void setROI(int x, int y, int w, int h); // L, T, roiW, roiH
 
 private:
-    //QSize imageSize;
+    cv::Size2f roiSize;
 
-    int imageWidth, imageHeight;
-
-    double fovX, fovY; // degrees
+    cv::Size2f  fov; // degrees
 
     double degPerPixelX, degPerPixelY;
 
-    // ROI
-    int roiX = 0, roiY = 0, roiW = 0, roiH = 0;
+    cv::Rect roi;
+
+    // OpticalCenter
+    cv::Point opticalCenter;
 
     void updateScaling();
 };

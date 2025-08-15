@@ -104,8 +104,16 @@ void VideoThread::run()
 
         // Draw crosshair in the center
         //cv::Point center(frame.cols / 2, frame.rows / 2);
-        videoConfig.opticalCenter = cv::Point(videoConfig.fullFrame.width / 2, videoConfig.fullFrame.height / 2); // оптичне (юстоване) перехрестя. Визначається з повного кадру (необрізаного)
+        videoConfig.opticalCenter = cv::Point(videoConfig.fullFrame.width / 2 - videoConfig.roi.x,
+                                              videoConfig.fullFrame.height / 2 - videoConfig.roi.y); // оптичне (юстоване) перехрестя. Визначається з повного кадру (необрізаного)
+
         cv::Point center = videoConfig.opticalCenter;
+
+        // Якщо кадр обрізаний, перераховуємо координати центру в межах ROI
+        //cv::Point center(videoConfig.opticalCenter.x - videoConfig.roi.x,
+        //                 videoConfig.opticalCenter.y - videoConfig.roi.y);
+
+
         cv::Scalar crossColor(255, 255, 0); // Червоний колір
         int thickness = 1;
         int length = 250;

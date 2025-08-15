@@ -66,31 +66,49 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
     if (videoFrameWidth <= 0 || videoFrameHeight <= 0)
         return QPointF();
 
-    //int labelWidth = this->width();
-    //int labelHeight = this->height();
+    double frameW = videoConfig.roi.width;   // 702
+    double frameH = videoConfig.roi.height;  // 566
 
-    //double labelAspect = static_cast<double>(labelWidth) / labelHeight;
-    //double frameAspect = static_cast<double>(videoConfig.roi.width) / videoConfig.roi.height; //   videoFrameWidth) / videoFrameHeight;
+    int labelW = this->width();
+    int labelH = this->height();
+
+    double labelAspect = static_cast<double>(labelW) / labelH;
+    double frameAspect = frameW / frameH;
 
     // int xInVideo = -1;
     // int yInVideo = -1;
 
-    // if (labelAspect > frameAspect)
-    // {
-    //     // QLabel ширший — зображення вписане по висоті
-    //     double scale = static_cast<double>(labelHeight) / videoFrameHeight;
-    // }
-    // else
-    // {
-    //     // QLabel вищий — зображення вписане по ширині
-    //     double scale = static_cast<double>(labelWidth) / videoFrameWidth;
-    // }
+    double scale;
+
+    if (labelAspect > frameAspect)
+    {
+        // QLabel ширший — зображення вписане по висоті
+        scale = static_cast<double>(labelH) / frameH;
+        double displayedW = frameW * scale;
+    }
+    else
+    {
+        // QLabel вищий — зображення вписане по ширині
+        scale = static_cast<double>(labelW) / frameW;
+        double displayedH = frameH * scale;
+    }
+
+
+
+
+    // Конвертація у координати відео
+    double videoX = (clickPos.x()) / scale;
+    double videoY = (clickPos.y()) / scale;
+
+    // Корекція на зміщення оптичного центру
+    double alignedX = videoX + videoConfig.roi.x;
+    double alignedY = videoY + videoConfig.roi.y;
 
     // Перетворення у кути
     cv::Size2f roiSize (videoConfig.roi.width, videoConfig.roi.height);
     cv::Size2f fov (FOVWidth, FOVHeight);
 
-    cv::Point opticalCenter;
+    cv::Point opticalCenter (roiSize.width/2, roiSize.height/2);
 
     if(!isRotated) opticalCenter = videoConfig.opticalCenter;
     else { //Перевертаєсо центр якщо зображення перевернуто
@@ -102,16 +120,17 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
 
     PixelToAngleConverter converter(roiSize, fov, opticalCenter);
 
-    QPointF deltaAngle = converter.pixelToAngle(clickPos);
-
+    QPointF deltaAngle = converter.pixelToAngle(QPoint(videoX, videoY));  //clickPos);
+    //QPointF deltaAngle = converter.pixelToAngle(QPoint(alignedX, alignedY));
 
     QString msg = QString("fy = %1, fz = %2; frame: w = %3, h = %4; X = %5 px, Y = %6 px")
                       .arg(deltaAngle.x())
                       .arg(deltaAngle.y())
                       .arg(videoFrameWidth) //videoWidthOnLabel)
                       .arg(videoFrameHeight) //videoHeightOnLabel)
-                      .arg(clickPos.x())
-                      .arg(clickPos.y())        ;
+                      .arg(videoX) //clickPos.x())
+                      .arg(videoY) //clickPos.y())
+        ;
     labelDebug->setText(msg);
 
     return deltaAngle;

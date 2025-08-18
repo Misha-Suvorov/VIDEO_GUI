@@ -379,7 +379,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(canBus, &CanBus::packetReceived, this, [this](const QByteArray &packetData) {
         // Перетворення отриманого пакету в hex і виведення в консоль
         QString hexString = canBus->toHexString(packetData);
-        qDebug() << "Received CAN packet:" << hexString;
+       // qDebug() << "Received CAN packet:" << hexString;
 
         try {
             // обробка пакета канелоні

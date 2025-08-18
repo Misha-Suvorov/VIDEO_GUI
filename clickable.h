@@ -21,6 +21,7 @@ signals:
     void clickedAt(QPoint pos);
     void held(QPointF deltaAngle);
     void clicked(QPointF deltaAngle);
+    void voltageChanged(float voltageH, float voltageV);
 
 private slots:
     void mouseHeld();
@@ -30,6 +31,7 @@ private slots:
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
 
@@ -49,4 +51,10 @@ private:
     QTimer *holdTimer;
     bool mousePressed = false;
     QPointF lastDeltaAngle;
+
+    QTimer *repeatTimer;
+    QPoint lastClickPos; // позиція кліка при утримування мишки
+    float maxVoltage = 15.0f;
+    std::pair<float, float> calculateVoltage(QPoint pos);
+    void startRepeating();
 };

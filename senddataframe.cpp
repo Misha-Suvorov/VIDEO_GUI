@@ -76,6 +76,12 @@ void SendDataFrame::SendAllFrames()
     }
     std::cout << " ]" << std::endl;
 
+
+
+    QString hexString = byteArray.toHex(' ').toUpper();
+
+    qDebug() << "Send by UDP: Count=" << countPacks << "[" << hexString << "]";
+
     ClearCanFrame();
 }
 

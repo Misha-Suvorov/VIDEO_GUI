@@ -1,4 +1,9 @@
 // ClickableLabel.cpp
+// 1) Натиснув → запустився holdTimer.
+// 2) Якщо відпустив до 500 мс → спрацював короткий клік (clicked + processClick).
+// 3) Якщо тримаєш ≥ 500 мс → запускається repeatTimer, який викликає mouseHeld() кожні 50 мс.
+// 4) Відпустив → обидва таймери стоп, енкодер скидається в 0.
+
 #include "clickable.h"
 #include "lpsparameters.h"
 #include "pixeltoangleconverter.h"
@@ -10,10 +15,23 @@
 ClickableLabel::ClickableLabel(QWidget *parent)
     : QLabel(parent)
 {
+    // Таймер для визначення "довгого натискання"
     holdTimer = new QTimer(this);
     holdTimer->setInterval(500); // 500 мс до події hold
-    holdTimer->setSingleShot(true);
-    connect(holdTimer, &QTimer::timeout, this, &ClickableLabel::mouseHeld);
+    holdTimer->setSingleShot(true); // виконується лише один раз
+    connect(holdTimer, &QTimer::timeout, this, &ClickableLabel::startRepeating);
+
+    // Таймер для періодичних подій під час утримання
+    repeatTimer = new QTimer(this);
+    repeatTimer->setInterval(50); // плавне оновлення (20 Гц)
+    connect(repeatTimer, &QTimer::timeout, this,  &ClickableLabel::mouseHeld);
+
+    //connect(repeatTimer, &QTimer::timeout, this, [this]() {
+    //     if (mousePressed) {
+    //         auto [voltageH, voltageV] = calculateVoltage(lastClickPos);
+    //         emit voltageChanged(voltageH, voltageV);
+    //     }
+    //});
 }
 
 void ClickableLabel::setVideoConfig(VideoConfig videoConfig)
@@ -48,18 +66,21 @@ void ClickableLabel::setDebugLabel(QLabel *label)
     labelDebug = label;
 }
 
+// Викликається при натисканні кнопки миші
 void ClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
 
         mousePressed = true;
 
+        lastClickPos = event->pos();   // зберігаємо координати кліку
         lastDeltaAngle = mapClickToAngle(event->pos());
 
         if (!lastDeltaAngle.isNull()) {
             holdTimer->start(); // запускаємо відлік до події hold
         }
 
+        QLabel::mousePressEvent(event);
 
         // if (lastDeltaAngle.isNull())
         // {
@@ -77,25 +98,80 @@ void ClickableLabel::mousePressEvent(QMouseEvent *event)
     }
 }
 
+// Викликається при відпусканні кнопки миші
 void ClickableLabel::mouseReleaseEvent(QMouseEvent *event)
 {
     if (mousePressed) {
+        // Якщо користувач відпустив мишку ДО завершення holdTimer → короткий клік
         if (holdTimer->isActive()) {
+
             holdTimer->stop();
+
+
             emit clicked(lastDeltaAngle); // коротке натискання
 
             processClick();
+
         }
+
+        repeatTimer->stop(); // зупиняємо повторюваний таймер
+        ScriptCommands::GetInstance().SetVoltageEncoder(0.0f, 0.0f); // при відпусканні — обнуляємо керування
+
         mousePressed = false;
     }
     QLabel::mouseReleaseEvent(event);
 }
 
-void ClickableLabel::mouseHeld()
+// Функція викликається один раз після 500 мс,
+// запускає періодичний repeatTimer
+void ClickableLabel::startRepeating()
 {
     if (mousePressed) {
-        emit held(lastDeltaAngle); // подія утримання
+        repeatTimer->start();
     }
+}
+
+// Оновлюємо позицію кліку при натиснутій клавіші миші
+void ClickableLabel::mouseMoveEvent(QMouseEvent *event)
+{
+    if (mousePressed) {
+        lastClickPos = event->pos();
+    }
+    QLabel::mouseMoveEvent(event);
+}
+
+
+
+// Викликається кожні 50 мс, поки тримається кнопка миші
+void ClickableLabel::mouseHeld()
+{
+    auto [voltageH, voltageV] = calculateVoltage(lastClickPos);
+
+    ScriptCommands::GetInstance().SetVoltageEncoder(voltageH, voltageV);
+}
+
+std::pair<float,float> ClickableLabel::calculateVoltage(QPoint pos)
+{
+
+
+    float vH = (pos.x() / (float)videoConfig.roi.width) * maxVoltage;
+    //float vH = (pos.x() / (float)videoConfig.opticalCenter.x) * maxVoltage;
+
+    vH -= maxVoltage/2;
+    float vV = (pos.y() / (float)videoConfig.roi.height) * maxVoltage;
+    //float vV = (pos.y() / (float)videoConfig.opticalCenter.y) * maxVoltage;
+    vV -= maxVoltage/2;
+
+
+    // центр = 0
+    vH = std::clamp((isRotated)? vH:-vH, -maxVoltage/2, maxVoltage/2); // Х перевертаємо
+    vV = std::clamp((isRotated)? vV:-vV, -maxVoltage/2, maxVoltage/2); // Y перевертаємо
+
+
+
+    qDebug() << "Held movement: vH=" << vH << " vV=" << vV;
+
+    return {vH, vV};
 }
 
 void ClickableLabel::processClick()
@@ -158,16 +234,13 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
         double displayedH = frameH * scale;
     }
 
-
-
-
     // Конвертація у координати відео
     double videoX = (clickPos.x()) / scale;
     double videoY = (clickPos.y()) / scale;
 
     // Корекція на зміщення оптичного центру
-    double alignedX = videoX + videoConfig.roi.x;
-    double alignedY = videoY + videoConfig.roi.y;
+    //double alignedX = videoX + videoConfig.roi.x;
+    //double alignedY = videoY + videoConfig.roi.y;
 
     // Перетворення у кути
     cv::Size2f roiSize (videoConfig.roi.width, videoConfig.roi.height);
@@ -200,5 +273,8 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
 
     return deltaAngle;
 }
+
+
+
 
 

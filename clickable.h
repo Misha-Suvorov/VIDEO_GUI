@@ -44,6 +44,11 @@ private:
     float FOVWidth = 8;
     float FOVHeight = 6;
 
+    cv::Size2f roiSize;
+    cv::Size2f fov;
+    cv::Point opticalCenter;
+    float nonlinearFactor;
+
     bool isSwitched = false;
     bool isRotated = false;
 
@@ -55,6 +60,8 @@ private:
     QTimer *repeatTimer;
     QPoint lastClickPos; // позиція кліка при утримування мишки
     float maxVoltage = 15.0f;
-    std::pair<float, float> calculateVoltage(QPoint pos);
+
+    //std::pair<float, float> calculateVoltage(QPoint pos);
     void startRepeating();
+    QPointF scaleClick(const QPoint &clickPos);
 };

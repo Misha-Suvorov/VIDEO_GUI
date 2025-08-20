@@ -16,6 +16,10 @@ struct VideoConfig {
     cv::Rect fullFrame;
     cv::Size2f fovVideo1;    // width, height в градусах ШПЗ
     cv::Size2f fovVideo2;    // width, height в градусах ВПЗ
+
+    float nonlinearFactor1; // коефіцієнт нелінійності для плавного руху біля центру ШПЗ
+    float nonlinearFactor2; // коефіцієнт нелінійності для плавного руху біля центру ВПЗ
+
     cv::Point opticalCenter;
 };
 

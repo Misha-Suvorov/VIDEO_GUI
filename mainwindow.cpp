@@ -238,12 +238,14 @@ VideoConfig VideoThread::loadVideoConfig() {
     settings.beginGroup("Video1");
     cfg.fovVideo1.width  = settings.value("w", 0.0).toFloat();
     cfg.fovVideo1.height = settings.value("h", 0.0).toFloat();
+    cfg.nonlinearFactor1 = settings.value("nonlinearFactor", 0.0).toFloat();
     settings.endGroup();
 
     // Video2
     settings.beginGroup("Video2");
     cfg.fovVideo2.width  = settings.value("w", 0.0).toFloat();
     cfg.fovVideo2.height = settings.value("h", 0.0).toFloat();
+    cfg.nonlinearFactor2 = settings.value("nonlinearFactor", 0.0).toFloat();
     settings.endGroup();
     return cfg;
 }

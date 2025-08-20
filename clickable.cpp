@@ -37,6 +37,20 @@ ClickableLabel::ClickableLabel(QWidget *parent)
 void ClickableLabel::setVideoConfig(VideoConfig videoConfig)
 {
     this->videoConfig = videoConfig;
+
+    roiSize = cv::Size2f(videoConfig.roi.width, videoConfig.roi.height);
+
+    fov = cv::Size2f(FOVWidth, FOVHeight);
+
+    opticalCenter = cv::Point(roiSize.width/2, roiSize.height/2);
+    if(!isRotated) opticalCenter = videoConfig.opticalCenter;
+    else { //Перевертаємо центр якщо зображення перевернуто
+        float cx = roiSize.width  / 2.0;
+        float cy = roiSize.height / 2.0;
+        opticalCenter.x = 2*cx - videoConfig.opticalCenter.x;
+        opticalCenter.y = 2*cy - videoConfig.opticalCenter.y;
+    }
+
 }
 
 void ClickableLabel::setVideoFrameSize(int width, int height)
@@ -53,11 +67,13 @@ void ClickableLabel::setFOV(bool isSwitched, bool isRotated)
     {
         FOVWidth = videoConfig.fovVideo2.width; //0.56f; //34`
         FOVHeight = videoConfig.fovVideo2.height; // 0.416f; //25`
+        nonlinearFactor = videoConfig.nonlinearFactor2;
     }
     else
     {
         FOVWidth = videoConfig.fovVideo1.width; // 8;
         FOVHeight = videoConfig.fovVideo1.height; //6;
+        nonlinearFactor = videoConfig.nonlinearFactor1;
     }
 }
 
@@ -145,34 +161,35 @@ void ClickableLabel::mouseMoveEvent(QMouseEvent *event)
 // Викликається кожні 50 мс, поки тримається кнопка миші
 void ClickableLabel::mouseHeld()
 {
-    auto [voltageH, voltageV] = calculateVoltage(lastClickPos);
+    //auto [voltageH, voltageV] = calculateVoltage(lastClickPos);
+    PixelToAngleConverter converter(roiSize, fov, opticalCenter, nonlinearFactor);
+    QPointF videoPos = scaleClick(lastClickPos);
+    auto [voltageH, voltageV] = converter.calculateVoltageNonlinear(videoPos, maxVoltage, isRotated);
 
     ScriptCommands::GetInstance().SetVoltageEncoder(voltageH, voltageV);
 }
 
-std::pair<float,float> ClickableLabel::calculateVoltage(QPoint pos)
-{
+// std::pair<float,float> ClickableLabel::calculateVoltage(QPoint pos)
+// {
 
 
-    float vH = (pos.x() / (float)videoConfig.roi.width) * maxVoltage;
-    //float vH = (pos.x() / (float)videoConfig.opticalCenter.x) * maxVoltage;
+//     float vH = (pos.x() / (float)videoConfig.roi.width) * maxVoltage;
+//     //float vH = (pos.x() / (float)videoConfig.opticalCenter.x) * maxVoltage;
 
-    vH -= maxVoltage/2;
-    float vV = (pos.y() / (float)videoConfig.roi.height) * maxVoltage;
-    //float vV = (pos.y() / (float)videoConfig.opticalCenter.y) * maxVoltage;
-    vV -= maxVoltage/2;
-
-
-    // центр = 0
-    vH = std::clamp((isRotated)? vH:-vH, -maxVoltage/2, maxVoltage/2); // Х перевертаємо
-    vV = std::clamp((isRotated)? vV:-vV, -maxVoltage/2, maxVoltage/2); // Y перевертаємо
+//     vH -= maxVoltage/2;
+//     float vV = (pos.y() / (float)videoConfig.roi.height) * maxVoltage;
+//     //float vV = (pos.y() / (float)videoConfig.opticalCenter.y) * maxVoltage;
+//     vV -= maxVoltage/2;
 
 
+//     // центр = 0
+//     vH = std::clamp((isRotated)? vH:-vH, -maxVoltage/2, maxVoltage/2); // Х перевертаємо
+//     vV = std::clamp((isRotated)? vV:-vV, -maxVoltage/2, maxVoltage/2); // Y перевертаємо
 
-    qDebug() << "Held movement: vH=" << vH << " vV=" << vV;
+//     qDebug() << "Held movement: vH=" << vH << " vV=" << vV;
 
-    return {vH, vV};
-}
+//     return {vH, vV};
+// }
 
 void ClickableLabel::processClick()
 {
@@ -207,6 +224,77 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
     if (videoFrameWidth <= 0 || videoFrameHeight <= 0)
         return QPointF();
 
+    auto[videoX, videoY] = scaleClick(clickPos);
+
+    // double frameW = videoConfig.roi.width;   // 702
+    // double frameH = videoConfig.roi.height;  // 566
+
+    // int labelW = this->width();
+    // int labelH = this->height();
+
+    // double labelAspect = static_cast<double>(labelW) / labelH;
+    // double frameAspect = frameW / frameH;
+
+    // // int xInVideo = -1;
+    // // int yInVideo = -1;
+
+    // double scale;
+
+    // if (labelAspect > frameAspect)
+    // {
+    //     // QLabel ширший — зображення вписане по висоті
+    //     scale = static_cast<double>(labelH) / frameH;
+    //     //double displayedW = frameW * scale;
+    // }
+    // else
+    // {
+    //     // QLabel вищий — зображення вписане по ширині
+    //     scale = static_cast<double>(labelW) / frameW;
+    //     //double displayedH = frameH * scale;
+    // }
+
+    // // Конвертація у координати відео
+    // double videoX = (clickPos.x()) / scale;
+    // double videoY = (clickPos.y()) / scale;
+
+    // Корекція на зміщення оптичного центру
+    //double alignedX = videoX + videoConfig.roi.x;
+    //double alignedY = videoY + videoConfig.roi.y;
+
+    // Перетворення у кути
+    // cv::Size2f roiSize (videoConfig.roi.width, videoConfig.roi.height);
+    // cv::Size2f fov (FOVWidth, FOVHeight);
+
+    // cv::Point opticalCenter (roiSize.width/2, roiSize.height/2);
+
+    // if(!isRotated) opticalCenter = videoConfig.opticalCenter;
+    // else { //Перевертаєсо центр якщо зображення перевернуто
+    //     float cx = roiSize.width  / 2.0;
+    //     float cy = roiSize.height / 2.0;
+    //     opticalCenter.x = 2*cx - videoConfig.opticalCenter.x;
+    //     opticalCenter.y = 2*cy - videoConfig.opticalCenter.y;
+    // }
+
+    PixelToAngleConverter converter(roiSize, fov, opticalCenter, nonlinearFactor);
+
+    QPointF deltaAngle = converter.pixelToAngle(QPoint(videoX, videoY));  //clickPos);
+    //QPointF deltaAngle = converter.pixelToAngle(QPoint(alignedX, alignedY));
+
+    QString msg = QString("fy = %1, fz = %2; frame: w = %3, h = %4; X = %5 px, Y = %6 px")
+                      .arg(deltaAngle.x())
+                      .arg(deltaAngle.y())
+                      .arg(videoFrameWidth) //videoWidthOnLabel)
+                      .arg(videoFrameHeight) //videoHeightOnLabel)
+                      .arg(videoX) //clickPos.x())
+                      .arg(videoY) //clickPos.y())
+        ;
+    labelDebug->setText(msg);
+
+    return deltaAngle;
+}
+
+QPointF ClickableLabel::scaleClick(const QPoint &clickPos)
+{
     double frameW = videoConfig.roi.width;   // 702
     double frameH = videoConfig.roi.height;  // 566
 
@@ -225,55 +313,20 @@ QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
     {
         // QLabel ширший — зображення вписане по висоті
         scale = static_cast<double>(labelH) / frameH;
-        double displayedW = frameW * scale;
+        //double displayedW = frameW * scale;
     }
     else
     {
         // QLabel вищий — зображення вписане по ширині
         scale = static_cast<double>(labelW) / frameW;
-        double displayedH = frameH * scale;
+        //double displayedH = frameH * scale;
     }
 
     // Конвертація у координати відео
     double videoX = (clickPos.x()) / scale;
     double videoY = (clickPos.y()) / scale;
-
-    // Корекція на зміщення оптичного центру
-    //double alignedX = videoX + videoConfig.roi.x;
-    //double alignedY = videoY + videoConfig.roi.y;
-
-    // Перетворення у кути
-    cv::Size2f roiSize (videoConfig.roi.width, videoConfig.roi.height);
-    cv::Size2f fov (FOVWidth, FOVHeight);
-
-    cv::Point opticalCenter (roiSize.width/2, roiSize.height/2);
-
-    if(!isRotated) opticalCenter = videoConfig.opticalCenter;
-    else { //Перевертаєсо центр якщо зображення перевернуто
-        float cx = roiSize.width  / 2.0;
-        float cy = roiSize.height / 2.0;
-        opticalCenter.x = 2*cx - videoConfig.opticalCenter.x;
-        opticalCenter.y = 2*cy - videoConfig.opticalCenter.y;
-    }
-
-    PixelToAngleConverter converter(roiSize, fov, opticalCenter);
-
-    QPointF deltaAngle = converter.pixelToAngle(QPoint(videoX, videoY));  //clickPos);
-    //QPointF deltaAngle = converter.pixelToAngle(QPoint(alignedX, alignedY));
-
-    QString msg = QString("fy = %1, fz = %2; frame: w = %3, h = %4; X = %5 px, Y = %6 px")
-                      .arg(deltaAngle.x())
-                      .arg(deltaAngle.y())
-                      .arg(videoFrameWidth) //videoWidthOnLabel)
-                      .arg(videoFrameHeight) //videoHeightOnLabel)
-                      .arg(videoX) //clickPos.x())
-                      .arg(videoY) //clickPos.y())
-        ;
-    labelDebug->setText(msg);
-
-    return deltaAngle;
+    return { videoX, videoY };
 }
-
 
 
 

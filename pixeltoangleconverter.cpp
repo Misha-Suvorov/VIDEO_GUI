@@ -1,4 +1,5 @@
 #include "PixelToAngleConverter.h"
+#include "lpsparameters.h"
 #include "qdebug.h"
 
 PixelToAngleConverter::PixelToAngleConverter(cv::Size2f roiSize, cv::Size2f fov, cv::Point opticalCenter, float nonlinearFactor)
@@ -91,6 +92,37 @@ QPointF PixelToAngleConverter::calculateVoltageNonlinear(QPointF p, float maxVol
     vH = std::clamp((isRotated)? vH:-vH, -maxVoltage/2, maxVoltage/2); // Х перевертаємо
     vV = std::clamp((isRotated)? vV:-vV, -maxVoltage/2, maxVoltage/2); // Y перевертаємо
     qDebug() << "Held movement: vH=" << vH << " vV=" << vV;
+
+    return { vH, vV };
+}
+
+// клацання мишкою в одній із чотирьох областей має викликати рух платформи (ліворуч/праворуч/вгору/вниз) на величину, яка зчитується з текстового поля
+QPointF PixelToAngleConverter::movePlatformInInertModeByStep(QPointF p, bool isRotated, float step) const
+{
+    float vH = 0;
+    float vV = 0;
+
+    // Центр зображення
+    const double cx = opticalCenter.x;
+    const double cy = opticalCenter.y;
+
+    // Координати кліку
+    int x = p.x();
+    int y = p.y();
+
+    // Визначаємо область
+    if (x < cx && abs(x - cx) > abs(y - cy)) {
+        vH = (isRotated)? -step : step; // ліва область
+    }
+    else if (x > cx && abs(x - cx) > abs(y - cy)) {
+        vH = (isRotated)? step : -step; // права область
+    }
+    else if (y < cy && abs(y - cy) > abs(x - cx)) {
+        vV = (isRotated)? -step : step; // верхня область
+    }
+    else if (y > cy && abs(y - cy) > abs(x - cx)) {
+        vV = (isRotated)? step : -step; // нижня область
+    }
 
     return { vH, vV };
 }

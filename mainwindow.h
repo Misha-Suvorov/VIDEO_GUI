@@ -98,9 +98,10 @@ private slots:
     void on_stop_b_2_clicked();
 
     // Slot to update the horizontal marker position
-    void onHorizontMarkerChanged(const float); // const QString &text);
+    void onHorizontMarkerChanged(const float);
     void onVerticalMarkerChanged(const float);
     void showSpeed(const float, const float);
+    void showDacValues(const float vH, const float vV);
 
     void on_pointer_b_clicked();
 

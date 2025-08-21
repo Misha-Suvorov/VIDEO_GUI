@@ -50,6 +50,7 @@ private:
     float angleY = 0.0f;
     float speedX = 0.0f;
     float speedY = 0.0f;
+
     ModePlatform mode_platform;
 
     Voltage voltage;

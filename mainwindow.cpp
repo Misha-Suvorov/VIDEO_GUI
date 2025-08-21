@@ -189,35 +189,6 @@ void VideoThread::stop()
 }
 
 
-// std::map<std::string, int> VideoThread::readROIConfig(const std::string& filename) {
-
-//     std::map<std::string, int> roiParams = { {"x",0}, {"y",0}, {"width",0}, {"height",0} };
-
-//     std::ifstream file(filename);
-//     if (!file.is_open()) {
-//         std::cerr << "Не вдалося відкрити файл: " << filename << std::endl;
-//         return roiParams;
-//     }
-
-//     std::string line;
-//     while (std::getline(file, line)) {
-//         if (line.empty() || line[0] == '[') continue;
-//         size_t eqPos = line.find('=');
-//         if (eqPos != std::string::npos) {
-//             std::string key = line.substr(0, eqPos);
-//             int value = std::stoi(line.substr(eqPos+1));
-//             roiParams[key] = value;
-//         }
-//     }
-//     return roiParams;
-// }
-
-// void VideoThread::initROIFromConfig() {
-//     auto roiParams = readROIConfig("C:/qt_projects/git/VIDEO_GUI/config.ini");
-//     roi = cv::Rect(roiParams["x"], roiParams["y"], roiParams["width"], roiParams["height"]);
-//     roiSet = true;
-// }
-
 VideoConfig VideoThread::loadVideoConfig() {
     VideoConfig cfg{};
     QString path = QCoreApplication::applicationDirPath() + "/config.ini";
@@ -311,8 +282,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
-
     connect(ui->measure_mode,
             &QComboBox::currentIndexChanged,
             this,
@@ -335,7 +304,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->videoLabel, &ClickableLabel::clickedAt, this, &MainWindow::onLabelClicked);
 
+    connect(ui->videoLabel2, &ClickableLabel::pressed,
+            this, &MainWindow::on_switch_vid_clicked);
 
+    // connect(ui->step_input, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    //         [this](int index){
+    //             int step = ui->step_input->itemText(index).toInt();
+    //             ui->videoLabel->setStepSize(step);
+    //         });
 
     // // Встановлюємо позначки під слайдером
     // ui->horizontalSlider->setTickPosition(QSlider::TicksBelow);
@@ -610,6 +586,9 @@ void MainWindow::updateLpsParametersUI()
     float range = manager.GetRange();
     float temp = manager.GetTemperature();
 
+    float voltageX = manager.GetVoltageX();
+    float voltageY = manager.GetVoltageY();
+
     uint32_t freq = manager.GetLaserFrequency();
 
     uint32_t time_remaining = manager.GetTimeRemaining();
@@ -634,7 +613,7 @@ void MainWindow::updateLpsParametersUI()
 
     // Режим роботи MODE
 
-    ScriptCommands::GetInstance().GetMode();
+
 
     switch (manager.GetModePlatform()) {
     case BODY:
@@ -656,42 +635,10 @@ void MainWindow::updateLpsParametersUI()
 
     // Рядок зі значеннями кутів і швидкостей
 
-    // auto formatVal = [](double val) {
-    //     return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
-    // };
-
-    // QString cellStyle = "style='"
-    //                     "background-color:#ddd;"         // м'яко-жовтий
-    //                     "color:#333;"                        // темний текст
-    //                     "border-radius:10px;"               // округлість
-    //                     "padding:0 5px;"                // відступи
-    //                     "font-family:monospace;"            // моноширинний
-    //                     "font-size:14pt;"                   // великий шрифт
-    //                     "box-shadow:2px 2px 6px rgba(0,0,0,0.2);" // легка тінь
-    //                     "text-align:center;"
-    //                     "white-space:pre;'";                // зберігає пробіли
-
-    // QString html = QString(
-    //                    "<table cellspacing='15' cellpadding='0'>"
-    //                    "  <tr>"
-    //                    "    <td %1>H:   %2°</td>"
-    //                    "    <td %1>V:   %3°</td>"
-    //                    "    <td %1>wH:  %4°/s</td>"
-    //                    "    <td %1>wV:  %5°/s</td>"
-    //                    "  </tr>"
-    //                    "</table>"
-    //                    )
-    //                    .arg(cellStyle)
-    //                    .arg(formatVal(angleX))
-    //                    .arg(formatVal(angleY))
-    //                    .arg(formatVal(omegaX))
-    //                    .arg(formatVal(omegaY));
-
-    // ui->status_label_2->setTextFormat(Qt::RichText);
-    // ui->status_label_2->setText(html);
      onHorizontMarkerChanged(angleX);
      onVerticalMarkerChanged(angleY);
      showSpeed(omegaX, omegaY);
+     showDacValues(voltageX, voltageY);
 
      if(activeRx>0)
      {
@@ -709,19 +656,31 @@ void MainWindow::updateLpsParametersUI()
      else setTxActive(false);
 
 
+     static int counterTicks = 0;
+     // Запроси значень платформи
+     switch (counterTicks)
+     {
+     case 0:
+         ScriptCommands::GetInstance().AskValueDACHoriz();
+         counterTicks = 1;
+         break;
+     case 1:
+         ScriptCommands::GetInstance().AskValueDACVert();
+         counterTicks = 2;
+         break;
+     case 2:
+         ScriptCommands::GetInstance().GetMode();
+         counterTicks = 0;
+         break;
+     }
+
+
     // Відправка пакету по CAN
     if (SendDataFrame::getInstance().GetDataFrameLen() != 0) {
         SendDataFrame::getInstance().SendAllFrames();
         activeTx = 30;
     }
 
-
-    // QString msg = QString("frame: w = %3, h = %4; label: w = %5, h = %6")
-    //                   .arg(videoFrameWidth)
-    //                   .arg(videoFrameHeight)
-    //                   .arg(videoLabel->width())
-    //                   .arg(videoLabel->height());
-    // ui->labelOutput->setText(msg);
 }
 
 /**
@@ -752,26 +711,12 @@ void MainWindow::onHorizontMarkerChanged(const float value)
         return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
     };
 
-    // HTML-стиль для прямокутника
-    QString cellStyle = "style='"
-                        "background:#ddd;"             // світло-сірий фон
-                        "color:#000;"                  // чорний текст
-                        "border-radius:6px;"           // округлені кути
-                        "padding:4px 8px;"             // внутрішні відступи
-                        "font-family:monospace;"       // моноширинний шрифт
-                        "font-size:14pt;"              // розмір шрифту
-                        "text-align:center;"
-                        "white-space:pre;'";           // збереження пробілів
 
-    // HTML вивід
-    QString html = QString("<div %1>H: %2°</div>")
-                       .arg(cellStyle)
+    QString html = QString("H:%1°")
                        .arg(formatVal(value));
 
-    // Встановити в QLabel
-    ui->H_label->setTextFormat(Qt::RichText);
-    ui->H_label->setText(html);
-
+    // // Встановити в QLabel
+     ui->H_label->setText(html);
 
     // Update marker values for both video threads
     if (videoThread1)
@@ -806,31 +751,15 @@ void MainWindow::onVerticalMarkerChanged(const float value)
                        .arg(fracPart, 2, 10, QLatin1Char('0'));
     ui->vert_out->setText(text);
 
-    // Значення в квадратику
-
     // Форматування значення з фіксованою шириною
     auto formatVal = [](double val) {
         return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
     };
 
-    // HTML-стиль для прямокутника
-    QString cellStyle = "style='"
-                        "background:#ddd;"             // світло-сірий фон
-                        "color:#000;"                  // чорний текст
-                        "border-radius:6px;"           // округлені кути
-                        "padding:4px 8px;"             // внутрішні відступи
-                        "font-family:monospace;"       // моноширинний шрифт
-                        "font-size:14pt;"              // розмір шрифту
-                        "text-align:center;"
-                        "white-space:pre;'";           // збереження пробілів
-
     // HTML вивід
-    QString html = QString("<div %1>V: %2°</div>")
-                       .arg(cellStyle)
+    QString html = QString("V:%1°")
                        .arg(formatVal(value));
 
-    // Встановити в QLabel
-    ui->V_label->setTextFormat(Qt::RichText);
     ui->V_label->setText(html);
 
 
@@ -848,33 +777,41 @@ void MainWindow::showSpeed(const float wH, const float wV)
         return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
     };
 
-    // HTML-стиль для прямокутника
-    QString cellStyle = "style='"
-                        "background:#ddd;"             // світло-сірий фон
-                        "color:#000;"                  // чорний текст
-                        "border-radius:6px;"           // округлені кути
-                        "padding:4px 8px;"             // внутрішні відступи
-                        "font-family:monospace;"       // моноширинний шрифт
-                        "font-size:14pt;"              // розмір шрифту
-                        "text-align:center;"
-                        "white-space:pre;'";           // збереження пробілів
-
     // HTML вивід
-    QString html = QString("<div %1>wH: %2°</div>")
-                       .arg(cellStyle)
+    QString html = QString("wH:%1°/s")
                        .arg(formatVal(wH));
 
     // Встановити в QLabel
-    ui->wH_label->setTextFormat(Qt::RichText);
     ui->wH_label->setText(html);
 
-    html = QString("<div %1>wV: %2°</div>")
-               .arg(cellStyle)
+    html = QString("wV:%1°/s")
                .arg(formatVal(wV));
 
     // Встановити в QLabel
-    ui->wV_label->setTextFormat(Qt::RichText);
+    //ui->wV_label->setTextFormat(Qt::RichText);
     ui->wV_label->setText(html);
+}
+
+void MainWindow::showDacValues(const float vH, const float vV)
+{
+    // Форматування значення з фіксованою шириною
+    auto formatVal = [](double val) {
+        return QString("%1").arg(val, 7, 'f', 4, QChar(' '));
+    };
+
+
+    // HTML вивід
+    QString html = QString("DacH:%1V")
+                       .arg(formatVal(vH));
+
+    // Встановити в QLabel
+    ui->valueDacH_label->setText(html);
+
+    html = QString("DacV:%1V")
+               .arg(formatVal(vV));
+
+    // Встановити в QLabel
+    ui->valueDacV_label->setText(html);
 }
 
 
@@ -1106,12 +1043,23 @@ void MainWindow::on_mode_input_currentIndexChanged(int index)
 
 void MainWindow::on_stop_b_clicked()
 {
+    ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
+    ScriptCommands::GetInstance().SetMode(BODY);
+    //QThread::msleep(10); // Затримка 10 мс
+
     ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
+
+    // через 10 секунд повертаємось у попередній режим
+    QTimer::singleShot(10000, this, [modeOld]() {
+        ScriptCommands::GetInstance().SetMode(modeOld);
+    });
+
 }
 
 void MainWindow::on_r_b_clicked()
 {
-    float voltage_x = -LpsParameters::GetInstance().GetVoltageX();
+    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
+    float voltage_x = -text.toFloat(); // -LpsParameters::GetInstance().GetVoltageX();
     if (videoThread1->isRotated)
         voltage_x = -voltage_x;
     ScriptCommands::GetInstance().SetVoltageEncoder(voltage_x, 0);
@@ -1119,7 +1067,8 @@ void MainWindow::on_r_b_clicked()
 
 void MainWindow::on_l_l_clicked()
 {
-    float voltage_x = LpsParameters::GetInstance().GetVoltageX();
+    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
+    float voltage_x = text.toFloat(); //LpsParameters::GetInstance().GetVoltageX();
 
     if (videoThread1->isRotated)
         voltage_x = -voltage_x;
@@ -1128,7 +1077,8 @@ void MainWindow::on_l_l_clicked()
 
 void MainWindow::on_up_b_clicked()
 {
-    float voltage_y = LpsParameters::GetInstance().GetVoltageY();
+    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
+    float voltage_y = text.toFloat();
     if (videoThread1->isRotated)
         voltage_y = -voltage_y;
     ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
@@ -1136,7 +1086,8 @@ void MainWindow::on_up_b_clicked()
 
 void MainWindow::on_d_b_clicked()
 {
-    float voltage_y = -LpsParameters::GetInstance().GetVoltageY();
+    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
+    float voltage_y = -text.toFloat();
     if (videoThread1->isRotated)
         voltage_y = -voltage_y;
     ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
@@ -1182,4 +1133,11 @@ void MainWindow::onFrameSizeAvailable(int width, int height, VideoConfig videoCo
     ui->videoLabel->setVideoFrameSize(width, height);
     ui->videoLabel->setVideoConfig(videoConfig);
     ui->videoLabel->setFOV(isSwitched, videoThread1->isRotated);
+
+    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
+    float step = text.toFloat();                  // перетворюємо у число (double)
+    ui->videoLabel->setStepSize(step);
 }
+
+
+

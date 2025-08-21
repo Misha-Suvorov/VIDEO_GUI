@@ -132,6 +132,24 @@ void ScriptCommands::SetMode(ModePlatform mode)
 }
 
 /**
+ * @brief Команда-запит поточного значення ЦАП в вольтах
+ *
+ * Надсилається постійно для контролю зміни напруги і виводу її у контрольне віконце
+ *
+ */
+void ScriptCommands::AskValueDACHoriz()
+{
+    std::vector<uint8_t> payload = {0x00, 0x10, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame::getInstance().Send(0x218, 0x08, payload);
+}
+
+void ScriptCommands::AskValueDACVert()
+{
+    std::vector<uint8_t> payload = {0x00, 0x20, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00};
+    SendDataFrame::getInstance().Send(0x218, 0x08, payload);
+}
+
+/**
  * @brief Встановлює потужність лазера
  *
  * @param value Значення потужності від 0 до 5. По замовчуванню станція працює на потужності 5

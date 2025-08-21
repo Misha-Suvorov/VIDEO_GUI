@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QPoint>
+#include "pixeltoangleconverter.h"
 #include "structs.h"
 
 class ClickableLabel : public QLabel
@@ -16,11 +17,14 @@ public:
     void setDebugLabel(QLabel *label);
 
     void setVideoConfig(VideoConfig videoConfig);
+    void setStepSize(float step) { stepSize = step; }
+    float getStepSize() const { return stepSize; }
 
 signals:
     void clickedAt(QPoint pos);
     void held(QPointF deltaAngle);
     void clicked(QPointF deltaAngle);
+    void pressed();  // простий сигнал "натиснули", без параметрів
     void voltageChanged(float voltageH, float voltageV);
 
 private slots:
@@ -52,6 +56,8 @@ private:
     bool isSwitched = false;
     bool isRotated = false;
 
+    PixelToAngleConverter converter;
+
     QLabel *labelDebug = nullptr;
     QTimer *holdTimer;
     bool mousePressed = false;
@@ -60,6 +66,7 @@ private:
     QTimer *repeatTimer;
     QPoint lastClickPos; // позиція кліка при утримування мишки
     float maxVoltage = 15.0f;
+    float stepSize = 1;   // значення за замовчуванням для руху по крокам в режимі Інерт
 
     //std::pair<float, float> calculateVoltage(QPoint pos);
     void startRepeating();

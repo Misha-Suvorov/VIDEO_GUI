@@ -19,7 +19,8 @@ public:
     void SetProgrammZero();
     void ZeroSet(uint8_t canal, uint8_t command);
 
-    //ScriptCommands();
+    void AskValueDACHoriz();
+    void AskValueDACVert();
 };
 
 #endif // SCRIPTCOMMANDS_H

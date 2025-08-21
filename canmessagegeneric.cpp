@@ -94,7 +94,7 @@ uint8_t CanMessageGeneric::ParseByte()
             break;
         }
     }
-    return byteValue; // 👈 додано
+    return byteValue;
 }
 
 float CanMessageGeneric::ParseFloat()
@@ -116,6 +116,17 @@ float CanMessageGeneric::ParseFloat()
             break;
         case static_cast<uint8_t>(IdNode1::SET_VERTICAL_CHANNEL):
             manager.SetSpeedY(floatValue);
+            break;
+        }
+    }
+
+    if (Node == static_cast<uint8_t>(NodeId::PLATFORM) && Priority == 5 && Dir == 0) {
+        switch (Message.ID) {
+        case static_cast<uint8_t>(IdNode1::SET_HORIZONTAL_CHANNEL):
+            manager.SetVoltageX(floatValue);
+            break;
+        case static_cast<uint8_t>(IdNode1::SET_VERTICAL_CHANNEL):
+            manager.SetVoltageY(floatValue);
             break;
         }
     }

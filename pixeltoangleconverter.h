@@ -12,6 +12,7 @@ public:
     QPointF calculateVoltage(QPointF p, float maxVoltage, bool isRotated) const;
     QPointF calculateVoltageNonlinear(QPointF p, float maxVoltage, bool isRotated) const;
 
+    QPointF movePlatformInInertModeByStep(QPointF p, bool isRotated, float step) const;
 private:
     cv::Size2f roiSize;
 

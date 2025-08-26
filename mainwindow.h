@@ -16,6 +16,7 @@
 #include "pixeltoangleconverter.h"
 #include "scalehorizontal.h"
 #include "senddataframe.h"
+#include "trackingworker.h"
 #include <opencv2/opencv.hpp>
 
 QT_BEGIN_NAMESPACE
@@ -50,6 +51,10 @@ signals:
     void verticalMarkerValueChanged(int value);
     void frameSizeAvailable(int width, int height, VideoConfig);
 
+    void frameProcessed(const QImage &image);
+    void frameReadyForTracking(const cv::Mat &frame);
+    void processingError(const QString &errorMessage);
+
 
 private:
     bool running;
@@ -71,6 +76,7 @@ private:
     void initFOVVideo2();
     VideoConfig loadVideoConfig();
     cv::Rect getVideo2RectInVideo1(const VideoConfig &cfg);
+    QImage matToQImage(const cv::Mat &mat);
 };
 
 class MainWindow : public QMainWindow
@@ -79,6 +85,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
     //std::queue<std::vector<uint8_t>>& messageQueue;
 
     ~MainWindow();
@@ -204,7 +211,18 @@ private:
     int videoFrameWidth = 0;
     int videoFrameHeight = 0;
 
+    VideoSettings videoSettings; // Налаштування відео параметрів
 
+    QThread *trackingThread;
+    TrackingWorker *trackingWorker;
+
+
+    void handleProcessingError(const QString &errorMessage);
+    void handleRoiUpdate(const cv::Rect &roi);
+    cv::Rect currentRoi;
+    QSize lastFrameSize;
+
+    void displayFrame(const QImage &image);
 };
 
 #endif // MAINWINDOW_H

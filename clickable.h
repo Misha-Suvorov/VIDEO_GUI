@@ -4,21 +4,27 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QPoint>
-#include "pixeltoangleconverter.h"
 #include "structs.h"
+#include "trackingworker.h"
+#include "videosettings.h"
 
 class ClickableLabel : public QLabel
 {
     Q_OBJECT
 public:
     explicit ClickableLabel(QWidget *parent = nullptr);
-    void setVideoFrameSize(int width, int height);
-    void setFOV(bool isSwitched, bool isRotated);
     void setDebugLabel(QLabel *label);
 
-    void setVideoConfig(VideoConfig videoConfig);
+    //void setVideoConfig(VideoConfig videoConfig);
     void setStepSize(float step) { stepSize = step; }
     float getStepSize() const { return stepSize; }
+    void setVideoSettings(VideoSettings* settings)
+    {
+        this->settings = settings;
+        isSwitched = settings->isSwitched;
+        isRotated = settings->isRotated;
+    }
+    void setTrackingWorker(TrackingWorker* tw) {trackingWorker = tw;}
 
 signals:
     void clickedAt(QPoint pos);
@@ -36,27 +42,23 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
 
     QPointF mapClickToAngle(const QPoint &clickPos);
 
     VideoConfig videoConfig {};
-    int videoFrameWidth = 0;
-    int videoFrameHeight = 0;
+    VideoSettings* settings = nullptr;
+    //int videoFrameWidth = 0;
+    //int videoFrameHeight = 0;
 
-    float FOVWidth = 8;
-    float FOVHeight = 6;
+    //float FOVWidth = 8;
+    //float FOVHeight = 6;
 
-    cv::Size2f roiSize;
-    cv::Size2f fov;
-    cv::Point opticalCenter;
-    float nonlinearFactor;
 
     bool isSwitched = false;
     bool isRotated = false;
-
-    PixelToAngleConverter converter;
 
     QLabel *labelDebug = nullptr;
     QTimer *holdTimer;
@@ -65,10 +67,15 @@ private:
 
     QTimer *repeatTimer;
     QPoint lastClickPos; // позиція кліка при утримування мишки
+    QPointF videoPos; // координати кліку масштабовані згідно з лейблом
     float maxVoltage = 15.0f;
     float stepSize = 1;   // значення за замовчуванням для руху по крокам в режимі Інерт
 
-    //std::pair<float, float> calculateVoltage(QPoint pos);
+
+    TrackingWorker *trackingWorker;
+    QPointF lastRoiCenter = QPointF(-1, -1);
+    int roiTrackingSize = 30;
     void startRepeating();
-    QPointF scaleClick(const QPoint &clickPos);
+    //QPointF scaleClick(const QPoint &clickPos);
+
 };

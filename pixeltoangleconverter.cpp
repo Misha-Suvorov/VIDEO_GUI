@@ -18,7 +18,7 @@ void PixelToAngleConverter::updateScaling()
     if (roi.height > 0)  degPerPixelY = fov.height / static_cast<double>(roi.height);
 }
 
-QPointF PixelToAngleConverter::pixelToAngle(QPoint p) const
+QPointF PixelToAngleConverter::pixelToAngle(QPointF p) const
 {
     // Центр активної зони
     const double cx = opticalCenter.x; //roiX + roiW / 2.0;
@@ -126,3 +126,49 @@ QPointF PixelToAngleConverter::movePlatformInInertModeByStep(QPointF p, bool isR
 
     return { vH, vV };
 }
+
+
+void PixelToAngleConverter::setRoiSize(const cv::Size2f& s)
+{
+    roiSize = s;
+    roi.x = 0.f; roi.y = 0.f;
+    roi.width  = roiSize.width;
+    roi.height = roiSize.height;
+    updateScaling();
+}
+
+void PixelToAngleConverter::setFov(const cv::Size2f& f)
+{
+    fov = f;
+    updateScaling();
+}
+
+void PixelToAngleConverter::setOpticalCenter(const cv::Point& c)
+{
+    opticalCenter = c;
+    updateScaling();
+}
+
+void PixelToAngleConverter::setNonlinearFactor(float k)
+{
+    nonlinearFactor = k;
+    updateScaling();
+}
+
+void PixelToAngleConverter::setParams(const cv::Size2f& s,
+                                      const cv::Size2f& f,
+                                      const cv::Point&  c,
+                                      float             k)
+{
+    roiSize = s;
+    fov = f;
+    opticalCenter = c;
+    nonlinearFactor = k;
+
+    roi.x = 0.f; roi.y = 0.f;
+    roi.width  = roiSize.width;
+    roi.height = roiSize.height;
+
+    updateScaling();
+}
+

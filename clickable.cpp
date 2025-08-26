@@ -11,10 +11,12 @@
 
 #include <QThread>
 #include <QTimer>
+#include <algorithm>
+#include "qdebug.h"
 
 ClickableLabel::ClickableLabel(QWidget *parent)
-    : QLabel(parent),
-      converter(cv::Size2f(1,1), cv::Size2f(1,1), cv::Point(0,0), 1.0f)
+    : QLabel(parent)
+      //converter(cv::Size2f(1,1), cv::Size2f(1,1), cv::Point(0,0), 1.0f)
 {
     // Таймер для визначення "довгого натискання"
     holdTimer = new QTimer(this);
@@ -27,57 +29,11 @@ ClickableLabel::ClickableLabel(QWidget *parent)
     repeatTimer->setInterval(50); // плавне оновлення (20 Гц)
     connect(repeatTimer, &QTimer::timeout, this,  &ClickableLabel::mouseHeld);
 
-    //connect(repeatTimer, &QTimer::timeout, this, [this]() {
-    //     if (mousePressed) {
-    //         auto [voltageH, voltageV] = calculateVoltage(lastClickPos);
-    //         emit voltageChanged(voltageH, voltageV);
-    //     }
-    //});
+    setFocusPolicy(Qt::StrongFocus); // дозвіл на отримання подій QKeyEvent
+
 }
 
-void ClickableLabel::setVideoConfig(VideoConfig videoConfig)
-{
-    this->videoConfig = videoConfig;
 
-    roiSize = cv::Size2f(videoConfig.roi.width, videoConfig.roi.height);
-
-    fov = cv::Size2f(FOVWidth, FOVHeight);
-
-    opticalCenter = cv::Point(roiSize.width/2, roiSize.height/2);
-    if(!isRotated) opticalCenter = videoConfig.opticalCenter;
-    else { //Перевертаємо центр якщо зображення перевернуто
-        float cx = roiSize.width  / 2.0;
-        float cy = roiSize.height / 2.0;
-        opticalCenter.x = 2*cx - videoConfig.opticalCenter.x;
-        opticalCenter.y = 2*cy - videoConfig.opticalCenter.y;
-    }
-
-    converter = PixelToAngleConverter(roiSize, fov, opticalCenter, nonlinearFactor);
-}
-
-void ClickableLabel::setVideoFrameSize(int width, int height)
-{
-    videoFrameWidth = width;
-    videoFrameHeight = height;
-}
-
-void ClickableLabel::setFOV(bool isSwitched, bool isRotated)
-{
-    this->isSwitched = isSwitched;
-    this->isRotated = isRotated;
-    if(isSwitched)
-    {
-        FOVWidth = videoConfig.fovVideo2.width; //0.56f; //34`
-        FOVHeight = videoConfig.fovVideo2.height; // 0.416f; //25`
-        nonlinearFactor = videoConfig.nonlinearFactor2;
-    }
-    else
-    {
-        FOVWidth = videoConfig.fovVideo1.width; // 8;
-        FOVHeight = videoConfig.fovVideo1.height; //6;
-        nonlinearFactor = videoConfig.nonlinearFactor1;
-    }
-}
 
 void ClickableLabel::setDebugLabel(QLabel *label)
 {
@@ -89,32 +45,30 @@ void ClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
 
-        emit pressed();              // ← одразу шлемо сигнал для перемикання
+        emit pressed();              // ← одразу шлемо сигнал для перемикання Switch video
 
         mousePressed = true;
 
         lastClickPos = event->pos();   // зберігаємо координати кліку
-        lastDeltaAngle = mapClickToAngle(event->pos());
 
-        if (!lastDeltaAngle.isNull()) {
-            holdTimer->start(); // запускаємо відлік до події hold
+        if(settings!=nullptr)
+        {
+            videoPos = settings->mapToVideoCoordinates(
+                lastClickPos,            // клік у QLabel
+                this->size(),            // розмір QLabel
+                &settings->getConfig() // структура VideoConfig із VideoSettings
+                );
+
+
+
+            lastDeltaAngle = settings->getConverter().pixelToAngle(videoPos);  //mapClickToAngle(event->pos());
+
+            if (!lastDeltaAngle.isNull()) {
+                holdTimer->start(); // запускаємо відлік до події hold
+            }
+
+            QLabel::mousePressEvent(event);
         }
-
-        QLabel::mousePressEvent(event);
-
-        // if (lastDeltaAngle.isNull())
-        // {
-        //     qDebug() << "Click outside video area";
-        //     return;
-        // }
-
-        // float currentAngleX = LpsParameters::GetInstance().GetAngleX();
-        // float newAngleX = (isRotated)? currentAngleX + deltaAngle.x() : currentAngleX - deltaAngle.x();
-
-        // float currentAngleY = LpsParameters::GetInstance().GetAngleY();
-        // float newAngleY = (isRotated)? currentAngleY - deltaAngle.y() : currentAngleY + deltaAngle.y();
-
-        // ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
     }
 }
 
@@ -157,6 +111,15 @@ void ClickableLabel::mouseMoveEvent(QMouseEvent *event)
 {
     if (mousePressed) {
         lastClickPos = event->pos();
+
+        if(settings!=nullptr){
+            videoPos = settings->mapToVideoCoordinates(
+                lastClickPos,            // клік у QLabel
+                this->size(),            // розмір QLabel
+                &settings->getConfig() // структура VideoConfig із VideoSettings
+                );
+        }
+
     }
     QLabel::mouseMoveEvent(event);
 }
@@ -166,9 +129,7 @@ void ClickableLabel::mouseMoveEvent(QMouseEvent *event)
 // Викликається кожні 50 мс, поки тримається кнопка миші
 void ClickableLabel::mouseHeld()
 {
-    //PixelToAngleConverter converter(roiSize, fov, opticalCenter, nonlinearFactor);
-    QPointF videoPos = scaleClick(lastClickPos);
-    auto [voltageH, voltageV] = converter.calculateVoltageNonlinear(videoPos, maxVoltage, isRotated);
+    auto [voltageH, voltageV] = settings->getConverter().calculateVoltageNonlinear(videoPos, maxVoltage, isRotated);
 
     ScriptCommands::GetInstance().SetVoltageEncoder(voltageH, voltageV);
 }
@@ -186,12 +147,13 @@ void ClickableLabel::processClick()
 
     case INERT:{
 
-        auto [voltageH, voltageV] = converter.movePlatformInInertModeByStep(lastClickPos, isRotated, stepSize);
+        auto [voltageH, voltageV] = settings->getConverter().movePlatformInInertModeByStep(videoPos, isRotated, stepSize);
 
         ScriptCommands::GetInstance().SetVoltageEncoder(voltageH, voltageV);
 
         break;
     }
+
     case BODY:{
 
         float currentAngleX = LpsParameters::GetInstance().GetAngleX();
@@ -207,9 +169,31 @@ void ClickableLabel::processClick()
         ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
         break;
     }
+
     case EARTH:
-    case TRACKING:
+    {
         break;
+    }
+
+    case TRACKING:{
+
+        lastRoiCenter = videoPos; //QPoint(x_original, y_original);
+        int frameW = settings->getConfig().roi.width;
+        int frameH = settings->getConfig().roi.height;
+        int x0 = std::clamp((int)(videoPos.x() - roiTrackingSize / 2), 0, frameW - roiTrackingSize);
+        int y0 = std::clamp((int)(videoPos.y() - roiTrackingSize / 2), 0, frameH - roiTrackingSize);
+
+        cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
+
+        trackingWorker->setTrackingROI(newRoi);
+        qDebug("Click processed, ROI sent to TrackingWorker: x=%d y=%d w=%d h=%d",
+               newRoi.x,
+               newRoi.y,
+               newRoi.width,
+               newRoi.height);
+
+        break;
+    }
     }
 
     //QString msg = QString("newAngleY = %1").arg(newAngleY);
@@ -217,65 +201,47 @@ void ClickableLabel::processClick()
 }
 
 
-
-QPointF ClickableLabel::mapClickToAngle(const QPoint &clickPos)
+void ClickableLabel::keyPressEvent(QKeyEvent *event)
 {
-    if (videoFrameWidth <= 0 || videoFrameHeight <= 0)
-        return QPointF();
+    if (settings == nullptr)
+        return QLabel::keyPressEvent(event);
 
-    auto[videoX, videoY] = scaleClick(clickPos);
+    if (event->key() == Qt::Key_Up) {
+        roiTrackingSize = std::min(roiTrackingSize + 10, 200);
+        qDebug() << "ROI size increased to" << roiTrackingSize;
 
-
-    //PixelToAngleConverter converter(roiSize, fov, opticalCenter, nonlinearFactor);
-
-    QPointF deltaAngle = converter.pixelToAngle(QPoint(videoX, videoY));  //clickPos);
-    //QPointF deltaAngle = converter.pixelToAngle(QPoint(alignedX, alignedY));
-
-    QString msg = QString("fy = %1, fz = %2; frame: w = %3, h = %4; X = %5 px, Y = %6 px")
-                      .arg(deltaAngle.x())
-                      .arg(deltaAngle.y())
-                      .arg(videoFrameWidth) //videoWidthOnLabel)
-                      .arg(videoFrameHeight) //videoHeightOnLabel)
-                      .arg(videoX) //clickPos.x())
-                      .arg(videoY) //clickPos.y())
-        ;
-    labelDebug->setText(msg);
-
-    return deltaAngle;
-}
-
-QPointF ClickableLabel::scaleClick(const QPoint &clickPos)
-{
-    double frameW = videoConfig.roi.width;   // 702
-    double frameH = videoConfig.roi.height;  // 566
-
-    int labelW = this->width();
-    int labelH = this->height();
-
-    double labelAspect = static_cast<double>(labelW) / labelH;
-    double frameAspect = frameW / frameH;
-
-    double scale;
-
-    if (labelAspect > frameAspect)
-    {
-        // QLabel ширший — зображення вписане по висоті
-        scale = static_cast<double>(labelH) / frameH;
-        //double displayedW = frameW * scale;
-    }
-    else
-    {
-        // QLabel вищий — зображення вписане по ширині
-        scale = static_cast<double>(labelW) / frameW;
-        //double displayedH = frameH * scale;
+        if (!lastRoiCenter.isNull()) {
+            int x0 = std::clamp(int(lastRoiCenter.x()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.width - roiTrackingSize);
+            int y0 = std::clamp(int(lastRoiCenter.y()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.height - roiTrackingSize);
+            cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
+            trackingWorker->setTrackingROI(newRoi);
+            qDebug() << "Updated ROI sent due to size increase";
+        }
+        return; // обробили
     }
 
-    // Конвертація у координати відео
-    double videoX = (clickPos.x()) / scale;
-    double videoY = (clickPos.y()) / scale;
-    return { videoX, videoY };
+    if (event->key() == Qt::Key_Down) {
+        roiTrackingSize = std::max(roiTrackingSize - 10, 10);
+        qDebug() << "ROI size decreased to" << roiTrackingSize;
+
+        if (!lastRoiCenter.isNull()) {
+            int x0 = std::clamp(int(lastRoiCenter.x()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.width - roiTrackingSize);
+            int y0 = std::clamp(int(lastRoiCenter.y()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.height - roiTrackingSize);
+            cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
+            trackingWorker->setTrackingROI(newRoi);
+            qDebug() << "Updated ROI sent due to size decrease";
+        }
+        return; // обробили
+    }
+
+    QLabel::keyPressEvent(event); // якщо це інша клавіша
 }
-
-
-
 

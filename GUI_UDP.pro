@@ -61,7 +61,8 @@ SOURCES += \
     scalingfactor.cpp \
     scriptcommands.cpp \
     senddataframe.cpp \
-    tracking.cpp
+    trackingworker.cpp \
+    videosettings.cpp
 
 HEADERS += \
     CircularBuffer.h \
@@ -86,7 +87,8 @@ HEADERS += \
     scriptcommands.h \
     senddataframe.h \
     structs.h \
-    tracking.h
+    trackingworker.h \
+    videosettings.h
 
 FORMS += \
     biascalibration.ui \

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QDebug>
+#include <QPainter>
 #include <QSettings>
 #include <QTimer>
 #include "canbus.h" // Підключаємо CanBus
@@ -173,13 +174,26 @@ void VideoThread::run()
         // }
 
         //cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
-        QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
-        emit frameReady(image.copy());
+        //QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+        emit frameReady(matToQImage(frame));
 
         emit frameSizeAvailable(frame.cols, frame.rows, videoConfig); // передаємо розміри кадра для кліка мішкою
+
+        emit frameReadyForTracking(frame);
+        emit frameProcessed(matToQImage(frame));
     }
 
     cap.release();
+}
+
+
+QImage VideoThread::matToQImage(const cv::Mat &mat)
+{
+    cv::Mat temp;
+    temp = mat;
+    //cv::cvtColor(mat, temp, cv::COLOR_BGR2RGB);
+    QImage image((uchar *) temp.data, temp.cols, temp.rows, temp.step, QImage::Format_RGB888);
+    return image.copy();
 }
 
 void VideoThread::stop()
@@ -304,6 +318,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->videoLabel, &ClickableLabel::clickedAt, this, &MainWindow::onLabelClicked);
 
+    // якщо клікнути по Video2, то йде перемикання відео (Switch video)
     connect(ui->videoLabel2, &ClickableLabel::pressed,
             this, &MainWindow::on_switch_vid_clicked);
 
@@ -348,6 +363,26 @@ MainWindow::MainWindow(QWidget *parent)
     //         label->show();
     //     }
     // });
+
+    trackingThread = new QThread(this);
+    trackingWorker = new TrackingWorker();
+    trackingWorker->moveToThread(trackingThread);
+
+    connect(videoThread1, &VideoThread::frameProcessed, this, &MainWindow::displayFrame);
+
+    connect(videoThread1,
+            &VideoThread::frameReadyForTracking,
+            trackingWorker,
+            &TrackingWorker::processFrame);
+    connect(videoThread1,
+            &VideoThread::processingError,
+            this,
+            &MainWindow::handleProcessingError);
+
+    // Connect TrackingWorker signals
+    //connect(trackingWorker, &TrackingWorker::anglesCalculated, this, &MainWindow::handleAngles);
+    connect(trackingWorker, &TrackingWorker::roiUpdated, this, &MainWindow::handleRoiUpdate);
+
 
 
 
@@ -681,6 +716,8 @@ void MainWindow::updateLpsParametersUI()
         activeTx = 30;
     }
 
+    ui->videoLabel->setTrackingWorker(trackingWorker);
+
 }
 
 /**
@@ -880,7 +917,7 @@ void MainWindow::on_switch_vid_clicked()
     }
 
     // Передаємо в ClickableLabel:
-    ui->videoLabel->setFOV(isSwitched, videoThread1->isRotated);
+    //ui->videoLabel->setFOV(isSwitched, videoThread1->isRotated);
     videoThread1->isSwitched = isSwitched; // флаг для малювання ВПЗ на ШПЗ (переключили - не малюємо)
 }
 
@@ -1129,15 +1166,45 @@ void MainWindow::onFrameSizeAvailable(int width, int height, VideoConfig videoCo
     videoFrameWidth = width;
     videoFrameHeight = height;
 
+    videoSettings.update(videoConfig, isSwitched, videoThread1->isRotated);
+
+    ui->videoLabel->setVideoSettings(&videoSettings);
+    trackingWorker->setVideoSettings(&videoSettings);
+
     // Передаємо в ClickableLabel:
-    ui->videoLabel->setVideoFrameSize(width, height);
-    ui->videoLabel->setVideoConfig(videoConfig);
-    ui->videoLabel->setFOV(isSwitched, videoThread1->isRotated);
+    //ui->videoLabel->setVideoFrameSize(width, height);
+    //ui->videoLabel->setVideoConfig(videoConfig);
+    //ui->videoLabel->setFOV(isSwitched, videoThread1->isRotated);
 
     QString text = ui->step_input->currentText();   // отримуємо вибраний текст
     float step = text.toFloat();                  // перетворюємо у число (double)
     ui->videoLabel->setStepSize(step);
 }
 
+void MainWindow::handleProcessingError(const QString &errorMessage)
+{
+    qWarning() << "Video processing error:" << errorMessage;
+}
 
 
+void MainWindow::handleRoiUpdate(const cv::Rect &roi)
+{
+    currentRoi = roi;
+}
+
+void MainWindow::displayFrame(const QImage &image)
+{
+
+    lastFrameSize = image.size();
+    QImage displayImage = image.copy();
+
+    if (!currentRoi.empty()) {
+        QPainter painter(&displayImage);
+        painter.setPen(QPen(Qt::red, 2));
+        painter.drawRect(currentRoi.x, currentRoi.y, currentRoi.width, currentRoi.height);
+    }
+
+    videoLabel->setPixmap(
+        QPixmap::fromImage(displayImage)
+            .scaled(videoLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}

@@ -55,6 +55,12 @@ signals:
     void frameReadyForTracking(const cv::Mat &frame);
     void processingError(const QString &errorMessage);
 
+public slots:
+    void setCurrentRoi(const cv::Rect &roi) {
+        QMutexLocker locker(&roiMutex);
+        currentRoi = roi;
+    }
+
 
 private:
     bool running;
@@ -77,6 +83,9 @@ private:
     VideoConfig loadVideoConfig();
     cv::Rect getVideo2RectInVideo1(const VideoConfig &cfg);
     QImage matToQImage(const cv::Mat &mat);
+
+    cv::Rect currentRoi;
+    QMutex roiMutex;
 };
 
 class MainWindow : public QMainWindow

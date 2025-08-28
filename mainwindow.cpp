@@ -180,7 +180,16 @@ void VideoThread::run()
         emit frameSizeAvailable(frame.cols, frame.rows, videoConfig); // передаємо розміри кадра для кліка мішкою
 
         emit frameReadyForTracking(frame);
-        emit frameProcessed(matToQImage(frame));
+        //emit frameProcessed(matToQImage(frame));
+
+        // малювання прямокутника трекінгу
+        //QMutexLocker locker(&roiMutex);
+        if (!currentRoi.empty()) {
+            cv::rectangle(frame,
+                          cv::Point(currentRoi.x, currentRoi.y),
+                          cv::Point(currentRoi.x + currentRoi.width, currentRoi.y + currentRoi.height),
+                          cv::Scalar(0, 0, 255), 2);
+        }
     }
 
     cap.release();
@@ -365,6 +374,7 @@ MainWindow::MainWindow(QWidget *parent)
     // });
 
     trackingThread = new QThread(this);
+    trackingThread->start();
     trackingWorker = new TrackingWorker();
     trackingWorker->moveToThread(trackingThread);
 
@@ -461,6 +471,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(updateTimer, &QTimer::timeout, this, &MainWindow::updateLpsParametersUI);
     updateTimer->start(100);
 
+
+
+    connect(trackingWorker, &TrackingWorker::roiUpdated,
+            videoThread1, &VideoThread::setCurrentRoi);
 
 }
 
@@ -1204,7 +1218,7 @@ void MainWindow::displayFrame(const QImage &image)
         painter.drawRect(currentRoi.x, currentRoi.y, currentRoi.width, currentRoi.height);
     }
 
-    videoLabel->setPixmap(
-        QPixmap::fromImage(displayImage)
-            .scaled(videoLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    // videoLabel->setPixmap(
+    //     QPixmap::fromImage(displayImage)
+    //         .scaled(videoLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }

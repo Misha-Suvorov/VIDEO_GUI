@@ -103,6 +103,9 @@ public:
 
     void onFrameSizeAvailable(int width, int height, VideoConfig videoConfig);
 
+protected:
+    void keyPressEvent(QKeyEvent *keyEvent);
+
 private slots:
     void displayFrame1(const QImage &image);
     void displayFrame2(const QImage &image);
@@ -230,6 +233,8 @@ private:
     void handleRoiUpdate(const cv::Rect &roi);
     cv::Rect currentRoi;
     QSize lastFrameSize;
+    int roiSize = 30;
+    QPoint lastRoiCenter = QPoint(-1, -1);
 
     void displayFrame(const QImage &image);
 };

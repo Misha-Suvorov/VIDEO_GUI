@@ -69,9 +69,9 @@ void BiasCalibration::startCalibration(int timeSec, int offset1, int offset2)
      QThread::msleep(10); // Затримка 10 мс
      ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
 
-     ui->labelComment->setText("Set platform to ZERO. Wait 30 sec");
+     ui->labelComment->setText("Set platform to ZERO. Wait 10 sec");
 
-     waitAndProgress(10000); //30000 очікування 30 сек з прогресбаром
+     waitAndProgress(10000); //10000 очікування 10 сек з прогресбаром
 
      // 2. Set offset Δ1
      ScriptCommands::GetInstance().SetMode(INERT);

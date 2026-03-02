@@ -13,7 +13,6 @@
 #include "ui_mainwindow.h"
 #include "biascalibration.h"
 #include <opencv2/opencv.hpp>
-#include <fstream>
 
 VideoThread::VideoThread(QObject *parent)
     : QThread(parent)
@@ -117,7 +116,7 @@ void VideoThread::run()
 
         cv::Scalar crossColor(255, 255, 0); // Червоний колір
         int thickness = 1;
-        int length = 250;
+        int length = 25;
 
         // Horizontal line
         cv::line(frame,
@@ -132,7 +131,7 @@ void VideoThread::run()
                  cv::Point(center.x, center.y + length),
                  crossColor,
                  thickness);
-
+/*
         // Центр в обрізаному кадрі (просто для порівняння)
         center = cv::Point(frame.cols / 2, frame.rows / 2);
         crossColor = cv::Scalar(255, 0, 0); // Червоний колір
@@ -152,13 +151,18 @@ void VideoThread::run()
                  cv::Point(center.x, center.y + length),
                  crossColor,
                  thickness);
-
+*/
         // Малювання ВПЗ
         if(!isSwitched){
             cv::Rect rectV2 = getVideo2RectInVideo1(videoConfig);
             cv::rectangle(frame, rectV2, cv::Scalar(0, 0, 255), 1);
         }
 
+        // малювання прямокутника трекінгу
+        //QMutexLocker locker(&roiMutex);
+        if (!currentRoi.empty()) {
+            cv::rectangle(frame, currentRoi, cv::Scalar(0, 0, 255), 2);
+        }
 
         // Draw the scale and markers
 
@@ -182,14 +186,10 @@ void VideoThread::run()
         emit frameReadyForTracking(frame);
         //emit frameProcessed(matToQImage(frame));
 
-        // малювання прямокутника трекінгу
-        //QMutexLocker locker(&roiMutex);
-        if (!currentRoi.empty()) {
-            cv::rectangle(frame,
-                          cv::Point(currentRoi.x, currentRoi.y),
-                          cv::Point(currentRoi.x + currentRoi.width, currentRoi.y + currentRoi.height),
-                          cv::Scalar(0, 0, 255), 2);
-        }
+
+
+
+
     }
 
     cap.release();
@@ -821,6 +821,15 @@ void MainWindow::onVerticalMarkerChanged(const float value)
         videoThread2->setVerticalMarkerValue(value);
 }
 
+/**
+ * @brief Виводить значення кутових швидкостей енкодерів
+ *
+ * Ця функція виводить форматовані значення швидкостей у віконця виводу
+ *
+ * @param wH значення кутовой швидкості по горизонталі (в градусах/сек)
+ * @param wV значення кутовой швидкості по вертикалі (в градусах/сек)
+ *
+ */
 void MainWindow::showSpeed(const float wH, const float wV)
 {
     // Форматування значення з фіксованою шириною
@@ -828,21 +837,28 @@ void MainWindow::showSpeed(const float wH, const float wV)
         return QString("%1").arg(val, 9, 'f', 5, QChar(' '));
     };
 
-    // HTML вивід
-    QString html = QString("wH:%1°/s")
-                       .arg(formatVal(wH));
-
-    // Встановити в QLabel
+    // HTML вивід значення по горизонталі
+    QString html = QString("wH:%1°/s").arg(formatVal(wH));
+    // Встановити в QLabel значення по горизонталі
     ui->wH_label->setText(html);
 
-    html = QString("wV:%1°/s")
-               .arg(formatVal(wV));
+    // HTML вивід значення по вертикалі
+    html = QString("wV:%1°/s").arg(formatVal(wV));
 
-    // Встановити в QLabel
-    //ui->wV_label->setTextFormat(Qt::RichText);
+    // Встановити в QLabel значення по вертикалі
     ui->wV_label->setText(html);
 }
 
+
+/**
+ * @brief Виводить значення напруги енкодерів
+ *
+ * Ця функція виводить форматовані значення напруги енкодерів
+ *
+ * @param vH значення напруги по горизонталі (в Вольтах)
+ * @param vV значення напруги по вертикалі (в Вольтах)
+ *
+ */
 void MainWindow::showDacValues(const float vH, const float vV)
 {
     // Форматування значення з фіксованою шириною
@@ -850,23 +866,30 @@ void MainWindow::showDacValues(const float vH, const float vV)
         return QString("%1").arg(val, 7, 'f', 4, QChar(' '));
     };
 
-
-    // HTML вивід
-    QString html = QString("DacH:%1V")
-                       .arg(formatVal(vH));
-
-    // Встановити в QLabel
+    // HTML вивід значення по горизонталі
+    QString html = QString("DacH:%1V").arg(formatVal(vH));
+    // Встановити в QLabel значення по горизонталі
     ui->valueDacH_label->setText(html);
 
-    html = QString("DacV:%1V")
-               .arg(formatVal(vV));
-
-    // Встановити в QLabel
+    // HTML вивід значення по вертикалі
+    html = QString("DacV:%1V").arg(formatVal(vV));
+    // Встановити в QLabel значення по вертикалі
     ui->valueDacV_label->setText(html);
 }
 
 
-
+/**
+ * @brief Стартує потоки відтворення відео з камер 1 і 2.
+ *
+ * Функція зупиняє вже існуючі потоки відео, створює нові екземпляри
+ * класу VideoThread для двох відеопотоків, налаштовує для них GStreamer-пайплайни,
+ * підключає сигнали до слотів відображення кадрів і запускає потоки.
+ *
+ * Додатково виставляє прапорці isSwitched:
+ *  - videoThread1 -> isSwitched = false (малювати мале поле);
+ *  - videoThread2 -> isSwitched = true (не малювати мале поле).
+ *
+ */
 void MainWindow::on_start_b_clicked()
 {
     if (videoThread1)
@@ -890,6 +913,12 @@ void MainWindow::on_start_b_clicked()
     videoThread2->isSwitched = true; //не малювати мале поле
 }
 
+/**
+ * @brief Зупиняє потоки відтворення відео з камер 1 і 2.
+ *
+ * Функція зупиняє вже існуючі потоки відео
+ *
+ */
 void MainWindow::on_stop_b_2_clicked()
 {
     if (videoThread1) {
@@ -905,6 +934,10 @@ void MainWindow::on_stop_b_2_clicked()
     }
 }
 
+/**
+ * @brief Поворот відео. Виставляє флаг для екземпляру класу videoThread1 і глобальний кут повороту
+ *
+ */
 void MainWindow::on_l_vid_turn_clicked()
 {
     //VideoThread.isRotated = !isRotated;
@@ -914,6 +947,10 @@ void MainWindow::on_l_vid_turn_clicked()
         rotationAngle += 360;
 }
 
+/**
+ * @brief Переключення відео. Виставляє флаг isSwitched
+ *
+ */
 void MainWindow::on_switch_vid_clicked()
 {
     //static bool isSwitched = false;
@@ -935,15 +972,10 @@ void MainWindow::on_switch_vid_clicked()
     videoThread1->isSwitched = isSwitched; // флаг для малювання ВПЗ на ШПЗ (переключили - не малюємо)
 }
 
-// void MainWindow::on_pointer_b_clicked() {
-//     // Приклад payload для CAN кадру
-//     std::vector<uint8_t> payload = {0x00, 0x10, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00};
-
-//     // Створення об'єкта для відправки даних
-//     SendDataFrame sendDataFrame;
-//     sendDataFrame.Send(0x210, payload);  // Відправка CAN повідомлення з ID 0x210
-// }
-
+/**
+ * @brief Включення лазерного вказівникеа далекоміра
+ *
+ */
 void MainWindow::on_pointer_b_clicked()
 {
     statePointer = !statePointer;
@@ -970,6 +1002,10 @@ void MainWindow::on_pointer_b_clicked()
 //     sendDataFrame.Send(0x238, payload);
 // }
 
+/**
+ * @brief Виконати замір дальності
+ *
+ */
 void MainWindow::on_start_range_b_clicked()
 {
     bool ok;
@@ -983,6 +1019,10 @@ void MainWindow::on_start_range_b_clicked()
     SendDataFrame::getInstance().Send(0x238, 0x08, payload);
 }
 
+/**
+ * @brief Зупинити замір дальності
+ *
+ */
 void MainWindow::on_break_range_b_clicked()
 {
     // Формуємо payload
@@ -994,6 +1034,10 @@ void MainWindow::on_break_range_b_clicked()
     SendDataFrame::getInstance().Send(0x238, 0x08, payload);
 }
 
+/**
+ * @brief Активувати лазер
+ *
+ */
 void MainWindow::on_laser_act_b_clicked()
 {
     laserOn = !laserOn;
@@ -1006,6 +1050,10 @@ void MainWindow::on_laser_act_b_clicked()
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
 }
 
+/**
+ * @brief Включити пульс лазера
+ *
+ */
 void MainWindow::on_pulse_b_clicked()
 {
     pulseOn = !pulseOn;
@@ -1018,6 +1066,10 @@ void MainWindow::on_pulse_b_clicked()
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
 }
 
+/**
+ * @brief ВУвімкнути термальний контроль
+ *
+ */
 void MainWindow::on_term_control_b_clicked()
 {
     termOn = !termOn;
@@ -1030,6 +1082,10 @@ void MainWindow::on_term_control_b_clicked()
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
 }
 
+/**
+ * @brief Отримати частоту лазера
+ *
+ */
 void MainWindow::on_get_frequency_clicked()
 {
     std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x01};
@@ -1038,6 +1094,10 @@ void MainWindow::on_get_frequency_clicked()
     SendDataFrame::getInstance().Send(0x248, 0x04, payload);
 }
 
+/**
+ * @brief Отримати станаг код
+ *
+ */
 void MainWindow::on_get_stanag_clicked()
 {
     QString octalStr = QString("%1%2%3")
@@ -1062,6 +1122,11 @@ void MainWindow::on_get_stanag_clicked()
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
 }
 
+
+/**
+ * @brief Задати потужність лазера 0 - 5
+ *
+ */
 void MainWindow::on_energy_0_clicked()
 {
     ScriptCommands::GetInstance().SetLaserEnergy(0);
@@ -1087,11 +1152,19 @@ void MainWindow::on_energy_5_clicked()
     ScriptCommands::GetInstance().SetLaserEnergy(5);
 }
 
+/**
+ * @brief Вибрати режим платформи
+ *
+ */
 void MainWindow::on_mode_input_currentIndexChanged(int index)
 {
     ScriptCommands::GetInstance().SetMode((ModePlatform) index);
 }
 
+/**
+ * @brief Встановити платформу в нуль
+ *
+ */
 void MainWindow::on_stop_b_clicked()
 {
     ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
@@ -1107,6 +1180,10 @@ void MainWindow::on_stop_b_clicked()
 
 }
 
+/**
+ * @brief Кнопки руху платформи
+ *
+ */
 void MainWindow::on_r_b_clicked()
 {
     QString text = ui->step_input->currentText();   // отримуємо вибраний текст
@@ -1144,6 +1221,10 @@ void MainWindow::on_d_b_clicked()
     ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
 }
 
+/**
+ * @brief Калібровка біас
+ *
+ */
 void MainWindow::on_actionBias_calibration_triggered()
 {
     BiasCalibration *form = new BiasCalibration(this); // створюємо об'єкт вікна
@@ -1151,11 +1232,19 @@ void MainWindow::on_actionBias_calibration_triggered()
     form->show();                            // відображаємо вікно
 }
 
+/**
+ * @brief Встановити програмний ноль
+ *
+ */
 void MainWindow::on_actionSet_program_0_triggered()
 {
     ScriptCommands::GetInstance().SetProgrammZero();
 }
 
+/**
+ * @brief Zero set/reset
+ *
+ */
 void MainWindow::on_actionZero_set_H_triggered()
 {
     ScriptCommands::GetInstance().ZeroSet(0x10, 0x2);
@@ -1176,6 +1265,14 @@ void MainWindow::on_actionZero_reset_V_triggered()
     ScriptCommands::GetInstance().ZeroSet(0x20, 0x3);
 }
 
+/**
+ * @brief Заповнити структуру налаштувань відео
+ *
+ * @param width Ширина кадру
+ * @param height висота кадру
+ * @param videoConfig Конфігурація відео (з файлу config.ini)
+ *
+ */
 void MainWindow::onFrameSizeAvailable(int width, int height, VideoConfig videoConfig) {
     videoFrameWidth = width;
     videoFrameHeight = height;
@@ -1222,3 +1319,21 @@ void MainWindow::displayFrame(const QImage &image)
     //     QPixmap::fromImage(displayImage)
     //         .scaled(videoLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
+
+
+ void MainWindow::keyPressEvent(QKeyEvent *keyEvent) {
+//     if (lastFrameSize.isEmpty()) {
+//         qDebug() << "No frame size available yet!";
+//         return;
+//     }
+
+    if (keyEvent->key() == Qt::Key_Up) {
+        roiSize = std::min(roiSize + 10, 200);
+        qDebug() << "ROI size increased to" << roiSize;
+    }
+    else if (keyEvent->key() == Qt::Key_Down) {
+        roiSize = std::max(roiSize - 10, 20);
+        qDebug() << "ROI size decreased to" << roiSize;
+    }
+
+ }

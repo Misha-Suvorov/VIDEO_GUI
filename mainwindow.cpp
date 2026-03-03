@@ -153,9 +153,11 @@ void VideoThread::run()
                  thickness);
 */
         // Малювання ВПЗ
-        if(!isSwitched){
+        if(!isSwitched)
+        {
             cv::Rect rectV2 = getVideo2RectInVideo1(videoConfig);
             cv::rectangle(frame, rectV2, cv::Scalar(0, 0, 255), 1);
+
         }
 
         // малювання прямокутника трекінгу
@@ -241,6 +243,8 @@ VideoConfig VideoThread::loadVideoConfig() {
     cfg.fovVideo2.height = settings.value("h", 0.0).toFloat();
     cfg.nonlinearFactor2 = settings.value("nonlinearFactor", 0.0).toFloat();
     settings.endGroup();
+
+
     return cfg;
 }
 
@@ -277,6 +281,10 @@ cv::Rect VideoThread::initROIAutoDetect(cv::Mat frame){
 }
 
 cv::Rect VideoThread::getVideo2RectInVideo1(const VideoConfig& cfg) {
+
+
+
+
     // пікселі на градус
     float pxPerDegX = cfg.roi.width  / cfg.fovVideo1.width;
     float pxPerDegY = cfg.roi.height / cfg.fovVideo1.height;
@@ -389,7 +397,7 @@ MainWindow::MainWindow(QWidget *parent)
             this,
             &MainWindow::handleProcessingError);
 
-    // Connect TrackingWorker signals
+    //Connect TrackingWorker signals
     //connect(trackingWorker, &TrackingWorker::anglesCalculated, this, &MainWindow::handleAngles);
     connect(trackingWorker, &TrackingWorker::roiUpdated, this, &MainWindow::handleRoiUpdate);
 

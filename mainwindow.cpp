@@ -76,48 +76,17 @@ void VideoThread::run()
         if (frame.empty())
             continue;
 
-
-        // Визначення чорних смуг і автоматичне встановлення ROI по першому кадру
+        //Заповнення конфігурації з файла config.ini
         if (!roiSet)
         {
             videoConfig = loadVideoConfig();
-
-            //initROIFromConfig();
-            //videoConfig.roi = initROIAutoDetect(frame);
-
-            videoConfig.fullFrame = cv::Rect(0, 0, frame.cols, frame.rows); // Запам'ятати повний кадр для оптичного перехрестя
-
         }
 
-
-
-        // Якщо ROI вже знайдено — обрізаємо кадр
-        if (roiSet && videoConfig.roi.width > 0 && videoConfig.roi.height > 0 &&
-            videoConfig.roi.x >= 0 && videoConfig.roi.y >= 0 &&
-            videoConfig.roi.x + videoConfig.roi.width <= frame.cols &&
-            videoConfig.roi.y + videoConfig.roi.height <= frame.rows)
-        {
-            frame = frame(videoConfig.roi);
-        }
-
-
-
-        // Draw crosshair in the center
-        //cv::Point center(frame.cols / 2, frame.rows / 2);
-        videoConfig.opticalCenter = cv::Point(videoConfig.fullFrame.width / 2 - videoConfig.roi.x,
-                                              videoConfig.fullFrame.height / 2 - videoConfig.roi.y); // оптичне (юстоване) перехрестя. Визначається з повного кадру (необрізаного)
-
-        cv::Point center = videoConfig.opticalCenter;
-
-        // Якщо кадр обрізаний, перераховуємо координати центру в межах ROI
-        //cv::Point center(videoConfig.opticalCenter.x - videoConfig.roi.x,
-        //                 videoConfig.opticalCenter.y - videoConfig.roi.y);
-
-
-        cv::Scalar crossColor(255, 255, 0); // Червоний колір
+        //Малювання перехрестя
+        cv::Scalar crossColor(255, 255, 0);
         int thickness = 1;
         int length = 25;
-
+        cv::Point center = videoConfig.opticalCenter;
         // Horizontal line
         cv::line(frame,
                  cv::Point(center.x - length, center.y),
@@ -131,27 +100,7 @@ void VideoThread::run()
                  cv::Point(center.x, center.y + length),
                  crossColor,
                  thickness);
-/*
-        // Центр в обрізаному кадрі (просто для порівняння)
-        center = cv::Point(frame.cols / 2, frame.rows / 2);
-        crossColor = cv::Scalar(255, 0, 0); // Червоний колір
-        thickness = 1;
-        length = 25;
 
-        // Horizontal line
-        cv::line(frame,
-                 cv::Point(center.x - length, center.y),
-                 cv::Point(center.x + length, center.y),
-                 crossColor,
-                 thickness);
-
-        // Vertical line
-        cv::line(frame,
-                 cv::Point(center.x, center.y - length),
-                 cv::Point(center.x, center.y + length),
-                 crossColor,
-                 thickness);
-*/
         // Малювання ВПЗ
         if(!isSwitched)
         {
@@ -196,6 +145,86 @@ void VideoThread::run()
 
     cap.release();
 }
+
+/*
+cv::Mat VideoThread::processVideoWithConfig(cv::Mat frame)
+{
+    // Визначення чорних смуг і автоматичне встановлення ROI по першому кадру
+    if (!roiSet)
+    {
+        videoConfig = loadVideoConfig();
+
+        //initROIFromConfig();
+        //videoConfig.roi = initROIAutoDetect(frame);
+
+        videoConfig.fullFrame = cv::Rect(0, 0, frame.cols, frame.rows); // Запам'ятати повний кадр для оптичного перехрестя
+
+    }
+
+
+
+    // Якщо ROI вже знайдено — обрізаємо кадр
+    if (roiSet && videoConfig.roi.width > 0 && videoConfig.roi.height > 0 &&
+        videoConfig.roi.x >= 0 && videoConfig.roi.y >= 0 &&
+        videoConfig.roi.x + videoConfig.roi.width <= frame.cols &&
+        videoConfig.roi.y + videoConfig.roi.height <= frame.rows)
+    {
+        frame = frame(videoConfig.roi);
+    }
+
+
+
+    // Draw crosshair in the center
+    //cv::Point center(frame.cols / 2, frame.rows / 2);
+    videoConfig.opticalCenter = cv::Point(videoConfig.fullFrame.width / 2 - videoConfig.roi.x,
+                                          videoConfig.fullFrame.height / 2 - videoConfig.roi.y); // оптичне (юстоване) перехрестя. Визначається з повного кадру (необрізаного)
+
+    cv::Point center = videoConfig.opticalCenter;
+
+    // Якщо кадр обрізаний, перераховуємо координати центру в межах ROI
+    //cv::Point center(videoConfig.opticalCenter.x - videoConfig.roi.x,
+    //                 videoConfig.opticalCenter.y - videoConfig.roi.y);
+
+
+    cv::Scalar crossColor(255, 255, 0); // Червоний колір
+    int thickness = 1;
+    int length = 25;
+
+    // Horizontal line
+    cv::line(frame,
+             cv::Point(center.x - length, center.y),
+             cv::Point(center.x + length, center.y),
+             crossColor,
+             thickness);
+
+    // Vertical line
+    cv::line(frame,
+             cv::Point(center.x, center.y - length),
+             cv::Point(center.x, center.y + length),
+             crossColor,
+             thickness);
+    /*
+        // Центр в обрізаному кадрі (просто для порівняння)
+        center = cv::Point(frame.cols / 2, frame.rows / 2);
+        crossColor = cv::Scalar(255, 0, 0); // Червоний колір
+        thickness = 1;
+        length = 25;
+
+        // Horizontal line
+        cv::line(frame,
+                 cv::Point(center.x - length, center.y),
+                 cv::Point(center.x + length, center.y),
+                 crossColor,
+                 thickness);
+
+        // Vertical line
+        cv::line(frame,
+                 cv::Point(center.x, center.y - length),
+                 cv::Point(center.x, center.y + length),
+                 crossColor,
+                 thickness);
+*/
+//}
 
 
 QImage VideoThread::matToQImage(const cv::Mat &mat)
@@ -243,6 +272,9 @@ VideoConfig VideoThread::loadVideoConfig() {
     cfg.fovVideo2.height = settings.value("h", 0.0).toFloat();
     cfg.nonlinearFactor2 = settings.value("nonlinearFactor", 0.0).toFloat();
     settings.endGroup();
+
+    cfg.opticalCenter.x = cfg.roi.width/2;
+    cfg.opticalCenter.y = cfg.roi.height/2;
 
 
     return cfg;
@@ -1345,3 +1377,9 @@ void MainWindow::displayFrame(const QImage &image)
     }
 
  }
+
+ void MainWindow::on_pushButton_clicked()
+ {
+
+ }
+

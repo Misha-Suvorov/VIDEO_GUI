@@ -101,3 +101,15 @@ RC_FILE = file.rc
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+# Copy config.ini next to exe (Qt creates debug/release subfolders)
+CONFIG_INI = $$shell_path($$PWD/config.ini)
+
+win32 {
+    contains(CONFIG, debug) {
+        TARGET_INI = $$shell_path($$OUT_PWD/debug/config.ini)
+    } else {
+        TARGET_INI = $$shell_path($$OUT_PWD/release/config.ini)
+    }
+    QMAKE_POST_LINK += $$quote(cmd /c copy /Y "$$CONFIG_INI" "$$TARGET_INI")
+}

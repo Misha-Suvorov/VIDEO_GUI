@@ -51,7 +51,7 @@ private:
     float speedX = 0.0f;
     float speedY = 0.0f;
 
-    ModePlatform mode_platform;
+    ModePlatform mode_platform = TRACKING;
 
     Voltage voltage;
 

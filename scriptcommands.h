@@ -21,6 +21,8 @@ public:
 
     void AskValueDACHoriz();
     void AskValueDACVert();
+    void SetTrackingDot(uint16_t x, uint16_t y);
+    void ResetTracking();
 };
 
 #endif // SCRIPTCOMMANDS_H

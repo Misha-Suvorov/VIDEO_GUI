@@ -178,6 +178,8 @@ private slots:
     void on_actionZero_reset_H_triggered();
     void on_actionZero_reset_V_triggered();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

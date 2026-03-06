@@ -178,6 +178,9 @@ void ClickableLabel::processClick()
     case TRACKING:{
 
         lastRoiCenter = videoPos; //QPoint(x_original, y_original);
+
+        ScriptCommands::GetInstance().SetTrackingDot(videoPos.x(), videoPos.y());
+/*
         int frameW = settings->getConfig().roi.width;
         int frameH = settings->getConfig().roi.height;
         int x0 = std::clamp((int)(videoPos.x() - roiTrackingSize / 2), 0, frameW - roiTrackingSize);
@@ -191,7 +194,7 @@ void ClickableLabel::processClick()
                newRoi.y,
                newRoi.width,
                newRoi.height);
-
+*/
         break;
     }
     }

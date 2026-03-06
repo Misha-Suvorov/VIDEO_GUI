@@ -223,3 +223,48 @@ void ScriptCommands::ZeroSet(uint8_t canal, uint8_t command)
 }
 
 
+/**
+ * @brief Передати координати точки для захоплення
+ *
+ * @param click_X Координата точки кліку по осі Х (пікселі)
+ * @param click_Y Координата точки кліку по осі Y (пікселі)
+ *
+ */
+void ScriptCommands::SetTrackingDot(uint16_t x, uint16_t y)
+{
+    std::vector<uint8_t> payload;
+
+    payload = {0x00, 0x00, 0x0D, 0x00};
+
+    // --- click_X (2 байти) ---
+    payload.push_back(static_cast<uint8_t>(x & 0xFF));        // low byte
+    payload.push_back(static_cast<uint8_t>((x >> 8) & 0xFF)); // high byte
+
+    // --- click_Y (2 байти) ---
+    payload.push_back(static_cast<uint8_t>(y & 0xFF));
+    payload.push_back(static_cast<uint8_t>((y >> 8) & 0xFF));
+
+
+
+    SendDataFrame::getInstance().AddCanFrame(0x198, 0x08, payload);
+
+
+}
+
+/**
+ * @brief Скидання захоплення
+ *
+ *
+ */
+void ScriptCommands::ResetTracking()
+{
+    std::vector<uint8_t> payload;
+
+    payload = {0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+    SendDataFrame::getInstance().AddCanFrame(0x198, 0x08, payload);
+
+
+}
+
+

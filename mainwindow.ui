@@ -1492,7 +1492,7 @@ QPushButton:checked:hover {
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="trackingButton">
           <property name="styleSheet">
            <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */

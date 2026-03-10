@@ -14,6 +14,7 @@
 #include "laserparameters.h"
 #include "lpsparameters.h"
 #include "pixeltoangleconverter.h"
+#include "qabstractbutton.h"
 #include "scalehorizontal.h"
 #include "senddataframe.h"
 #include "trackingworker.h"
@@ -193,6 +194,7 @@ private:
     QThread *parserThread;
 
     ClickableLabel *videoLabel;
+    QButtonGroup *modeButtonGroup = nullptr;
 
     CircularBuffer<std::vector<uint8_t>> localMessageQueue;
     QMutex queueMutex;
@@ -239,6 +241,7 @@ private:
     QPoint lastRoiCenter = QPoint(-1, -1);
 
     void displayFrame(const QImage &image);
+    void onModeSelected(int id);
 };
 
 #endif // MAINWINDOW_H

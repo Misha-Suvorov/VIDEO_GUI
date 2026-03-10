@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QButtonGroup>
 #include <QDebug>
 #include <QPainter>
 #include <QSettings>
@@ -345,11 +346,20 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->measure_mode,
+    modeButtonGroup = new QButtonGroup(this);
+
+    modeButtonGroup->addButton(ui->radioModeInert, static_cast<int>(ModePlatform::INERT));
+    modeButtonGroup->addButton(ui->radioModeBody, static_cast<int>(ModePlatform::BODY));
+    modeButtonGroup->addButton(ui->radioModeTracking, static_cast<int>(ModePlatform::TRACKING));
+
+    connect(modeButtonGroup, QOverload<int>::of(&QButtonGroup::idClicked),
+            this, &MainWindow::onModeSelected);
+
+    connect(ui->comboMeasurementMode,
             &QComboBox::currentIndexChanged,
             this,
             &MainWindow::onMeasureModeChanged);
-    onMeasureModeChanged(ui->measure_mode->currentIndex());
+    onMeasureModeChanged(ui->comboMeasurementMode->currentIndex());
 
     connect(ui->frequency_mode,
             &QComboBox::currentIndexChanged,
@@ -543,6 +553,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::onModeSelected(int id)
+{
+    ScriptCommands::GetInstance().SetMode(static_cast<ModePlatform>(id));
+}
+
+
 QString MainWindow::circleHtml(bool active, const QString& label) {
     QString color = active ? "green" : "red";
     return QString("<span style='color:%1;font-size:14pt;'>●</span> %2")
@@ -682,27 +699,25 @@ void MainWindow::updateLpsParametersUI()
 
     uint32_t time_remaining = manager.GetTimeRemaining();
     uint8_t laser_error_code = manager.GetLaserError();
-    QString laser_error_str[4] = {"Error: NONE",
-                                  "Error: INPUT",
-                                  "Error: OVERTEMPERATURE",
-                                  "Error: OVERVOLTAGE"};
+    QString laser_error_str[4] = {"NONE",
+                                  "INPUT",
+                                  "OVERTEMPERATURE",
+                                  "OVERVOLTAGE"};
     //uint32_t stanag = manager.GetLaserStanag();
 
     // Display values in UI QLineEdit widgets
 
     ui->range_out->setText(QString::number(range, 'f', 4));
-    ui->temp_out->setText(QString::number(temp, 'f', 4));
+    ui->labelLaserTempValue->setText(QString::number(temp, 'f', 4));
 
     ui->frequency_out->setText(QString::number(freq) + " us");
-    ui->time_remaining_out->setText(QString::number(time_remaining / 1000));
+    ui->labelPulseTimerValue->setText(QString::number(time_remaining / 1000) + " s");
 
-    ui->error_label->setText(laser_error_str[laser_error_code]);
+    ui->labelLaserErrorValue->setText(laser_error_str[laser_error_code]);
 
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
 
     // Режим роботи MODE
-
-
 
     switch (manager.GetModePlatform()) {
     case BODY:

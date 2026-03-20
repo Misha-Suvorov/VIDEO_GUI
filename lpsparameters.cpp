@@ -35,6 +35,12 @@ void LpsParameters::SetRange(float value)
 {
     range = value;
 }
+
+void LpsParameters::SetPlatformHeartbeat()
+{
+    is_heartbeat = 30;
+}
+/*
 void LpsParameters::SetTemperature(float value)
 {
     temperature = value;
@@ -59,6 +65,8 @@ void LpsParameters::SetLaserError(uint8_t value)
 {
     laser_error = value;
 }
+*/
+
 
 void LpsParameters::SetVoltageX(float value)
 {
@@ -96,10 +104,6 @@ float LpsParameters::GetRange() const
 {
     return range;
 }
-float LpsParameters::GetTemperature() const
-{
-    return temperature;
-}
 
 float LpsParameters::GetVoltageX() const
 {
@@ -114,6 +118,17 @@ Voltage LpsParameters::GetVoltage() const
     return voltage;
 }
 
+float LpsParameters::GetPlatformHeartbeat()
+{
+    if(is_heartbeat>0) is_heartbeat--;
+    return is_heartbeat;
+}
+
+// float LpsParameters::GetTemperature() const
+// {
+//     return temperature;
+// }
+/*
 uint32_t LpsParameters::GetLaserFrequency() const
 {
     return laser_frequency;
@@ -134,3 +149,4 @@ uint8_t LpsParameters::GetLaserError() const
 {
     return laser_error;
 }
+*/

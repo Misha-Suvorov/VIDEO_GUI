@@ -34,6 +34,10 @@ void CANParserWorker::process()
             switch (canMessage.Message.TYPE) {
             case ParamType::NoneType:
                 //LpsParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
+                canMessage.ParseByte();
+                break;
+            case ParamType::ErrorType:
+                canMessage.ParseErrorType();
                 break;
             case ParamType::Float:
                 canMessage.ParseFloat();

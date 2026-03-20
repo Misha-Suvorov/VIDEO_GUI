@@ -99,6 +99,8 @@ public:
     float ParseFloat();
     uint32_t ParseULong();
     uint8_t ParseByte();
+    bool ParseNonType();
+    uint8_t ParseErrorType();
 
     void PrintParsedValue();
     float GetFloatFromPayload();
@@ -107,6 +109,7 @@ public:
     uint16_t GetUShortFromPayload();
     int16_t GetShortFromPayload();
     uint8_t GetByteFromPayload();
+
 };
 
 #endif // CANMESSAGEGENERIC_H

@@ -1,6 +1,7 @@
 #include "canthread.h"
 #include "canmessagegeneric.h"
 #include "lpsparameters.h"
+#include "laserparameters.h"
 
 //CANThread::CANThread() {}
 
@@ -75,7 +76,7 @@ void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>> &queueCopy
         CanMessageGeneric canMessage(message);
         switch (canMessage.Message.TYPE) {
         case ParamType::NoneType:
-            LpsParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
+            LaserParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
             break;
         case ParamType::Float:
             canMessage.ParseFloat();

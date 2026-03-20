@@ -8,50 +8,96 @@ LaserParameters &LaserParameters::GetInstance()
     return instance;
 }
 
+// Встановити STANAG код
 void LaserParameters::SetLaserStanag(uint32_t value)
 {
     stanag_code = value;
 }
+
+// Задати лічильник кількості імпульсів напрацювання
 void LaserParameters::SetLaserCountWorkPulses(uint32_t value)
 {
     work_pulses = value;
 }
+
+// Задати залишок часу підсвіту в мс
 void LaserParameters::SetTimeRemaining(uint32_t value)
 {
     time_remaining = value;
 }
+
+// Встановити код помилки
 void LaserParameters::SetLaserError(uint8_t value)
 {
     error = value;
 }
+
+// Встановити залишок часу  затримки підсвіту в мс.
 void LaserParameters::SetDelayRemaining(uint32_t value)
 {
     delay_remaining = value;
 }
+
+// Задати Лічильник кількості імпульсів напрацювання
 void LaserParameters::SetCountCycles(uint32_t value)
 {
     count_cycles = value;
 }
+
+// Встановлення статусу Активація ЛЦВ
 void LaserParameters::SetLaserActive(bool value)
 {
     is_laser_activ = value;
 }
+
+// Встановлення статусу Включення підсвіту
 void LaserParameters::SetPulseOn(bool value)
 {
     is_pulse_on = value;
 }
+
+// Встановлення статусу Термоконтроль включено
 void LaserParameters::SetThermocontrolOn(bool value)
 {
     is_thermocontrol_on = value;
 }
+
+// Встановлення статусу Затвор (якщо увімкнений випромінювання не виходить назовні)
 void LaserParameters::SetBlindOn(bool value)
 {
     is_blind_on = value;
 }
 
+//Серцебиття
+void LaserParameters::SetHeartbeat(bool value)
+{
+    if(value) is_heartbeat = 30;
+    else if(is_heartbeat>0) is_heartbeat--;
+}
+
+// Задати температуру
+void LaserParameters::SetTemperature(float value)
+{
+    temperature = value;
+}
+
+// Задати частоту
+void LaserParameters::SetLaserFrequency(uint32_t value)
+{
+    pulse_frequency = value;
+}
+
+// Задати потужність
+void LaserParameters::SetEnergy(uint8_t value)
+{
+    energy = value;
+}
+
+
+//=== Зчитування параметрів лазера
 uint32_t LaserParameters::GetLaserFrequency() const
 {
-    return pulse_repetition_frequency;
+    return pulse_frequency;
 }
 uint32_t LaserParameters::GetLaserStanag() const
 {
@@ -92,4 +138,16 @@ bool LaserParameters::GetThermocontrolOn() const
 bool LaserParameters::GetBlindOn() const
 {
     return is_blind_on;
+}
+float LaserParameters::GetTemperature() const
+{
+     return temperature;
+}
+uint8_t LaserParameters::GetEnergy() const
+{
+    return energy;
+}
+bool LaserParameters::GetHeartbeat() {
+    if(is_heartbeat>0) is_heartbeat--;
+    return is_heartbeat;
 }

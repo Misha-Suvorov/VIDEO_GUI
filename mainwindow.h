@@ -87,6 +87,7 @@ private:
 
     cv::Rect currentRoi;
     QMutex roiMutex;
+    void cross(cv::Mat frame, cv::Scalar crossColor, int x, int y, int thickness, int length);
 };
 
 class MainWindow : public QMainWindow
@@ -160,8 +161,6 @@ private slots:
 
     void on_mode_input_currentIndexChanged(int index);
 
-    void on_stop_b_clicked();
-
     void on_r_b_clicked();
 
     void on_step_input_currentTextChanged(const QString &arg1);
@@ -180,6 +179,15 @@ private slots:
     void on_actionZero_reset_V_triggered();
 
     void on_pushButton_clicked();
+
+    void on_ext_radiation_b_clicked();
+
+    void on_trackingButton_clicked();
+
+    void on_zero_b_clicked();
+
+    void on_btnLaserAdvanced_clicked();
+
 
 private:
     Ui::MainWindow *ui;
@@ -207,6 +215,7 @@ private:
     bool laserOn = false;
     bool pulseOn = false;
     bool termOn = false;
+    bool blindOn = false;
     bool isLittleEndian();
 
     // New variables for marker values
@@ -223,6 +232,10 @@ private:
     QString circleHtml(bool active, const QString& label);
     int activeRx = 0;
     int activeTx = 0;
+
+    int activeLaserStatus = 0;
+    int activeLrfStatus = 0;
+    int activePlatformStatus = 0;
 
     int videoFrameWidth = 0;
     int videoFrameHeight = 0;
@@ -242,6 +255,47 @@ private:
 
     void displayFrame(const QImage &image);
     void onModeSelected(int id);
+
+
+    enum class UiState
+    {
+        Off,
+        On,
+        Warning,
+        Error
+    };
+
+    enum class IndicatorVisual
+    {
+        Inactive,
+        LaserEnabled,
+        ThermalActive,
+        RadiationActive,
+        ShutterClosed,
+        Warning,
+        Error
+    };
+
+    QString uiStateToString(UiState state) const;
+    void updateLaserActiveState(bool isLaserActive);
+    void applyStateStyle(QWidget *widget, UiState state);
+    void updatePulseOnState(bool isPulseOn);
+    void updateThermalControlState(bool isThermocontrolOn);
+    void updateExternalRadiationState(bool isExternalRadiationOn);
+
+
+    void applyIndicatorStyle(QWidget *widget, IndicatorVisual visual, const QString &tooltip = QString());
+    void updateLaserIndicators(bool isLaserActive,
+                               bool isPulseOn,
+                               bool isThermocontrolOn,
+                               bool isBlindOn);
+
+    QString statusTextHtml(const QString &name, bool active) const;
+    void setStatusRowState();
+
+    void check_laser_power();
+    void updateLaserTemperatureUI(float temperature);
+    void updateLaserErrorUI(uint8_t errorCode);
 };
 
 #endif // MAINWINDOW_H

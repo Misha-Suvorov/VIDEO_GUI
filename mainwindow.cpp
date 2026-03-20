@@ -55,6 +55,24 @@ void VideoThread::setVerticalMarkerValue(float value)
     }
     emit verticalMarkerValueChanged(static_cast<int>(verticalMarkerValue));
 }
+void VideoThread::cross(cv::Mat frame, cv::Scalar crossColor, int x, int y,
+                        int thickness, int length)
+{
+    //Малювання перехрестя
+    // Horizontal line
+    cv::line(frame,
+             cv::Point(x - length, y),
+             cv::Point(x + length, y),
+             crossColor,
+             thickness);
+
+    // Vertical line
+    cv::line(frame,
+             cv::Point(x, y - length),
+             cv::Point(x, y + length),
+             crossColor,
+             thickness);
+}
 
 void VideoThread::run()
 {
@@ -87,7 +105,12 @@ void VideoThread::run()
         cv::Scalar crossColor(255, 255, 0);
         int thickness = 1;
         int length = 25;
-        cv::Point center = videoConfig.opticalCenter;
+        cv::Point center; // = videoConfig.opticalCenter;
+        //center.x = frame.cols/2-15;
+        //center.y = frame.rows/2;
+        center.x = frame.cols/2+1;
+        center.y = frame.rows/2;
+
         // Horizontal line
         cv::line(frame,
                  cv::Point(center.x - length, center.y),
@@ -101,6 +124,22 @@ void VideoThread::run()
                  cv::Point(center.x, center.y + length),
                  crossColor,
                  thickness);
+
+/*
+        //Центр Лазера
+        cv::Scalar crossLaser(255, 0, 0);
+        cv::Point centerLaser; // = videoConfig.opticalCenter;
+        centerLaser.x = frame.cols/2-3; //12 px*0.00077 = 0.56`=33.6"
+        centerLaser.y = frame.rows/2-15; //15 px *0.00072=38.88"
+        cross(frame, crossLaser, centerLaser.x, centerLaser.y, 1, 20);
+
+        //Центр далекоміра
+        cv::Scalar crossLRF(0, 0, 255);
+        cv::Point centerLRF; // = videoConfig.opticalCenter;
+        centerLRF.x = frame.cols/2+4; //19px*0.00077=52.5"
+        centerLRF.y = frame.rows/2+15; //15px = 38.88"
+        cross(frame, crossLRF, centerLRF.x, centerLRF.y, 1, 15);
+*/
 
         // Малювання ВПЗ
         if(!isSwitched)
@@ -146,6 +185,9 @@ void VideoThread::run()
 
     cap.release();
 }
+
+
+
 
 /*
 cv::Mat VideoThread::processVideoWithConfig(cv::Mat frame)
@@ -346,6 +388,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->laserAdvancedFrame->setVisible(false);
+
     modeButtonGroup = new QButtonGroup(this);
 
     modeButtonGroup->addButton(ui->radioModeInert, static_cast<int>(ModePlatform::INERT));
@@ -460,7 +504,7 @@ MainWindow::MainWindow(QWidget *parent)
 
             QMutexLocker locker(&queueMutex); // Блокуємо доступ до черги
 
-            activeRx = 50;
+            activeRx = 20;
 
             // Отримуємо тимчасову чергу з кадру
             std::queue<std::vector<uint8_t>> frameQueue = frame.GetMessageQueue();
@@ -557,6 +601,8 @@ MainWindow::~MainWindow()
 void MainWindow::onModeSelected(int id)
 {
     ScriptCommands::GetInstance().SetMode(static_cast<ModePlatform>(id));
+    if(id==0) ui->label_step->setText("Step (Volts)");
+    else ui->label_step->setText("Step (°/s)");
 }
 
 
@@ -613,7 +659,10 @@ void MainWindow::on_step_input_currentTextChanged(const QString &arg1)
 // {
 //     int first_stanag_input[8] = {1,2,3,4,5,6,7,8};
 // }
-
+/**
+ * @brief Вибір режиму вимірювання далекоміра
+ *
+ */
 void MainWindow::onMeasureModeChanged(int index)
 {
     switch (index) {
@@ -682,6 +731,8 @@ void MainWindow::displayFrame2(const QImage &image)
 void MainWindow::updateLpsParametersUI()
 {
     LpsParameters &manager = LpsParameters::GetInstance();
+    LaserParameters &laser = LaserParameters::GetInstance();
+
 
     float angleX = manager.GetAngleX();
     float angleY = manager.GetAngleY();
@@ -690,30 +741,44 @@ void MainWindow::updateLpsParametersUI()
     float omegaY = manager.GetSpeedY();
 
     float range = manager.GetRange();
-    float temp = manager.GetTemperature();
+    float temp = laser.GetTemperature();
 
     float voltageX = manager.GetVoltageX();
     float voltageY = manager.GetVoltageY();
 
-    uint32_t freq = manager.GetLaserFrequency();
+    //Laser
+    uint32_t period_us = laser.GetLaserFrequency(); // період в мікросекундах
+    float period_s = (float)period_us/1000000.0; // перевела в секунди
+    float freq = (period_s!=0) ? (1/period_s):0;
 
-    uint32_t time_remaining = manager.GetTimeRemaining();
-    uint8_t laser_error_code = manager.GetLaserError();
-    QString laser_error_str[4] = {"NONE",
-                                  "INPUT",
-                                  "OVERTEMPERATURE",
-                                  "OVERVOLTAGE"};
-    //uint32_t stanag = manager.GetLaserStanag();
+    uint32_t time_remaining = laser.GetTimeRemaining();
+    uint8_t laser_error_code = laser.GetLaserError();
+
+    bool isLaserActive = laser.GetLaserActive();
+    bool isTermocontrolOn = laser.GetThermocontrolOn();
+    bool isBlindOn = laser.GetBlindOn();
+    bool isPulseOn = laser.GetPulseOn();
+
 
     // Display values in UI QLineEdit widgets
 
     ui->range_out->setText(QString::number(range, 'f', 4));
-    ui->labelLaserTempValue->setText(QString::number(temp, 'f', 4));
+    //ui->labelLaserTempValue->setText(QString::number(temp, 'f', 2));
+    updateLaserTemperatureUI(temp);
 
-    ui->frequency_out->setText(QString::number(freq) + " us");
+    ui->period_out->setText(QString::number(period_s) + " s");
+    ui->frequency_out->setText(QString::number(freq) + " Hz");
     ui->labelPulseTimerValue->setText(QString::number(time_remaining / 1000) + " s");
 
-    ui->labelLaserErrorValue->setText(laser_error_str[laser_error_code]);
+    //ui->labelLaserErrorValue->setText(laser_error_str[laser_error_code]);
+    updateLaserErrorUI(laser_error_code);
+
+    // Робота лазера
+    updateLaserIndicators(isLaserActive,
+                          isPulseOn,
+                          isTermocontrolOn,
+                          isBlindOn);
+
 
     scaleHorizontal.setOmegaValues(omegaX, omegaY);
 
@@ -744,20 +809,32 @@ void MainWindow::updateLpsParametersUI()
      showSpeed(omegaX, omegaY);
      showDacValues(voltageX, voltageY);
 
-     if(activeRx>0)
-     {
-         setRxActive(true);
-         activeRx--;
-     }
-     else setRxActive(false);
+     setStatusRowState();
+
+     // if(activeRx>0)
+     // {
+     //     setRxActive(true);
+     //     activeRx--;
+     // }
+     // else setRxActive(false);
 
 
-     if(activeTx>0)
-     {
-        setTxActive(true);
-        activeTx--;
-     }
-     else setTxActive(false);
+     // if(activeTx>0)
+     // {
+     //    setTxActive(true);
+     //    activeTx--;
+     // }
+     // else setTxActive(false);
+
+     // if (activeLaserStatus > 0)
+     // {
+     //     setLaserStatus(true);
+     //     activeLaserStatus--;
+     // }
+     // else
+     // {
+     //     setLaserStatus(false);
+     // }
 
 
      static int counterTicks = 0;
@@ -779,14 +856,276 @@ void MainWindow::updateLpsParametersUI()
      }
 
 
+
+
     // Відправка пакету по CAN
     if (SendDataFrame::getInstance().GetDataFrameLen() != 0) {
         SendDataFrame::getInstance().SendAllFrames();
-        activeTx = 30;
+        activeTx = 20;
     }
 
     ui->videoLabel->setTrackingWorker(trackingWorker);
 
+}
+
+
+
+
+/**
+ * @brief Показує чи активний лазер
+ */
+void MainWindow::updateLaserActiveState(bool isLaserActive)
+{
+   applyStateStyle(ui->laser_act_b, isLaserActive ? UiState::On : UiState::Off);
+}
+
+/**
+ * @brief Показує чи лазер пульсує
+ */
+void MainWindow::updatePulseOnState(bool isPulseOn)
+{
+    applyStateStyle(ui->pulse_b, isPulseOn ? UiState::On : UiState::Off);
+}
+
+/**
+ * @brief Показує чи увімкнено термоконтроль
+ */
+void MainWindow::updateThermalControlState(bool isThermocontrolOn)
+{
+    applyStateStyle(ui->term_control_b, isThermocontrolOn ? UiState::On : UiState::Off);
+}
+
+/**
+ * @brief Показує чи увімкнено затвор
+ */
+void MainWindow::updateExternalRadiationState(bool isExternalRadiationOn)
+{
+    applyStateStyle(ui->ext_radiation_b, isExternalRadiationOn ? UiState::On : UiState::Off);
+}
+
+/**
+ * @brief Оновити стани кнопок для ІЛВ
+ */
+void MainWindow::updateLaserIndicators(bool isLaserActive,
+                                       bool isPulseOn,
+                                       bool isThermocontrolOn,
+                                       bool isBlindOn)
+{
+    applyIndicatorStyle(
+        ui->laser_act_b,
+        isLaserActive ? IndicatorVisual::LaserEnabled : IndicatorVisual::Inactive,
+        isLaserActive
+            ? "Laser activation enabled. Thermal control is enabled automatically."
+            : "Laser activation is off."
+        );
+
+    applyIndicatorStyle(
+        ui->term_control_b,
+        isThermocontrolOn ? IndicatorVisual::ThermalActive : IndicatorVisual::Inactive,
+        isThermocontrolOn
+            ? "Thermal control active."
+            : "Thermal control inactive."
+        );
+
+    applyIndicatorStyle(
+        ui->pulse_b,
+        isPulseOn ? IndicatorVisual::RadiationActive : IndicatorVisual::Inactive,
+        isPulseOn
+            ? "Pulse ON. Radiation active. Use caution."
+            : "Pulse OFF."
+        );
+
+    applyIndicatorStyle(
+        ui->ext_radiation_b,
+        isBlindOn ? IndicatorVisual::ShutterClosed : IndicatorVisual::Inactive,
+        isBlindOn
+            ? "Shutter closed. Radiation does not exit outside."
+            : "Shutter open."
+        );
+}
+
+/**
+ * @brief Стилі для кнопок ІЛВ
+ */
+void MainWindow::applyIndicatorStyle(QWidget *widget,
+                                     IndicatorVisual visual,
+                                     const QString &tooltip)
+{
+    QString style;
+
+    switch (visual)
+    {
+    case IndicatorVisual::Inactive:
+        style =
+            "QPushButton {"
+            "background-color: transparent;"
+            "border: 1px solid #8a8a8a;"
+            "color: black;"
+            "}";
+        break;
+
+    case IndicatorVisual::LaserEnabled:
+        style =
+            "QPushButton {"
+            "background-color: #2ecc71;"
+            "border: 1px solid #1e8449;"
+            "color: black;"
+            "font-weight: 600;"
+            "}";
+        break;
+
+    case IndicatorVisual::RadiationActive:
+        style =
+            "QPushButton {"
+            "background-color: #e74c3c;"
+            "border: 1px solid #922b21;"
+            "color: white;"
+            "font-weight: 600;"
+            "}";
+        break;
+
+    case IndicatorVisual::ThermalActive:
+        style =
+            "QPushButton {"
+            "background-color: #d6eaf8;"
+            "border: 1px solid #7fb3d5;"
+            "color: black;"
+            "font-weight: 400;"
+            "}";
+        break;
+
+    case IndicatorVisual::ShutterClosed:
+        style =
+            "QPushButton {"
+            "background-color: #fcf3cf;"
+            "border: 1px solid #d4ac0d;"
+            "color: black;"
+            "font-weight: 400;"
+            "}";
+        break;
+    }
+
+    widget->setStyleSheet(style);
+
+    if (!tooltip.isEmpty())
+        widget->setToolTip(tooltip);
+}
+
+// void MainWindow::applyIndicatorStyle(QWidget *widget,
+//                                      IndicatorVisual visual,
+//                                      const QString &tooltip)
+// {
+//     QString style;
+
+//     switch (visual)
+//     {
+//     case IndicatorVisual::Inactive:
+//         style =
+//             "QPushButton {"
+//             "background-color: transparent;"
+//             "border: 1px solid gray;"
+//             "color: black;"
+//             "}";
+//         break;
+
+//     case IndicatorVisual::LaserEnabled:
+//         style =
+//             "QPushButton {"
+//             "background-color: #2ecc71;"
+//             "border: 1px solid #1e8449;"
+//             "color: black;"
+//             "font-weight: 600;"
+//             "}";
+//         break;
+
+//     case IndicatorVisual::ThermalActive:
+//         style =
+//             "QPushButton {"
+//                 "background-color: #f4d03f;"
+//                 "border: 1px solid #b7950b;"
+//                 "color: black;"
+//             "}";
+//         break;
+
+//     case IndicatorVisual::RadiationActive:
+//         style =
+//             "QPushButton {"
+//             "background-color: #e74c3c;"
+//             "border: 1px solid #922b21;"
+//             "color: white;"
+//             "font-weight: 600;"
+//             "}";
+//         break;
+
+//     case IndicatorVisual::ShutterClosed:
+//         style =
+//             "QPushButton {"
+//                 "background-color: #5dade2;"
+//                 "border: 1px solid #2e86c1;"
+//                 "color: black;"
+//             "}";
+//         break;
+
+//     case IndicatorVisual::Warning:
+//         style =
+//             "QPushButton {"
+//             "background-color: #f39c12;"
+//             "border: 1px solid #af601a;"
+//             "color: black;"
+//             "}";
+//         break;
+
+//     case IndicatorVisual::Error:
+//         style =
+//             "QPushButton {"
+//             "background-color: #c0392b;"
+//             "border: 1px solid #7b241c;"
+//             "color: white;"
+//             "font-weight: 600;"
+//             "}";
+//         break;
+//     }
+
+//     widget->setStyleSheet(style);
+
+//     if (!tooltip.isEmpty())
+//         widget->setToolTip(tooltip);
+// }
+
+
+/**
+ * @brief Стилі для рядка статуса
+ */
+QString MainWindow::statusTextHtml(const QString &name, bool active) const
+{
+    const QString stateText  = active ? "ON" : "OFF";
+    const QString stateColor = active ? "#2ecc71" : "#808080";
+
+    return QString("%1: <span style='color:%2; font-weight:600;'>%3</span>")
+        .arg(name)
+        .arg(stateColor)
+        .arg(stateText);
+}
+
+/**
+ * @brief Встановити стани для рядка статуса
+ */
+void MainWindow::setStatusRowState()
+{
+    LaserParameters &laser = LaserParameters::GetInstance();
+    LpsParameters &lps = LpsParameters::GetInstance();
+    activeLaserStatus = laser.GetHeartbeat();
+    activePlatformStatus = lps.GetPlatformHeartbeat();
+
+    ui->labelLaserStatus->setText(statusTextHtml("LASER", activeLaserStatus > 0 ));
+    ui->rxLabel->setText(statusTextHtml("RX", activeRx > 0));
+    ui->txLabel->setText(statusTextHtml("TX", activeTx > 0));
+    ui->labelPlatformStatus->setText(statusTextHtml("PLT", activePlatformStatus  > 0));
+
+    if(activeLaserStatus>0) activeLaserStatus--;
+    if(activeRx>0) activeRx--;
+    if(activeTx>0) activeTx--;
+    if(activePlatformStatus>0) activePlatformStatus--;
 }
 
 /**
@@ -1099,11 +1438,25 @@ void MainWindow::on_laser_act_b_clicked()
     uint8_t lastByte = laserOn ? 0x01 : 0x00;
 
     std::vector<uint8_t> payload = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte};
-
-    // SendDataFrame sendDataFrame;
-    // sendDataFrame.Send(0x248,0x08, payload);
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+
+    //Одночастно включаємо термоконтроль
+    on_term_control_b_clicked();
+
+    // перевіряємо потужність лазера і виставляємо відповідний radiobutton
+    uint8_t energy = LaserParameters::GetInstance().GetEnergy();
+    switch (energy)
+    {
+    case 0: ui->energy_0->setChecked(true); break;
+    case 1: ui->energy_1->setChecked(true); break;
+    case 2: ui->energy_2->setChecked(true); break;
+    case 3: ui->energy_3->setChecked(true); break;
+    case 4: ui->energy_4->setChecked(true); break;
+    case 5: ui->energy_5->setChecked(true); break;
+    default: break;
+    }
 }
+
 
 /**
  * @brief Включити пульс лазера
@@ -1115,9 +1468,6 @@ void MainWindow::on_pulse_b_clicked()
     uint8_t lastByte = pulseOn ? 0x01 : 0x00;
 
     std::vector<uint8_t> payload = {0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte};
-
-    // SendDataFrame sendDataFrame;
-    // sendDataFrame.Send(0x248,0x08, payload);
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
 }
 
@@ -1131,9 +1481,6 @@ void MainWindow::on_term_control_b_clicked()
     uint8_t lastByte = termOn ? 0x01 : 0x00;
 
     std::vector<uint8_t> payload = {0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte};
-
-    // SendDataFrame sendDataFrame;
-    // sendDataFrame.Send(0x248,0x08, payload);
     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
 }
 
@@ -1144,8 +1491,6 @@ void MainWindow::on_term_control_b_clicked()
 void MainWindow::on_get_frequency_clicked()
 {
     std::vector<uint8_t> payload = {0x00, 0x02, 0x04, 0x01};
-    // SendDataFrame sendDataFrame;
-    // sendDataFrame.Send(0x248,0x04, payload);
     SendDataFrame::getInstance().Send(0x248, 0x04, payload);
 }
 
@@ -1216,24 +1561,7 @@ void MainWindow::on_mode_input_currentIndexChanged(int index)
     ScriptCommands::GetInstance().SetMode((ModePlatform) index);
 }
 
-/**
- * @brief Встановити платформу в нуль
- *
- */
-void MainWindow::on_stop_b_clicked()
-{
-    ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
-    ScriptCommands::GetInstance().SetMode(BODY);
-    //QThread::msleep(10); // Затримка 10 мс
 
-    ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
-
-    // через 10 секунд повертаємось у попередній режим
-    QTimer::singleShot(10000, this, [modeOld]() {
-        ScriptCommands::GetInstance().SetMode(modeOld);
-    });
-
-}
 
 /**
  * @brief Кнопки руху платформи
@@ -1396,5 +1724,161 @@ void MainWindow::displayFrame(const QImage &image)
  void MainWindow::on_pushButton_clicked()
  {
 
+ }
+
+ QString MainWindow::uiStateToString(UiState state) const
+ {
+     switch (state) {
+     case UiState::Off:     return "off";
+     case UiState::On:      return "on";
+     case UiState::Warning: return "warn";
+     case UiState::Error:   return "error";
+     }
+     return "off";
+ }
+
+ void MainWindow::applyStateStyle(QWidget *widget, UiState state)
+ {
+     const QString stateStr = uiStateToString(state);
+
+     if (stateStr == "on") {
+         widget->setStyleSheet(
+             "QPushButton {"
+             "background-color: #2ecc71;"
+             "border: 1px solid #1e8449;"
+             "}");
+     }
+     else if (stateStr == "warn") {
+         widget->setStyleSheet(
+             "QPushButton {"
+             "background-color: #f1c40f;"
+             "border: 1px solid #b7950b;"
+             "}");
+     }
+     else if (stateStr == "error") {
+         widget->setStyleSheet(
+             "QPushButton {"
+             "background-color: #e74c3c;"
+             "border: 1px solid #922b21;"
+             "color: white;"
+             "}");
+     }
+     else {
+         widget->setStyleSheet(
+             "QPushButton {"
+             "background-color: transparent;"
+             "border: 1px solid gray;"
+             "}");
+     }
+ }
+
+
+ void MainWindow::on_ext_radiation_b_clicked()
+ {
+     blindOn = !blindOn;
+     uint8_t lastByte = blindOn ? 0x01 : 0x00;
+
+     std::vector<uint8_t> payload = {0x00, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, lastByte};
+     SendDataFrame::getInstance().Send(0x248, 0x08, payload);
+ }
+
+
+ void MainWindow::on_trackingButton_clicked()
+ {
+
+ }
+
+
+ /**
+ * @brief Встановити платформу в нуль
+ *
+ */
+ void MainWindow::on_zero_b_clicked()
+ {
+     ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
+     ScriptCommands::GetInstance().SetMode(BODY);
+     //QThread::msleep(10); // Затримка 10 мс
+
+     ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
+
+     // через 10 секунд повертаємось у попередній режим
+     QTimer::singleShot(10000, this, [modeOld]() {
+         ScriptCommands::GetInstance().SetMode(modeOld);
+     });
+
+ }
+
+ void MainWindow::on_btnLaserAdvanced_clicked()
+ {
+     const bool showAdvanced = !ui->laserAdvancedFrame->isVisible();
+
+     ui->laserAdvancedFrame->setVisible(showAdvanced);
+     ui->btnLaserAdvanced->setText(showAdvanced ? "Advanced ▾" : "Advanced ▸");
+ }
+
+ // Вивід температури червоним кольором, якщо вийшла за межі робочого діапазону
+ void MainWindow::updateLaserTemperatureUI(float temperature)
+ {
+     const bool inRange = (temperature >= 25.0f && temperature <= 35.0f);
+
+     ui->labelLaserTempValue->setText(QString::number(temperature, 'f', 2));
+
+     if (inRange)
+     {
+         ui->labelLaserTempValue->setStyleSheet(
+             "QLabel {"
+             "color: black;"
+             "font-weight: normal;"
+             "}");
+         ui->labelLaserTempValue->setToolTip("Temperature in operating range");
+     }
+     else
+     {
+         ui->labelLaserTempValue->setStyleSheet(
+             "QLabel {"
+             "color: #c0392b;"
+             "font-weight: 600;"
+             "}");
+         ui->labelLaserTempValue->setToolTip("Temperature out of operating range (25-35 °C)");
+     }
+ }
+
+
+ // Вивід помилки червоним кольором
+ void MainWindow::updateLaserErrorUI(uint8_t errorCode)
+ {
+     static const QString laser_error_str[4] = {
+         "NONE",
+         "INPUT",
+         "OVERTEMPERATURE",
+         "OVERVOLTAGE"
+     };
+
+     QString errorText = "UNKNOWN";
+     if (errorCode < 4)
+         errorText = laser_error_str[errorCode];
+
+     ui->labelLaserErrorValue->setText(errorText);
+
+     const bool noError = (errorCode == 0);
+
+     if (noError)
+     {
+         ui->labelLaserErrorValue->setStyleSheet(
+             "QLabel {"
+             "color: black;"
+             "font-weight: normal;"
+             "}");
+         ui->labelLaserErrorValue->setToolTip("No error");
+     }
+     else
+     {
+         ui->labelLaserErrorValue->setStyleSheet(
+             "QLabel {"
+             "color: #c0392b;"
+             "font-weight: 600;"
+             "}");
+         ui->labelLaserErrorValue->setToolTip("Laser error active");
+     }
  }
 

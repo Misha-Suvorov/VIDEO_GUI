@@ -14,8 +14,8 @@ PixelToAngleConverter::PixelToAngleConverter(cv::Size2f roiSize, cv::Size2f fov,
 
 void PixelToAngleConverter::updateScaling()
 {
-    if (roi.width > 0)  degPerPixelX = fov.width / static_cast<double>(roi.width);
-    if (roi.height > 0)  degPerPixelY = fov.height / static_cast<double>(roi.height);
+    if (roi.width > 0)  degPerPixelX = fov.width / static_cast<double>(roi.width); //0.56/720=0.00077
+    if (roi.height > 0)  degPerPixelY = fov.height / static_cast<double>(roi.height);//0.416/576=0.00072
 }
 
 QPointF PixelToAngleConverter::pixelToAngle(QPointF p) const

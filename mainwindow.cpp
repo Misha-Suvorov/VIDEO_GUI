@@ -390,16 +390,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Рух платформи кнопками
-    // platformMotionController = new PlatformMotionController(this);
-    // platformMotionController->setStepCombo(ui->step_input);
-    // // Реєстрація кнопок - яка кнопка зажата
-    // platformMotionController->setHoldButtons(
-    //     ui->l_2_b,
-    //     ui->r_2_b,
-    //     ui->up_2_b,
-    //     ui->d_2_b,
-    //     ui->stop_b
-    //     );
     setupPlatformControlUi();
 
     ui->laserAdvancedFrame->setVisible(false);
@@ -671,10 +661,6 @@ void MainWindow::on_step_input_currentTextChanged(const QString &arg1)
     }
 }
 
-// void MainWindow::on_first_STANAG_Changed(int index)
-// {
-//     int first_stanag_input[8] = {1,2,3,4,5,6,7,8};
-// }
 /**
  * @brief Вибір режиму вимірювання далекоміра
  *
@@ -826,32 +812,6 @@ void MainWindow::updateLpsParametersUI()
      showDacValues(voltageX, voltageY);
 
      setStatusRowState();
-
-     // if(activeRx>0)
-     // {
-     //     setRxActive(true);
-     //     activeRx--;
-     // }
-     // else setRxActive(false);
-
-
-     // if(activeTx>0)
-     // {
-     //    setTxActive(true);
-     //    activeTx--;
-     // }
-     // else setTxActive(false);
-
-     // if (activeLaserStatus > 0)
-     // {
-     //     setLaserStatus(true);
-     //     activeLaserStatus--;
-     // }
-     // else
-     // {
-     //     setLaserStatus(false);
-     // }
-
 
      static int counterTicks = 0;
      // Запроси значень платформи
@@ -1027,86 +987,7 @@ void MainWindow::applyIndicatorStyle(QWidget *widget,
         widget->setToolTip(tooltip);
 }
 
-// void MainWindow::applyIndicatorStyle(QWidget *widget,
-//                                      IndicatorVisual visual,
-//                                      const QString &tooltip)
-// {
-//     QString style;
 
-//     switch (visual)
-//     {
-//     case IndicatorVisual::Inactive:
-//         style =
-//             "QPushButton {"
-//             "background-color: transparent;"
-//             "border: 1px solid gray;"
-//             "color: black;"
-//             "}";
-//         break;
-
-//     case IndicatorVisual::LaserEnabled:
-//         style =
-//             "QPushButton {"
-//             "background-color: #2ecc71;"
-//             "border: 1px solid #1e8449;"
-//             "color: black;"
-//             "font-weight: 600;"
-//             "}";
-//         break;
-
-//     case IndicatorVisual::ThermalActive:
-//         style =
-//             "QPushButton {"
-//                 "background-color: #f4d03f;"
-//                 "border: 1px solid #b7950b;"
-//                 "color: black;"
-//             "}";
-//         break;
-
-//     case IndicatorVisual::RadiationActive:
-//         style =
-//             "QPushButton {"
-//             "background-color: #e74c3c;"
-//             "border: 1px solid #922b21;"
-//             "color: white;"
-//             "font-weight: 600;"
-//             "}";
-//         break;
-
-//     case IndicatorVisual::ShutterClosed:
-//         style =
-//             "QPushButton {"
-//                 "background-color: #5dade2;"
-//                 "border: 1px solid #2e86c1;"
-//                 "color: black;"
-//             "}";
-//         break;
-
-//     case IndicatorVisual::Warning:
-//         style =
-//             "QPushButton {"
-//             "background-color: #f39c12;"
-//             "border: 1px solid #af601a;"
-//             "color: black;"
-//             "}";
-//         break;
-
-//     case IndicatorVisual::Error:
-//         style =
-//             "QPushButton {"
-//             "background-color: #c0392b;"
-//             "border: 1px solid #7b241c;"
-//             "color: white;"
-//             "font-weight: 600;"
-//             "}";
-//         break;
-//     }
-
-//     widget->setStyleSheet(style);
-
-//     if (!tooltip.isEmpty())
-//         widget->setToolTip(tooltip);
-// }
 
 
 /**
@@ -1770,7 +1651,9 @@ void MainWindow::displayFrame(const QImage &image)
      ui->btnLaserAdvanced->setText(showAdvanced ? "Advanced ▾" : "Advanced ▸");
  }
 
- // Вивід температури червоним кольором, якщо вийшла за межі робочого діапазону
+ /**
+ * @brief Вивід температури червоним кольором, якщо вийшла за межі робочого діапазону
+ */
  void MainWindow::updateLaserTemperatureUI(float temperature)
  {
      const bool inRange = (temperature >= 25.0f && temperature <= 35.0f);
@@ -1797,8 +1680,9 @@ void MainWindow::displayFrame(const QImage &image)
      }
  }
 
-
- // Вивід помилки червоним кольором
+ /**
+ * @brief Вивід помилки червоним кольором
+ */
  void MainWindow::updateLaserErrorUI(uint8_t errorCode)
  {
      static const QString laser_error_str[4] = {
@@ -1911,21 +1795,4 @@ void MainWindow::displayFrame(const QImage &image)
      });
  }
 
- // /**
- // * @brief Встановити платформу в нуль
- // *
- // */
- // void MainWindow::on_zero_b_clicked()
- // {
- //     ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
- //     ScriptCommands::GetInstance().SetMode(BODY);
- //     //QThread::msleep(10); // Затримка 10 мс
 
- //     ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
-
- //     // через 10 секунд повертаємось у попередній режим
- //     QTimer::singleShot(10000, this, [modeOld]() {
- //         ScriptCommands::GetInstance().SetMode(modeOld);
- //     });
-
- // }

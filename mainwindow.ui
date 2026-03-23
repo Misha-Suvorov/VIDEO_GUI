@@ -1023,7 +1023,7 @@ QPushButton:hover {
                    <number>16</number>
                   </property>
                   <property name="verticalSpacing">
-                   <number>6</number>
+                   <number>4</number>
                   </property>
                   <item row="1" column="1">
                    <widget class="QLabel" name="labelLaserErrorValue">
@@ -1035,7 +1035,7 @@ QPushButton:hover {
                     </property>
                     <property name="font">
                      <font>
-                      <pointsize>10</pointsize>
+                      <pointsize>9</pointsize>
                      </font>
                     </property>
                     <property name="text">
@@ -1053,7 +1053,7 @@ QPushButton:hover {
                     </property>
                     <property name="font">
                      <font>
-                      <pointsize>10</pointsize>
+                      <pointsize>9</pointsize>
                      </font>
                     </property>
                     <property name="text">
@@ -1128,7 +1128,7 @@ QPushButton:hover {
                     </property>
                     <property name="font">
                      <font>
-                      <pointsize>10</pointsize>
+                      <pointsize>9</pointsize>
                      </font>
                     </property>
                     <property name="text">

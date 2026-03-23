@@ -23,6 +23,7 @@ public:
     void AskValueDACVert();
     void SetTrackingDot(uint16_t x, uint16_t y);
     void ResetTracking();
+    void SetPlatformZero();
 };
 
 #endif // SCRIPTCOMMANDS_H

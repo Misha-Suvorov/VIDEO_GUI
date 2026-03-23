@@ -58,6 +58,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     pixeltoangleconverter.cpp \
+    platformmotioncontroller.cpp \
     scalehorizontal.cpp \
     scalevertical.cpp \
     scalingfactor.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     lpsparameters.h \
     mainwindow.h \
     pixeltoangleconverter.h \
+    platformmotioncontroller.h \
     scalehorizontal.h \
     scalevertical.h \
     scalingfactor.h \

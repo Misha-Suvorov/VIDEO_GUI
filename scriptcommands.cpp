@@ -1,6 +1,8 @@
 #include "scriptcommands.h"
 #include "qthread.h"
+#include "qtimer.h"
 #include "senddataframe.h"
+#include "lpsparameters.h"
 
 ScriptCommands &ScriptCommands::GetInstance()
 {
@@ -263,8 +265,22 @@ void ScriptCommands::ResetTracking()
     payload = {0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
     SendDataFrame::getInstance().AddCanFrame(0x198, 0x08, payload);
-
-
 }
 
+
+/**
+ * @brief Встановити платформу в нуль.
+ */
+void ScriptCommands::SetPlatformZero()
+{
+    ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
+
+    SetMode(BODY);
+    SetAngleEncoder(0, 0);
+
+    // Через 10 секунд повернути попередній режим
+    QTimer::singleShot(10000, [modeOld]() {
+        ScriptCommands::GetInstance().SetMode(modeOld);
+    });
+}
 

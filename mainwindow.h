@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QMainWindow>
 #include <QMutex>
+#include <QPushButton>
 #include <QThread>
 #include "CircularBuffer.h"
 #include "canbus.h"
@@ -14,11 +15,14 @@
 #include "laserparameters.h"
 #include "lpsparameters.h"
 #include "pixeltoangleconverter.h"
+#include "platformmotioncontroller.h"
 #include "qabstractbutton.h"
 #include "scalehorizontal.h"
 #include "senddataframe.h"
 #include "trackingworker.h"
 #include <opencv2/opencv.hpp>
+
+class PlatformMotionController;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -161,15 +165,7 @@ private slots:
 
     void on_mode_input_currentIndexChanged(int index);
 
-    void on_r_b_clicked();
-
     void on_step_input_currentTextChanged(const QString &arg1);
-
-    void on_up_b_clicked();
-
-    void on_l_l_clicked();
-
-    void on_d_b_clicked();
 
     void on_actionBias_calibration_triggered();
     void on_actionSet_program_0_triggered();
@@ -183,8 +179,6 @@ private slots:
     void on_ext_radiation_b_clicked();
 
     void on_trackingButton_clicked();
-
-    void on_zero_b_clicked();
 
     void on_btnLaserAdvanced_clicked();
 
@@ -276,6 +270,9 @@ private:
         Error
     };
 
+
+    PlatformMotionController *platformMotionController = nullptr;
+
     QString uiStateToString(UiState state) const;
     void updateLaserActiveState(bool isLaserActive);
     void applyStateStyle(QWidget *widget, UiState state);
@@ -296,6 +293,11 @@ private:
     void check_laser_power();
     void updateLaserTemperatureUI(float temperature);
     void updateLaserErrorUI(uint8_t errorCode);
+    void setupPlatformControlUi();
+    void bindHoldMoveButton(QPushButton *button, PlatformMoveDirection direction);
+    void bindSingleStepMoveButton(QPushButton *button, PlatformMoveDirection direction);
+    void bindStopButton(QPushButton *button);
+    void bindZeroButton(QPushButton *button);
 };
 
 #endif // MAINWINDOW_H

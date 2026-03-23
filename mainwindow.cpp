@@ -13,6 +13,7 @@
 #include "structs.h"
 #include "ui_mainwindow.h"
 #include "biascalibration.h"
+#include "platformmotioncontroller.h"
 #include <opencv2/opencv.hpp>
 
 VideoThread::VideoThread(QObject *parent)
@@ -246,7 +247,7 @@ cv::Mat VideoThread::processVideoWithConfig(cv::Mat frame)
              cv::Point(center.x, center.y + length),
              crossColor,
              thickness);
-    /*
+
         // Центр в обрізаному кадрі (просто для порівняння)
         center = cv::Point(frame.cols / 2, frame.rows / 2);
         crossColor = cv::Scalar(255, 0, 0); // Червоний колір
@@ -387,6 +388,19 @@ MainWindow::MainWindow(QWidget *parent)
     /*messageQueue(localMessageQueue),*/ localMessageQueue(1000)
 {
     ui->setupUi(this);
+
+    // Рух платформи кнопками
+    // platformMotionController = new PlatformMotionController(this);
+    // platformMotionController->setStepCombo(ui->step_input);
+    // // Реєстрація кнопок - яка кнопка зажата
+    // platformMotionController->setHoldButtons(
+    //     ui->l_2_b,
+    //     ui->r_2_b,
+    //     ui->up_2_b,
+    //     ui->d_2_b,
+    //     ui->stop_b
+    //     );
+    setupPlatformControlUi();
 
     ui->laserAdvancedFrame->setVisible(false);
 
@@ -569,6 +583,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(trackingWorker, &TrackingWorker::roiUpdated,
             videoThread1, &VideoThread::setCurrentRoi);
+
+
 
 }
 
@@ -1562,48 +1578,6 @@ void MainWindow::on_mode_input_currentIndexChanged(int index)
 }
 
 
-
-/**
- * @brief Кнопки руху платформи
- *
- */
-void MainWindow::on_r_b_clicked()
-{
-    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
-    float voltage_x = -text.toFloat(); // -LpsParameters::GetInstance().GetVoltageX();
-    if (videoThread1->isRotated)
-        voltage_x = -voltage_x;
-    ScriptCommands::GetInstance().SetVoltageEncoder(voltage_x, 0);
-}
-
-void MainWindow::on_l_l_clicked()
-{
-    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
-    float voltage_x = text.toFloat(); //LpsParameters::GetInstance().GetVoltageX();
-
-    if (videoThread1->isRotated)
-        voltage_x = -voltage_x;
-    ScriptCommands::GetInstance().SetVoltageEncoder(voltage_x, 0);
-}
-
-void MainWindow::on_up_b_clicked()
-{
-    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
-    float voltage_y = text.toFloat();
-    if (videoThread1->isRotated)
-        voltage_y = -voltage_y;
-    ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
-}
-
-void MainWindow::on_d_b_clicked()
-{
-    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
-    float voltage_y = -text.toFloat();
-    if (videoThread1->isRotated)
-        voltage_y = -voltage_y;
-    ScriptCommands::GetInstance().SetVoltageEncoder(0, voltage_y);
-}
-
 /**
  * @brief Калібровка біас
  *
@@ -1788,26 +1762,6 @@ void MainWindow::displayFrame(const QImage &image)
 
  }
 
-
- /**
- * @brief Встановити платформу в нуль
- *
- */
- void MainWindow::on_zero_b_clicked()
- {
-     ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
-     ScriptCommands::GetInstance().SetMode(BODY);
-     //QThread::msleep(10); // Затримка 10 мс
-
-     ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
-
-     // через 10 секунд повертаємось у попередній режим
-     QTimer::singleShot(10000, this, [modeOld]() {
-         ScriptCommands::GetInstance().SetMode(modeOld);
-     });
-
- }
-
  void MainWindow::on_btnLaserAdvanced_clicked()
  {
      const bool showAdvanced = !ui->laserAdvancedFrame->isVisible();
@@ -1882,3 +1836,96 @@ void MainWindow::displayFrame(const QImage &image)
      }
  }
 
+ /**
+ * @brief Налаштовує кнопки керування платформою.
+ */
+ void MainWindow::setupPlatformControlUi()
+ {
+     platformMotionController = new PlatformMotionController(this);
+     platformMotionController->setStepCombo(ui->step_input);
+
+     platformMotionController->setHoldButtons(
+         ui->l_2_b,
+         ui->r_2_b,
+         ui->up_2_b,
+         ui->d_2_b,
+         ui->stop_b
+         );
+
+     // Безперервний рух
+     bindHoldMoveButton(ui->l_2_b, PlatformMoveDirection::Left);
+     bindHoldMoveButton(ui->r_2_b, PlatformMoveDirection::Right);
+     bindHoldMoveButton(ui->up_2_b, PlatformMoveDirection::Up);
+     bindHoldMoveButton(ui->d_2_b, PlatformMoveDirection::Down);
+
+     // Одиночний крок
+     bindSingleStepMoveButton(ui->l_l, PlatformMoveDirection::Left);
+     bindSingleStepMoveButton(ui->r_b, PlatformMoveDirection::Right);
+     bindSingleStepMoveButton(ui->up_b, PlatformMoveDirection::Up);
+     bindSingleStepMoveButton(ui->d_b, PlatformMoveDirection::Down);
+
+     // Службові кнопки
+     bindStopButton(ui->stop_b);
+     bindZeroButton(ui->zero_b);
+ }
+
+ /**
+ * @brief Прив'язує кнопку безперервного руху до заданого напрямку.
+ */
+ void MainWindow::bindHoldMoveButton(QPushButton *button, PlatformMoveDirection direction)
+ {
+     connect(button, &QPushButton::pressed, this, [this, direction]() {
+         platformMotionController->setRotated(videoThread1->isRotated);
+         platformMotionController->startContinuousMove(direction);
+     });
+ }
+
+ /**
+ * @brief Прив'язує кнопку одиночного руху до заданого напрямку.
+ */
+ void MainWindow::bindSingleStepMoveButton(QPushButton *button, PlatformMoveDirection direction)
+ {
+     connect(button, &QPushButton::clicked, this, [this, direction]() {
+         platformMotionController->setRotated(videoThread1->isRotated);
+         platformMotionController->moveSingleStep(direction);
+     });
+ }
+
+ /**
+ * @brief Прив'язує кнопку зупинки безперервного руху.
+ */
+ void MainWindow::bindStopButton(QPushButton *button)
+ {
+     connect(button, &QPushButton::clicked, this, [this]() {
+         platformMotionController->stopMotion();
+     });
+ }
+
+ /**
+ * @brief Прив'язує кнопку переходу в нульове положення.
+ */
+ void MainWindow::bindZeroButton(QPushButton *button)
+ {
+     connect(button, &QPushButton::clicked, this, [this]() {
+         ScriptCommands::GetInstance().SetPlatformZero();
+     });
+ }
+
+ // /**
+ // * @brief Встановити платформу в нуль
+ // *
+ // */
+ // void MainWindow::on_zero_b_clicked()
+ // {
+ //     ModePlatform modeOld = LpsParameters::GetInstance().GetModePlatform();
+ //     ScriptCommands::GetInstance().SetMode(BODY);
+ //     //QThread::msleep(10); // Затримка 10 мс
+
+ //     ScriptCommands::GetInstance().SetAngleEncoder(0, 0);
+
+ //     // через 10 секунд повертаємось у попередній режим
+ //     QTimer::singleShot(10000, this, [modeOld]() {
+ //         ScriptCommands::GetInstance().SetMode(modeOld);
+ //     });
+
+ // }

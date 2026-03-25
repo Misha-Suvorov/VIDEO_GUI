@@ -147,6 +147,7 @@ void ClickableLabel::processClick()
 
     case INERT:{
 
+        // В режимі INERT відбувається одиночний рух на крок, заданий в полі Step, при кліку мишкою в будь-якому місці на фреймі
         auto [voltageH, voltageV] = settings->getConverter().movePlatformInInertModeByStep(videoPos, isRotated, stepSize);
 
         ScriptCommands::GetInstance().SetVoltageEncoder(voltageH, voltageV);
@@ -156,6 +157,7 @@ void ClickableLabel::processClick()
 
     case BODY:{
 
+        // Рух в режимі BODY на новий кут = поточний кут + дельта відхилення від центру
         float currentAngleX = LpsParameters::GetInstance().GetAngleX();
         float newAngleX = (isRotated)? currentAngleX + lastDeltaAngle.x() :
                               currentAngleX - lastDeltaAngle.x();
@@ -176,7 +178,7 @@ void ClickableLabel::processClick()
     }
 
     case TRACKING:{
-
+        // Передати позицію на відео фреймі програмі-трекінгу
         lastRoiCenter = videoPos; //QPoint(x_original, y_original);
 
         ScriptCommands::GetInstance().SetTrackingDot(videoPos.x(), videoPos.y());

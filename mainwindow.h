@@ -182,6 +182,7 @@ private slots:
 
     void on_btnLaserAdvanced_clicked();
 
+    void on_stop_track_clicked();
 
 private:
     Ui::MainWindow *ui;

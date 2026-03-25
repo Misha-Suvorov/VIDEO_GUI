@@ -68,13 +68,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="labelOutput">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="0">
        <widget class="ClickableLabel" name="videoLabel">
         <property name="enabled">
@@ -400,13 +393,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>100</height>
+           <height>70</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>160</height>
+           <height>100</height>
           </size>
          </property>
          <property name="frameShape">
@@ -445,7 +438,7 @@
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>16777215</height>
+              <height>20</height>
              </size>
             </property>
             <property name="frameShape">
@@ -475,8 +468,19 @@
                <property name="minimumSize">
                 <size>
                  <width>100</width>
-                 <height>0</height>
+                 <height>20</height>
                 </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <bold>true</bold>
+                </font>
                </property>
                <property name="text">
                 <string>MODE: --</string>
@@ -488,7 +492,13 @@
                <property name="minimumSize">
                 <size>
                  <width>40</width>
-                 <height>0</height>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>20</height>
                 </size>
                </property>
                <property name="text">
@@ -501,7 +511,13 @@
                <property name="minimumSize">
                 <size>
                  <width>40</width>
-                 <height>0</height>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>20</height>
                 </size>
                </property>
                <property name="text">
@@ -514,7 +530,13 @@
                <property name="minimumSize">
                 <size>
                  <width>60</width>
-                 <height>0</height>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>20</height>
                 </size>
                </property>
                <property name="text">
@@ -527,7 +549,13 @@
                <property name="minimumSize">
                 <size>
                  <width>50</width>
-                 <height>0</height>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>20</height>
                 </size>
                </property>
                <property name="text">
@@ -549,7 +577,7 @@
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>16777215</height>
+              <height>50</height>
              </size>
             </property>
             <property name="frameShape">
@@ -559,7 +587,16 @@
              <enum>QFrame::Shadow::Raised</enum>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
              <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
               <number>0</number>
              </property>
              <property name="bottomMargin">
@@ -581,13 +618,13 @@
                  <number>4</number>
                 </property>
                 <property name="leftMargin">
-                 <number>6</number>
+                 <number>0</number>
                 </property>
                 <property name="topMargin">
                  <number>0</number>
                 </property>
                 <property name="rightMargin">
-                 <number>6</number>
+                 <number>0</number>
                 </property>
                 <property name="bottomMargin">
                  <number>0</number>
@@ -638,14 +675,19 @@
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="pushButton">
-                  <property name="text">
-                   <string>Start Track</string>
+                 <widget class="QPushButton" name="stop_track">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
                   </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>Stop Track</string>
                   </property>
@@ -1143,19 +1185,16 @@ QPushButton:hover {
              </item>
              <item>
               <widget class="QFrame" name="laserAdvancedFrame">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>100</height>
-                </size>
-               </property>
                <property name="frameShape">
                 <enum>QFrame::Shape::StyledPanel</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Shadow::Raised</enum>
                </property>
-               <layout class="QGridLayout" name="gridLayout_6">
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
                 <property name="leftMargin">
                  <number>4</number>
                 </property>
@@ -1168,19 +1207,31 @@ QPushButton:hover {
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <property name="spacing">
-                 <number>4</number>
-                </property>
-                <item row="5" column="8">
-                 <widget class="QPushButton" name="get_frequency">
-                  <property name="minimumSize">
-                   <size>
-                    <width>30</width>
-                    <height>28</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
+                <item>
+                 <widget class="QWidget" name="rowThermalWidget" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_9">
+                   <property name="spacing">
+                    <number>6</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QPushButton" name="term_control_b">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
     border: none;
     color: black;
@@ -1207,222 +1258,19 @@ QPushButton:checked:hover {
     background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
 }
 </string>
-                  </property>
-                  <property name="text">
-                   <string>Get</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1" colspan="3">
-                 <widget class="QLabel" name="label_period">
-                  <property name="text">
-                   <string>Period | Hz</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="5">
-                 <widget class="QRadioButton" name="energy_2">
-                  <property name="text">
-                   <string>2</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="7">
-                 <widget class="QRadioButton" name="energy_4">
-                  <property name="text">
-                   <string>4</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1" colspan="3">
-                 <widget class="QLabel" name="label_stanag">
-                  <property name="text">
-                   <string>STANAG</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="5" colspan="4">
-                 <widget class="QComboBox" name="frequency_mode">
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>1 HZ</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>2 Hz</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>5 Hz</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>10 Hz</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>20 HZ</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>25 HZ</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>0,5 HZ</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>0,2 HZ</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="6" column="6">
-                 <widget class="QRadioButton" name="energy_3">
-                  <property name="text">
-                   <string>3</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1" colspan="3">
-                 <widget class="QLabel" name="pulseFreqLabel">
-                  <property name="text">
-                   <string>Pulse Freq</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="4">
-                 <widget class="QRadioButton" name="energy_1">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="5">
-                 <widget class="QComboBox" name="first_STANAG">
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>1</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>2</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>3</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>4</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>5</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>6</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>7</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>8</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="6" column="1" colspan="2">
-                 <widget class="QLabel" name="label_energy">
-                  <property name="text">
-                   <string>Pwr</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="6">
-                 <widget class="QComboBox" name="second_STANAG">
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>1</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>2</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>3</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>4</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>5</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>6</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>7</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>8</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="0" column="1" colspan="5">
-                 <widget class="QPushButton" name="term_control_b">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
+                     </property>
+                     <property name="text">
+                      <string>Thermal Control</string>
+                     </property>
+                     <property name="checkable">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="ext_radiation_b">
+                     <property name="styleSheet">
+                      <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
     border: none;
     color: black;
@@ -1449,42 +1297,342 @@ QPushButton:checked:hover {
     background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
 }
 </string>
-                  </property>
-                  <property name="text">
-                   <string>Thermal Control</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
+                     </property>
+                     <property name="text">
+                      <string>Shutter</string>
+                     </property>
+                     <property name="checkable">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
-                <item row="6" column="8">
-                 <widget class="QRadioButton" name="energy_5">
-                  <property name="text">
-                   <string>5</string>
-                  </property>
+                <item>
+                 <widget class="QWidget" name="rowFreqWidget" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_12">
+                   <property name="spacing">
+                    <number>4</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="pulseFreqLabel">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>58</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Pulse Freq</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="frequency_mode">
+                     <property name="styleSheet">
+                      <string notr="true"/>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>1 HZ</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>2 Hz</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>5 Hz</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>10 Hz</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>20 HZ</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>25 HZ</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>0,5 HZ</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>0,2 HZ</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
-                <item row="3" column="4">
-                 <widget class="QLabel" name="label_first_digit_stanag">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="8">
-                 <widget class="QPushButton" name="get_stanag">
-                  <property name="minimumSize">
-                   <size>
-                    <width>30</width>
-                    <height>28</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
+                <item>
+                 <widget class="QWidget" name="rowStanagWidget" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_14">
+                   <property name="spacing">
+                    <number>4</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_stanag">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>58</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>STANAG</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_first_digit_stanag">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>10</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>1</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignmentFlag::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="first_STANAG">
+                     <property name="minimumSize">
+                      <size>
+                       <width>30</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>1</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>2</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>3</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>4</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>5</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>6</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>7</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>8</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="second_STANAG">
+                     <property name="minimumSize">
+                      <size>
+                       <width>30</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>1</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>2</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>3</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>4</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>5</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>6</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>7</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>8</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="third_STANAG">
+                     <property name="minimumSize">
+                      <size>
+                       <width>30</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>1</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>2</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>3</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>4</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>5</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>6</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>7</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>8</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="get_stanag">
+                     <property name="minimumSize">
+                      <size>
+                       <width>35</width>
+                       <height>24</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
     border: none;
     color: black;
@@ -1511,73 +1659,94 @@ QPushButton:checked:hover {
     background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
 }
 </string>
-                  </property>
-                  <property name="text">
-                   <string>Set</string>
-                  </property>
+                     </property>
+                     <property name="text">
+                      <string>Set</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
-                <item row="3" column="7">
-                 <widget class="QComboBox" name="third_STANAG">
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>1</string>
+                <item>
+                 <widget class="QWidget" name="rowPeriodWidget" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_15">
+                   <property name="spacing">
+                    <number>4</number>
                    </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>2</string>
+                   <property name="leftMargin">
+                    <number>0</number>
                    </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>3</string>
+                   <property name="topMargin">
+                    <number>0</number>
                    </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>4</string>
+                   <property name="rightMargin">
+                    <number>0</number>
                    </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>5</string>
+                   <property name="bottomMargin">
+                    <number>0</number>
                    </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>6</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>7</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>8</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="6" column="3">
-                 <widget class="QRadioButton" name="energy_0">
-                  <property name="text">
-                   <string>0</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="6" colspan="3">
-                 <widget class="QPushButton" name="ext_radiation_b">
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
+                   <item>
+                    <widget class="QLabel" name="label_period">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>58</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Period | Hz</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="period_out">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>52</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="frequency_out">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>52</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="get_frequency">
+                     <property name="minimumSize">
+                      <size>
+                       <width>35</width>
+                       <height>24</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QPushButton {
     background-color: none; /* Дефолтний колір */
     border: none;
     color: black;
@@ -1604,33 +1773,95 @@ QPushButton:checked:hover {
     background-color: rgb(138, 181, 96); /* Світліший зелений при наведенні в активному стані */
 }
 </string>
-                  </property>
-                  <property name="text">
-                   <string>Shutter</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
+                     </property>
+                     <property name="text">
+                      <string>Get</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
-                <item row="5" column="4" colspan="2">
-                 <widget class="QLineEdit" name="period_out">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="6" colspan="2">
-                 <widget class="QLineEdit" name="frequency_out">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
+                <item>
+                 <widget class="QWidget" name="rowPwrWidget" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_16">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_energy">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>58</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Pwr</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="energy_0">
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="energy_1">
+                     <property name="text">
+                      <string>1</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="energy_2">
+                     <property name="text">
+                      <string>2</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="energy_3">
+                     <property name="text">
+                      <string>3</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="energy_4">
+                     <property name="text">
+                      <string>4</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="energy_5">
+                     <property name="text">
+                      <string>5</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                </layout>
@@ -2279,7 +2510,7 @@ QPushButton:checked:hover {
                       </size>
                      </property>
                      <property name="currentText">
-                      <string>1</string>
+                      <string>0.001</string>
                      </property>
                      <item>
                       <property name="text">

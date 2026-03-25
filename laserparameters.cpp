@@ -79,6 +79,7 @@ void LaserParameters::SetHeartbeat(bool value)
 void LaserParameters::SetTemperature(float value)
 {
     temperature = value;
+    SetHeartbeat(1);
 }
 
 // Задати частоту

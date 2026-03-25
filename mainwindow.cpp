@@ -292,6 +292,10 @@ VideoConfig VideoThread::loadVideoConfig() {
     QString path = QCoreApplication::applicationDirPath() + "/config.ini";
     QSettings settings(path, QSettings::IniFormat);
 
+    qDebug() << "Config path =" << path;
+    qDebug() << "App dir =" << QCoreApplication::applicationDirPath();
+
+
     // ROI
     settings.beginGroup("ROI");
     int x = settings.value("x", 0).toInt();
@@ -421,7 +425,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(videoThread2, &VideoThread::frameSizeAvailable, this, &MainWindow::onFrameSizeAvailable);
 
     videoLabel = qobject_cast<ClickableLabel*>(ui->videoLabel);
-    videoLabel->setDebugLabel(ui->labelOutput);
+    //videoLabel->setDebugLabel(ui->labelOutput);
 
     connect(ui->videoLabel, &ClickableLabel::clickedAt, this, &MainWindow::onLabelClicked);
 
@@ -769,7 +773,7 @@ void MainWindow::updateLpsParametersUI()
     updateLaserTemperatureUI(temp);
 
     ui->period_out->setText(QString::number(period_s) + " s");
-    ui->frequency_out->setText(QString::number(freq) + " Hz");
+    ui->frequency_out->setText(QString::number(freq,  'f', 2) + " Hz");
     ui->labelPulseTimerValue->setText(QString::number(time_remaining / 1000) + " s");
 
     //ui->labelLaserErrorValue->setText(laser_error_str[laser_error_code]);
@@ -1664,8 +1668,8 @@ void MainWindow::displayFrame(const QImage &image)
      {
          ui->labelLaserTempValue->setStyleSheet(
              "QLabel {"
-             "color: black;"
-             "font-weight: normal;"
+             "color: #1e8449;"
+             "font-weight: 600;"
              "}");
          ui->labelLaserTempValue->setToolTip("Temperature in operating range");
      }
@@ -1795,4 +1799,11 @@ void MainWindow::displayFrame(const QImage &image)
      });
  }
 
+ /**
+ * @brief Скидання захоплення
+ */
+ void MainWindow::on_stop_track_clicked()
+ {
+     ScriptCommands::GetInstance().ResetTracking();
+ }
 

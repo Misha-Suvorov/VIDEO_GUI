@@ -8,7 +8,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 #FOR RELEASE - COMMENT
-#CONFIG += debug
+CONFIG += debug
 #
 
 #FOR RELEASE
@@ -104,14 +104,29 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-# Copy config.ini next to exe (Qt creates debug/release subfolders)
+# Copy config.ini next to exe
 CONFIG_INI = $$shell_path($$PWD/config.ini)
 
 win32 {
-    contains(CONFIG, debug) {
-        TARGET_INI = $$shell_path($$OUT_PWD/debug/config.ini)
-    } else {
-        TARGET_INI = $$shell_path($$OUT_PWD/release/config.ini)
+    CONFIG(debug, debug|release) {
+        TARGET_DIR = $$shell_path($$OUT_PWD/debug)
+    } else:CONFIG(release, debug|release) {
+        TARGET_DIR = $$shell_path($$OUT_PWD/release)
     }
-    QMAKE_POST_LINK += $$quote(cmd /c copy /Y "$$CONFIG_INI" "$$TARGET_INI")
+
+    QMAKE_POST_LINK += $$quote(cmd /c xcopy /Y /I "$$CONFIG_INI" "$$TARGET_DIR")
 }
+
+
+
+# Copy config.ini next to exe (Qt creates debug/release subfolders)
+# CONFIG_INI = $$shell_path($$PWD/config.ini)
+
+# win32 {
+#     contains(CONFIG, debug) {
+#         TARGET_INI = $$shell_path($$OUT_PWD/debug/config.ini)
+#     } else {
+#         TARGET_INI = $$shell_path($$OUT_PWD/release/config.ini)
+#     }
+#     QMAKE_POST_LINK += $$quote(cmd /c copy /Y "$$CONFIG_INI" "$$TARGET_INI")
+# }

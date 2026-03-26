@@ -253,6 +253,19 @@ void ScriptCommands::SetTrackingDot(uint16_t x, uint16_t y)
 
 }
 
+void ScriptCommands::SetTrackingDotNormalized(float nx, float ny)
+{
+    nx = std::clamp(nx, 0.0f, 1.0f);
+    ny = std::clamp(ny, 0.0f, 1.0f);
+
+    // Варіант: пакуємо в uint16_t [0..65535]
+    const uint16_t xNorm = static_cast<uint16_t>(nx * 65535.0f);
+    const uint16_t yNorm = static_cast<uint16_t>(ny * 65535.0f);
+
+    // Далі пакування у payload і відправка  payload / SendDataFrame
+    SetTrackingDot(xNorm, yNorm);
+}
+
 /**
  * @brief Скидання захоплення
  *

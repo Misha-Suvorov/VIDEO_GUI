@@ -1519,18 +1519,28 @@ void MainWindow::onFrameSizeAvailable(int width, int height, VideoConfig videoCo
     videoFrameWidth = width;
     videoFrameHeight = height;
 
+    // Беремо FOV та інші параметри з config.ini,
+    // але геометрію кадру - з реального потоку
+    videoConfig.roi.x = 0;
+    videoConfig.roi.y = 0;
+    videoConfig.roi.width  = width;
+    videoConfig.roi.height = height;
+
+    // optical center теж перерахувати від реального кадру
+    videoConfig.opticalCenter.x = width / 2;
+    videoConfig.opticalCenter.y = height / 2;
+
+    qDebug() << "[PC stream size]"
+             << "actual =" << width << height
+             << "cfg roi replaced to =" << videoConfig.roi.width << videoConfig.roi.height;
+
     videoSettings.update(videoConfig, isSwitched, videoThread1->isRotated);
 
     ui->videoLabel->setVideoSettings(&videoSettings);
     trackingWorker->setVideoSettings(&videoSettings);
 
-    // Передаємо в ClickableLabel:
-    //ui->videoLabel->setVideoFrameSize(width, height);
-    //ui->videoLabel->setVideoConfig(videoConfig);
-    //ui->videoLabel->setFOV(isSwitched, videoThread1->isRotated);
-
-    QString text = ui->step_input->currentText();   // отримуємо вибраний текст
-    float step = text.toFloat();                  // перетворюємо у число (double)
+    QString text = ui->step_input->currentText();
+    float step = text.toFloat();
     ui->videoLabel->setStepSize(step);
 }
 
@@ -1807,3 +1817,60 @@ void MainWindow::displayFrame(const QImage &image)
      ScriptCommands::GetInstance().ResetTracking();
  }
 
+ /**
+ * @brief Нормалізація координат кліку для передачі на плату
+ */
+ bool MainWindow::normalizedPointFromClick(const QPoint &pos, const cv::Mat &frame, float &nx, float &ny)
+ {
+     if (frame.empty())
+         return false;
+
+     const int frameW = frame.cols;
+     const int frameH = frame.rows;
+
+     const int labelW = ui->videoLabel->width();
+     const int labelH = ui->videoLabel->height();
+
+     const double scale = std::min(double(labelW) / frameW, double(labelH) / frameH);
+     const int displayedW = int(frameW * scale);
+     const int displayedH = int(frameH * scale);
+
+     const int offsetX = (labelW - displayedW) / 2;
+     const int offsetY = (labelH - displayedH) / 2;
+
+     if (pos.x() < offsetX || pos.x() >= offsetX + displayedW ||
+         pos.y() < offsetY || pos.y() >= offsetY + displayedH) {
+         return false;
+     }
+
+     const double localX = double(pos.x() - offsetX);
+     const double localY = double(pos.y() - offsetY);
+
+     nx = static_cast<float>(localX / displayedW);
+     ny = static_cast<float>(localY / displayedH);
+
+     nx = std::clamp(nx, 0.0f, 1.0f);
+     ny = std::clamp(ny, 0.0f, 1.0f);
+
+     return true;
+ }
+
+ /**
+ * @brief nx, ny -> координата кадру
+ */
+ cv::Point MainWindow::framePointFromNormalized(float nx, float ny, const cv::Mat &frame)
+ {
+     const int frameW = frame.cols;
+     const int frameH = frame.rows;
+
+     nx = std::clamp(nx, 0.0f, 1.0f);
+     ny = std::clamp(ny, 0.0f, 1.0f);
+
+     int x = static_cast<int>(nx * frameW);
+     int y = static_cast<int>(ny * frameH);
+
+     x = std::clamp(x, 0, std::max(0, frameW - 1));
+     y = std::clamp(y, 0, std::max(0, frameH - 1));
+
+     return cv::Point(x, y);
+ }

@@ -299,6 +299,9 @@ private:
     void bindSingleStepMoveButton(QPushButton *button, PlatformMoveDirection direction);
     void bindStopButton(QPushButton *button);
     void bindZeroButton(QPushButton *button);
+
+    bool normalizedPointFromClick(const QPoint &pos, const cv::Mat &frame, float &nx, float &ny);
+    cv::Point framePointFromNormalized(float nx, float ny, const cv::Mat &frame);
 };
 
 #endif // MAINWINDOW_H

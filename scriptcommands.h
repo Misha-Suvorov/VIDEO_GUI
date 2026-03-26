@@ -22,6 +22,7 @@ public:
     void AskValueDACHoriz();
     void AskValueDACVert();
     void SetTrackingDot(uint16_t x, uint16_t y);
+    void SetTrackingDotNormalized(float nx, float ny);
     void ResetTracking();
     void SetPlatformZero();
 };

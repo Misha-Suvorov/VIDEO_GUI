@@ -13,6 +13,7 @@
 #include <QTimer>
 #include <algorithm>
 #include "qdebug.h"
+#include <cmath>
 
 ClickableLabel::ClickableLabel(QWidget *parent)
     : QLabel(parent)
@@ -137,7 +138,11 @@ void ClickableLabel::mouseHeld()
 
 void ClickableLabel::processClick()
 {
-    if (lastDeltaAngle.isNull())
+    const auto mode = LpsParameters::GetInstance().GetModePlatform();
+
+    // Для INERT і BODY потрібен lastDeltaAngle.
+    // Для TRACKING lastDeltaAngle не використовується, тому тут не блокуємо клік.
+    if (mode != TRACKING && lastDeltaAngle.isNull())
     {
         qDebug() << "Click outside video area";
         return;
@@ -199,37 +204,127 @@ void ClickableLabel::processClick()
 // */
 //         break;
 //     }
-    case TRACKING:{
-        // Позиція кліку в координатах відеокадру
-        lastRoiCenter = videoPos;
+    // case TRACKING:{
+    //     // Позиція кліку в координатах відеокадру
+    //     lastRoiCenter = videoPos;
 
+    //     const int frameW = settings->getConfig().roi.width;
+    //     const int frameH = settings->getConfig().roi.height;
+
+    //     if (frameW <= 0 || frameH <= 0) {
+    //         qDebug() << "Invalid frame size for normalized tracking:" << frameW << frameH;
+    //         break;
+    //     }
+
+    //     const float nx = std::clamp(float(videoPos.x()) / float(frameW), 0.0f, 1.0f);
+    //     const float ny = std::clamp(float(videoPos.y()) / float(frameH), 0.0f, 1.0f);
+
+
+    //     qDebug() << "[TRACK dbg]"
+    //              << "videoPos =" << videoPos
+    //              << "cfg roi =" << settings->getConfig().roi.width << settings->getConfig().roi.height
+    //              << "normalized =" << nx << ny;
+
+    //     ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
+    //     break;
+    // }
+
+    case TRACKING:
+    {
         const int frameW = settings->getConfig().roi.width;
         const int frameH = settings->getConfig().roi.height;
 
         if (frameW <= 0 || frameH <= 0) {
-            qDebug() << "Invalid frame size for normalized tracking:" << frameW << frameH;
+            qDebug() << "[TRACK click] Invalid frame size:" << frameW << frameH;
             break;
         }
 
-        const float nx = std::clamp(float(videoPos.x()) / float(frameW), 0.0f, 1.0f);
-        const float ny = std::clamp(float(videoPos.y()) / float(frameH), 0.0f, 1.0f);
+        QSize pixmapSize;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        const QPixmap *pm = this->pixmap();
+        if (pm != nullptr) {
+            pixmapSize = pm->size();
+        }
+#else
+        const QPixmap pm = this->pixmap(Qt::ReturnByValue);
+        if (!pm.isNull()) {
+            pixmapSize = pm.size();
+        }
+#endif
 
-        qDebug() << "[TRACK dbg]"
-                 << "videoPos =" << videoPos
-                 << "cfg roi =" << settings->getConfig().roi.width << settings->getConfig().roi.height
-                 << "normalized =" << nx << ny;
+        const QSize labelSize = this->size();
+
+        if (pixmapSize.width() <= 0 || pixmapSize.height() <= 0) {
+            qDebug() << "[TRACK click] Invalid pixmap size:" << pixmapSize;
+            break;
+        }
+
+        const int offsetX = (labelSize.width()  - pixmapSize.width())  / 2;
+        const int offsetY = (labelSize.height() - pixmapSize.height()) / 2;
+
+        // Перевірка: клік має бути саме по області відео,
+        // а не по чорному полю QLabel.
+        if (lastClickPos.x() < offsetX ||
+            lastClickPos.x() >= offsetX + pixmapSize.width() ||
+            lastClickPos.y() < offsetY ||
+            lastClickPos.y() >= offsetY + pixmapSize.height()) {
+
+            qDebug() << "[TRACK click] Click outside video area"
+                     << "click =" << lastClickPos
+                     << "label =" << labelSize
+                     << "pixmap =" << pixmapSize
+                     << "offset =" << offsetX << offsetY;
+            break;
+        }
+
+        const double localX = double(lastClickPos.x() - offsetX);
+        const double localY = double(lastClickPos.y() - offsetY);
+
+        const float nx = std::clamp(
+            float(localX / double(pixmapSize.width())),
+            0.0f,
+            1.0f
+            );
+
+        const float ny = std::clamp(
+            float(localY / double(pixmapSize.height())),
+            0.0f,
+            1.0f
+            );
+
+        // Для локального відображення точки на GUI можна зберегти позицію у пікселях кадру.
+        //lastRoiCenter = QPointF(nx * frameW, ny * frameH);
+
+        const int frameX = std::clamp(
+            int(std::lround(nx * double(frameW - 1))),
+            0,
+            frameW - 1
+            );
+
+        const int frameY = std::clamp(
+            int(std::lround(ny * double(frameH - 1))),
+            0,
+            frameH - 1
+            );
+
+        lastRoiCenter = QPointF(frameX, frameY);
+
+        qDebug() << "[TRACK click OK]"
+                 << "click =" << lastClickPos
+                 << "label =" << labelSize
+                 << "pixmap =" << pixmapSize
+                 << "offset =" << offsetX << offsetY
+                 << "local =" << localX << localY
+                 << "frame =" << frameW << frameH
+                 << "normalized =" << nx << ny
+                 << "frame pixel =" << frameX << frameY;
 
         ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
         break;
     }
-
-    }
-
-    //QString msg = QString("newAngleY = %1").arg(newAngleY);
-    //labelDebug->setText(msg);
 }
-
+}
 
 void ClickableLabel::keyPressEvent(QKeyEvent *event)
 {

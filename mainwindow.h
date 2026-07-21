@@ -184,6 +184,8 @@ private slots:
 
     void on_stop_track_clicked();
 
+    void on_btnLaserAdvanced_triggered(QAction *arg1);
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

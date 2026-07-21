@@ -25,7 +25,7 @@ LIBS += C:\opencv_gst_debug\install\x64\vc17\lib\opencv_world4100d.lib
 # FOR DEBUG END
 
 
-INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include
+INCLUDEPATH += C:\Qt\\msvc2019_64\include
 DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include
 INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include\QtGui
 DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtGui
@@ -38,8 +38,6 @@ DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtCore
 
 INCLUDEPATH += C:\Qt\6.2.13\msvc2019_64\include\QtNetwork
 DEPENDPATH += C:\Qt\6.2.13\msvc2019_64\include\QtNetwork
-
-
 
 SOURCES += \
     base.cpp \

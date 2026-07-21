@@ -103,7 +103,7 @@ void VideoThread::run()
         }
 
         //Малювання перехрестя
-        cv::Scalar crossColor(255, 255, 0);
+        cv::Scalar crossColor(0, 255, 255);
         int thickness = 1;
         int length = 25;
         cv::Point center; // = videoConfig.opticalCenter;
@@ -143,6 +143,7 @@ void VideoThread::run()
 */
 
         // Малювання ВПЗ
+/*
         if(!isSwitched)
         {
             cv::Rect rectV2 = getVideo2RectInVideo1(videoConfig);
@@ -155,7 +156,7 @@ void VideoThread::run()
         if (!currentRoi.empty()) {
             cv::rectangle(frame, currentRoi, cv::Scalar(0, 0, 255), 2);
         }
-
+*/
         // Draw the scale and markers
 
 
@@ -271,13 +272,46 @@ cv::Mat VideoThread::processVideoWithConfig(cv::Mat frame)
 //}
 
 
+// QImage VideoThread::matToQImage(const cv::Mat &mat)
+// {
+//     cv::Mat temp;
+//     temp = mat;
+//     //cv::cvtColor(mat, temp, cv::COLOR_BGR2RGB);
+//     QImage image((uchar *) temp.data, temp.cols, temp.rows, temp.step, QImage::Format_RGB888);
+//     return image.copy();
+// }
+
 QImage VideoThread::matToQImage(const cv::Mat &mat)
 {
-    cv::Mat temp;
-    temp = mat;
-    //cv::cvtColor(mat, temp, cv::COLOR_BGR2RGB);
-    QImage image((uchar *) temp.data, temp.cols, temp.rows, temp.step, QImage::Format_RGB888);
-    return image.copy();
+    if (mat.empty())
+        return QImage();
+
+    cv::Mat rgb;
+
+    if (mat.channels() == 3) {
+        // OpenCV/GStreamer дає BGR, а Qt QImage хоче RGB
+        cv::cvtColor(mat, rgb, cv::COLOR_BGR2RGB);
+
+        QImage image(rgb.data,
+                     rgb.cols,
+                     rgb.rows,
+                     static_cast<int>(rgb.step),
+                     QImage::Format_RGB888);
+
+        return image.copy();
+    }
+
+    if (mat.channels() == 1) {
+        QImage image(mat.data,
+                     mat.cols,
+                     mat.rows,
+                     static_cast<int>(mat.step),
+                     QImage::Format_Grayscale8);
+
+        return image.copy();
+    }
+
+    return QImage();
 }
 
 void VideoThread::stop()
@@ -392,6 +426,16 @@ MainWindow::MainWindow(QWidget *parent)
     /*messageQueue(localMessageQueue),*/ localMessageQueue(1000)
 {
     ui->setupUi(this);
+
+    // Важливо для коректного перерахунку кліку у координати відео.
+    // QLabel НЕ повинен сам розтягувати pixmap.
+    ui->videoLabel->setScaledContents(false); // заборона розтягувати відео
+    ui->videoLabel->setAlignment(Qt::AlignCenter);
+    ui->videoLabel->setStyleSheet("background-color: black;"); // для поля
+
+    ui->videoLabel2->setScaledContents(false);
+    ui->videoLabel2->setAlignment(Qt::AlignCenter);
+    ui->videoLabel2->setStyleSheet("background-color: black;");
 
     // Рух платформи кнопками
     setupPlatformControlUi();
@@ -1193,8 +1237,25 @@ void MainWindow::on_start_b_clicked()
         videoThread2->stop();
 
     videoThread1 = new VideoThread(this);
-    videoThread1->setPipeline("udpsrc port=5601 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! "
-                              "videoconvert ! video/x-raw, format=BGR ! appsink sync=false");
+
+    /*
+    // For Lichee camera
+    videoThread1->setPipeline(
+        "udpsrc port=5000 "
+        "caps=\"application/x-rtp, media=(string)video, "
+        "clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96\" ! "
+        "rtpjitterbuffer latency=0 drop-on-latency=true ! "
+        "rtph264depay ! "
+        "h264parse ! "
+        "avdec_h264 ! "
+        "videoconvert ! "
+        "video/x-raw, format=BGR ! "
+        "appsink sync=false drop=true max-buffers=1"
+        );
+ */
+     videoThread1->setPipeline("udpsrc port=5601 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! "
+                               "videoconvert ! video/x-raw, format=BGR ! appsink sync=false");
+
     connect(videoThread1, &VideoThread::frameReady, this, &MainWindow::displayFrame1);
     videoThread1->start();
 
@@ -1874,3 +1935,9 @@ void MainWindow::displayFrame(const QImage &image)
 
      return cv::Point(x, y);
  }
+
+ void MainWindow::on_btnLaserAdvanced_triggered(QAction *arg1)
+ {
+
+ }
+

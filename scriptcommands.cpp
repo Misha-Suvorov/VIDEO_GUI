@@ -1,4 +1,5 @@
 #include "scriptcommands.h"
+#include "qdebug.h"
 #include "qthread.h"
 #include "qtimer.h"
 #include "senddataframe.h"
@@ -250,7 +251,7 @@ void ScriptCommands::SetTrackingDot(uint16_t x, uint16_t y)
 
     SendDataFrame::getInstance().AddCanFrame(0x198, 0x08, payload);
 
-
+    qDebug() << "[SetTrackingDot OK ]" << x << " " << y;
 }
 
 void ScriptCommands::SetTrackingDotNormalized(float nx, float ny)

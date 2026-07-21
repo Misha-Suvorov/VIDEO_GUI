@@ -80,7 +80,7 @@ void SendDataFrame::SendAllFrames()
 
     QString hexString = byteArray.toHex(' ').toUpper();
 
-    qDebug() << "Send by UDP: Count=" << countPacks << "[" << hexString << "]";
+    //qDebug() << "Send by UDP: Count=" << countPacks << "[" << hexString << "]";
 
     ClearCanFrame();
 }

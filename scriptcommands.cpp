@@ -283,6 +283,74 @@ void ScriptCommands::ResetTracking()
 
 
 /**
+ * @brief передати в плату FOV камери по горизонталі в градусах
+ *
+ * @param value Значення FOV по горизонталі (градуси)
+ *
+ */
+void ScriptCommands::SetTrackingFOV_H(float value)
+{
+    std::vector<uint8_t> byteArray(4);
+    std::memcpy(byteArray.data(), &value, sizeof(float));
+
+    std::vector<uint8_t> payload = {0x00, 0x03, 0x02, 0x00};
+    payload.insert(payload.end(), byteArray.begin(), byteArray.end());
+
+    SendDataFrame::getInstance().AddCanFrame(0x198, 0x08, payload);
+}
+
+
+/**
+ * @brief передати в плату FOV камери по вертикалі в градусах
+ *
+ * @param value Значення FOV по вертикалі (градуси)
+ *
+ */
+void ScriptCommands::SetTrackingFOV_V(float value)
+{
+    std::vector<uint8_t> byteArray(4);
+    std::memcpy(byteArray.data(), &value, sizeof(float));
+
+    std::vector<uint8_t> payload = {0x00, 0x04, 0x02, 0x00};
+    payload.insert(payload.end(), byteArray.begin(), byteArray.end());
+
+    SendDataFrame::getInstance().AddCanFrame(0x198, 0x08, payload);
+}
+
+/**
+ * @brief Встановлює значення FOV_H, FOV_V в градусах
+ *
+ * @param fovH Значення FOV по горизонталі (градуси)
+ * @param fovV Значення FOV по вертикалі (градуси)
+ *
+ */
+void ScriptCommands::SetTrackingFOV(float FOV_H, float FOV_V)
+{
+    SetTrackingFOV_H(FOV_H);
+    SetTrackingFOV_V(FOV_V);
+}
+
+/**
+ * @brief передати в плату розмір ROI
+ *
+ * @param value Значення ROI size в пікселях
+ *
+ */
+void ScriptCommands::SetTrackingRoiSize(uint16_t value)
+{
+
+    std::vector<uint8_t> payload = {0x00, 0x02, 0x07, 0x00};
+    payload.push_back(static_cast<uint8_t>(value & 0xFF));        // low byte
+    payload.push_back(static_cast<uint8_t>((value >> 8) & 0xFF)); // high byte
+
+    payload.push_back(0);
+    payload.push_back(0);
+
+    SendDataFrame::getInstance().AddCanFrame(0x198, 0x08, payload);
+
+}
+
+/**
  * @brief Встановити платформу в нуль.
  */
 void ScriptCommands::SetPlatformZero()

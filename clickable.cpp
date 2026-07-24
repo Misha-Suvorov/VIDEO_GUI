@@ -321,6 +321,16 @@ void ClickableLabel::processClick()
                  << "frame pixel =" << frameX << frameY;
 
         ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
+
+        //передаєм поле зору в градусах для того, щоб плата порахувала відхилення від центру
+        //TODO: визначати яка камера активна зараз
+        float fovH = settings->getConfig().fovVideo1.width;
+        float fovV = settings->getConfig().fovVideo1.height;
+        ScriptCommands::GetInstance().SetTrackingFOV(fovH, fovV);
+
+        //uint16_t roiSize = 80;
+        //ScriptCommands::GetInstance().SetTrackingRoiSize(roiSize);
+
         break;
     }
 }

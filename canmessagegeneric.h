@@ -40,22 +40,16 @@ enum class ParamType {
     DoubleL,
 };
 
-enum class NodeId {
-    PLATFORM = 1,
-    GYROVERTICAL,
-    RANGE_FINDER,
-    LASER_POINTER,
-    THERMAL_CAMERA = 8
-};
+enum class NodeId { PLATFORM = 1, GYROVERTICAL, RANGE_FINDER, LASER_POINTER, THERMAL_CAMERA = 8 };
 
 enum class IdNode1 {
+    MODE = 0,
     SET_HORIZONTAL_CHANNEL = 0x10,
     ANGLE_HORIZONTAL_CHANNEL = 0x11,
     ZERO_SET_HORIZONTAL_ENCODER = 0x12,
     ZERO_RESET_HORIZONTAL_ENCODER = 0x13,
     ENABLE_HORIZONTAL_ENCODER = 0x14,
     SET_PROGRAM_ZERO_HORIZONTAL_ENCODER = 0x15,
-
 
     SET_VERTICAL_CHANNEL = 0x20,
     ANGLE_VERTICAL_CHANNEL = 0x21,
@@ -65,12 +59,9 @@ enum class IdNode1 {
     SET_PROGRAM_ZERO_VERTICAL_ENCODER = 0x25
 };
 
-enum class IdNode3 {
-    MEASURED_RANGES_1 = 0x06
-};
+enum class IdNode3 { MEASURED_RANGES_1 = 0x06 };
 
-
-enum class IdNode4{
+enum class IdNode4 {
     LASER_ACTIVE = 0,
     PULSE_ON = 0x1,
     FREQUENCY = 0x2,
@@ -86,10 +77,11 @@ enum class IdNode4{
     ERROR_CODE = 0xFE
 };
 
-
-class CanMessageGeneric : public BaseCanMessage {
+class CanMessageGeneric : public BaseCanMessage
+{
 public:
-    struct MESSAGE_t {
+    struct MESSAGE_t
+    {
         uint8_t PART_NUM;
         uint8_t PART_CNT;
         uint8_t ID;
@@ -97,16 +89,18 @@ public:
         uint8_t ACTION;
         uint8_t PL[4];
 
-        MESSAGE_t(const std::vector<uint8_t>& message);
+        MESSAGE_t(const std::vector<uint8_t> &message);
     };
 
     MESSAGE_t Message;
 
-    CanMessageGeneric(const std::vector<uint8_t>& bytes);
+    CanMessageGeneric(const std::vector<uint8_t> &bytes);
 
     float ParseFloat();
     uint32_t ParseULong();
     uint8_t ParseByte();
+    bool ParseNonType();
+    uint8_t ParseErrorType();
 
     void PrintParsedValue();
     float GetFloatFromPayload();
@@ -115,7 +109,7 @@ public:
     uint16_t GetUShortFromPayload();
     int16_t GetShortFromPayload();
     uint8_t GetByteFromPayload();
-};
 
+};
 
 #endif // CANMESSAGEGENERIC_H

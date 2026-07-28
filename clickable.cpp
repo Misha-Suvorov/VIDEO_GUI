@@ -1,33 +1,405 @@
 // ClickableLabel.cpp
+// 1) Натиснув → запустився holdTimer.
+// 2) Якщо відпустив до 500 мс → спрацював короткий клік (clicked + processClick).
+// 3) Якщо тримаєш ≥ 500 мс → запускається repeatTimer, який викликає mouseHeld() кожні 50 мс.
+// 4) Відпустив → обидва таймери стоп, енкодер скидається в 0.
+
 #include "clickable.h"
+#include "lpsparameters.h"
 #include "pixeltoangleconverter.h"
 #include "scriptcommands.h"
-#include "lpsparameters.h"
 
-ClickableLabel::ClickableLabel(QWidget *parent) : QLabel(parent) {}
+#include <QThread>
+#include <QTimer>
+#include <algorithm>
+#include "qdebug.h"
+#include <cmath>
 
-void ClickableLabel::mousePressEvent(QMouseEvent *event) {
+ClickableLabel::ClickableLabel(QWidget *parent)
+    : QLabel(parent)
+      //converter(cv::Size2f(1,1), cv::Size2f(1,1), cv::Point(0,0), 1.0f)
+{
+    // Таймер для визначення "довгого натискання"
+    holdTimer = new QTimer(this);
+    holdTimer->setInterval(500); // 500 мс до події hold
+    holdTimer->setSingleShot(true); // виконується лише один раз
+    connect(holdTimer, &QTimer::timeout, this, &ClickableLabel::startRepeating);
+
+    // Таймер для періодичних подій під час утримання
+    repeatTimer = new QTimer(this);
+    repeatTimer->setInterval(50); // плавне оновлення (20 Гц)
+    connect(repeatTimer, &QTimer::timeout, this,  &ClickableLabel::mouseHeld);
+
+    setFocusPolicy(Qt::StrongFocus); // дозвіл на отримання подій QKeyEvent
+
+}
+
+
+
+void ClickableLabel::setDebugLabel(QLabel *label)
+{
+    labelDebug = label;
+}
+
+void ClickableLabel::setTrackingRoiSize(uint16_t roiSize)
+{
+    if (roiSize < 10 || roiSize > 1000) {
+        qDebug() << "[ClickableLabel] invalid roiSize =" << roiSize;
+        return;
+    }
+
+    m_trackingRoiSize = roiSize;
+
+    qDebug() << "[ClickableLabel] roiSize set =" << m_trackingRoiSize;
+}
+
+uint16_t ClickableLabel::trackingRoiSize() const
+{
+    return m_trackingRoiSize;
+}
+
+// Викликається при натисканні кнопки миші
+void ClickableLabel::mousePressEvent(QMouseEvent *event)
+{
     if (event->button() == Qt::LeftButton) {
-        emit clickedAt(event->pos());
-        int labelWidth = this->width();
-        int labelHeight = this->height();
-        PixelToAngleConverter converter(labelWidth, labelHeight, 8.0, 6.0);
 
-        QPointF deltaAngle = converter.pixelToAngle(event->pos());
-        qDebug() << " Вивід пікселів через Angle:" << deltaAngle;
+        emit pressed();              // ← одразу шлемо сигнал для перемикання Switch video
 
-        float currentAngleX =  LpsParameters::GetInstance().GetAngleX();
-        float newAngleX = currentAngleX+deltaAngle.x();
-        //ScriptCommands::GetInstance().SetAngleEncoder_H(currentAngleX+deltaAngle.x());
+        mousePressed = true;
 
+        lastClickPos = event->pos();   // зберігаємо координати кліку
 
-        float currentAngleY = LpsParameters::GetInstance().GetAngleY();
-        float newAngleY = currentAngleY-deltaAngle.y();
-        //ScriptCommands::GetInstance().SetAngleEncoder_V(currentAngleY-deltaAngle.y());
-
-        ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+        if(settings!=nullptr)
+        {
+            videoPos = settings->mapToVideoCoordinates(
+                lastClickPos,            // клік у QLabel
+                this->size(),            // розмір QLabel
+                &settings->getConfig() // структура VideoConfig із VideoSettings
+                );
 
 
 
+            lastDeltaAngle = settings->getConverter().pixelToAngle(videoPos);  //mapClickToAngle(event->pos());
+
+            if (!lastDeltaAngle.isNull()) {
+                holdTimer->start(); // запускаємо відлік до події hold
+            }
+
+            QLabel::mousePressEvent(event);
+        }
     }
 }
+
+// Викликається при відпусканні кнопки миші
+void ClickableLabel::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (mousePressed) {
+        // Якщо користувач відпустив мишку ДО завершення holdTimer → короткий клік
+        if (holdTimer->isActive()) {
+
+            holdTimer->stop();
+
+
+            emit clicked(lastDeltaAngle); // коротке натискання
+
+
+            processClick();
+
+        }
+
+        repeatTimer->stop(); // зупиняємо повторюваний таймер
+        //ScriptCommands::GetInstance().SetVoltageEncoder(0.0f, 0.0f); // при відпусканні — обнуляємо керування
+
+        mousePressed = false;
+    }
+    QLabel::mouseReleaseEvent(event);
+}
+
+// Функція викликається один раз після 500 мс,
+// запускає періодичний repeatTimer
+void ClickableLabel::startRepeating()
+{
+    if (mousePressed) {
+        repeatTimer->start();
+    }
+}
+
+// Оновлюємо позицію кліку при натиснутій клавіші миші
+void ClickableLabel::mouseMoveEvent(QMouseEvent *event)
+{
+    if (mousePressed) {
+        lastClickPos = event->pos();
+
+        if(settings!=nullptr){
+            videoPos = settings->mapToVideoCoordinates(
+                lastClickPos,            // клік у QLabel
+                this->size(),            // розмір QLabel
+                &settings->getConfig() // структура VideoConfig із VideoSettings
+                );
+        }
+
+    }
+    QLabel::mouseMoveEvent(event);
+}
+
+
+
+// Викликається кожні 50 мс, поки тримається кнопка миші
+void ClickableLabel::mouseHeld()
+{
+    auto [voltageH, voltageV] = settings->getConverter().calculateVoltageNonlinear(videoPos, maxVoltage, isRotated);
+
+    ScriptCommands::GetInstance().SetVoltageEncoder(voltageH, voltageV);
+}
+
+
+void ClickableLabel::processClick()
+{
+    const auto mode = LpsParameters::GetInstance().GetModePlatform();
+
+    // Для INERT і BODY потрібен lastDeltaAngle.
+    // Для TRACKING lastDeltaAngle не використовується, тому тут не блокуємо клік.
+    if (mode != TRACKING && lastDeltaAngle.isNull())
+    {
+        qDebug() << "Click outside video area";
+        return;
+    }
+
+    switch(LpsParameters::GetInstance().GetModePlatform()){
+
+    case INERT:{
+
+        // В режимі INERT відбувається одиночний рух на крок, заданий в полі Step, при кліку мишкою в будь-якому місці на фреймі
+        auto [voltageH, voltageV] = settings->getConverter().movePlatformInInertModeByStep(videoPos, isRotated, stepSize);
+
+        ScriptCommands::GetInstance().SetVoltageEncoder(voltageH, voltageV);
+
+        break;
+    }
+
+    case BODY:{
+
+        // Рух в режимі BODY на новий кут = поточний кут + дельта відхилення від центру
+        float currentAngleX = LpsParameters::GetInstance().GetAngleX();
+        float newAngleX = (isRotated)? currentAngleX + lastDeltaAngle.x() :
+                              currentAngleX - lastDeltaAngle.x();
+
+        float currentAngleY = LpsParameters::GetInstance().GetAngleY();
+        float newAngleY = (isRotated)? currentAngleY - lastDeltaAngle.y() :
+                              currentAngleY + lastDeltaAngle.y();
+
+        ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+        QThread::msleep(200);
+        ScriptCommands::GetInstance().SetAngleEncoder(newAngleX, newAngleY);
+        break;
+    }
+
+    case EARTH:
+    {
+        break;
+    }
+
+//     case TRACKING:{
+//         // Передати позицію на відео фреймі програмі-трекінгу
+//         lastRoiCenter = videoPos; //QPoint(x_original, y_original);
+
+//         ScriptCommands::GetInstance().SetTrackingDot(videoPos.x(), videoPos.y());
+// /*
+//         int frameW = settings->getConfig().roi.width;
+//         int frameH = settings->getConfig().roi.height;
+//         int x0 = std::clamp((int)(videoPos.x() - roiTrackingSize / 2), 0, frameW - roiTrackingSize);
+//         int y0 = std::clamp((int)(videoPos.y() - roiTrackingSize / 2), 0, frameH - roiTrackingSize);
+
+//         cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
+
+//         trackingWorker->setTrackingROI(newRoi);
+//         qDebug("Click processed, ROI sent to TrackingWorker: x=%d y=%d w=%d h=%d",
+//                newRoi.x,
+//                newRoi.y,
+//                newRoi.width,
+//                newRoi.height);
+// */
+//         break;
+//     }
+    // case TRACKING:{
+    //     // Позиція кліку в координатах відеокадру
+    //     lastRoiCenter = videoPos;
+
+    //     const int frameW = settings->getConfig().roi.width;
+    //     const int frameH = settings->getConfig().roi.height;
+
+    //     if (frameW <= 0 || frameH <= 0) {
+    //         qDebug() << "Invalid frame size for normalized tracking:" << frameW << frameH;
+    //         break;
+    //     }
+
+    //     const float nx = std::clamp(float(videoPos.x()) / float(frameW), 0.0f, 1.0f);
+    //     const float ny = std::clamp(float(videoPos.y()) / float(frameH), 0.0f, 1.0f);
+
+
+    //     qDebug() << "[TRACK dbg]"
+    //              << "videoPos =" << videoPos
+    //              << "cfg roi =" << settings->getConfig().roi.width << settings->getConfig().roi.height
+    //              << "normalized =" << nx << ny;
+
+    //     ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
+    //     break;
+    // }
+
+    case TRACKING:
+    {
+        const int frameW = settings->getConfig().roi.width;
+        const int frameH = settings->getConfig().roi.height;
+
+        if (frameW <= 0 || frameH <= 0) {
+            qDebug() << "[TRACK click] Invalid frame size:" << frameW << frameH;
+            break;
+        }
+
+        QSize pixmapSize;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        const QPixmap *pm = this->pixmap();
+        if (pm != nullptr) {
+            pixmapSize = pm->size();
+        }
+#else
+        const QPixmap pm = this->pixmap(Qt::ReturnByValue);
+        if (!pm.isNull()) {
+            pixmapSize = pm.size();
+        }
+#endif
+
+        const QSize labelSize = this->size();
+
+        if (pixmapSize.width() <= 0 || pixmapSize.height() <= 0) {
+            qDebug() << "[TRACK click] Invalid pixmap size:" << pixmapSize;
+            break;
+        }
+
+        const int offsetX = (labelSize.width()  - pixmapSize.width())  / 2;
+        const int offsetY = (labelSize.height() - pixmapSize.height()) / 2;
+
+        // Перевірка: клік має бути саме по області відео,
+        // а не по чорному полю QLabel.
+        if (lastClickPos.x() < offsetX ||
+            lastClickPos.x() >= offsetX + pixmapSize.width() ||
+            lastClickPos.y() < offsetY ||
+            lastClickPos.y() >= offsetY + pixmapSize.height()) {
+
+            qDebug() << "[TRACK click] Click outside video area"
+                     << "click =" << lastClickPos
+                     << "label =" << labelSize
+                     << "pixmap =" << pixmapSize
+                     << "offset =" << offsetX << offsetY;
+            break;
+        }
+
+        const double localX = double(lastClickPos.x() - offsetX);
+        const double localY = double(lastClickPos.y() - offsetY);
+
+        const float nx = std::clamp(
+            float(localX / double(pixmapSize.width())),
+            0.0f,
+            1.0f
+            );
+
+        const float ny = std::clamp(
+            float(localY / double(pixmapSize.height())),
+            0.0f,
+            1.0f
+            );
+
+        // Для локального відображення точки на GUI можна зберегти позицію у пікселях кадру.
+        //lastRoiCenter = QPointF(nx * frameW, ny * frameH);
+
+        const int frameX = std::clamp(
+            int(std::lround(nx * double(frameW - 1))),
+            0,
+            frameW - 1
+            );
+
+        const int frameY = std::clamp(
+            int(std::lround(ny * double(frameH - 1))),
+            0,
+            frameH - 1
+            );
+
+        lastRoiCenter = QPointF(frameX, frameY);
+
+        qDebug() << "[TRACK click OK]"
+                 << "click =" << lastClickPos
+                 << "label =" << labelSize
+                 << "pixmap =" << pixmapSize
+                 << "offset =" << offsetX << offsetY
+                 << "local =" << localX << localY
+                 << "frame =" << frameW << frameH
+                 << "normalized =" << nx << ny
+                 << "frame pixel =" << frameX << frameY;
+
+        //передаєм поле зору в градусах для того, щоб плата порахувала відхилення від центру
+        //TODO: визначати яка камера активна зараз
+        float fovH = settings->getConfig().fovVideo1.width;
+        float fovV = settings->getConfig().fovVideo1.height;
+        ScriptCommands::GetInstance().SetTrackingFOV(fovH, fovV);
+
+        // Передаємо ROI size з ComboBox
+        const uint16_t roiSize = m_trackingRoiSize;
+
+        ScriptCommands::GetInstance().SetTrackingRoiSize(roiSize);
+
+
+
+       // Передаємо координати точки
+        ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
+
+
+        break;
+    }
+}
+}
+
+void ClickableLabel::keyPressEvent(QKeyEvent *event)
+{
+    if (settings == nullptr)
+        return QLabel::keyPressEvent(event);
+
+    if (event->key() == Qt::Key_Up) {
+        roiTrackingSize = std::min(roiTrackingSize + 10, 200);
+        qDebug() << "ROI size increased to" << roiTrackingSize;
+
+        if (!lastRoiCenter.isNull()) {
+            int x0 = std::clamp(int(lastRoiCenter.x()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.width - roiTrackingSize);
+            int y0 = std::clamp(int(lastRoiCenter.y()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.height - roiTrackingSize);
+            cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
+            trackingWorker->setTrackingROI(newRoi);
+            qDebug() << "Updated ROI sent due to size increase";
+        }
+        return; // обробили
+    }
+
+    if (event->key() == Qt::Key_Down) {
+        roiTrackingSize = std::max(roiTrackingSize - 10, 10);
+        qDebug() << "ROI size decreased to" << roiTrackingSize;
+
+        if (!lastRoiCenter.isNull()) {
+            int x0 = std::clamp(int(lastRoiCenter.x()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.width - roiTrackingSize);
+            int y0 = std::clamp(int(lastRoiCenter.y()) - roiTrackingSize / 2,
+                                0,
+                                settings->getConfig().roi.height - roiTrackingSize);
+            cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
+            trackingWorker->setTrackingROI(newRoi);
+            qDebug() << "Updated ROI sent due to size decrease";
+        }
+        return; // обробили
+    }
+
+    QLabel::keyPressEvent(event); // якщо це інша клавіша
+}
+

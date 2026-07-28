@@ -1,6 +1,7 @@
 #include "canthread.h"
-#include "mainwindow.h"
 #include "canmessagegeneric.h"
+#include "lpsparameters.h"
+#include "laserparameters.h"
 
 //CANThread::CANThread() {}
 
@@ -16,10 +17,8 @@
 //     }
 // }
 
-
-
-
-void CANThread::run(){
+void CANThread::run()
+{
     running = true;
     while (running) {
         std::queue<std::vector<uint8_t>> localQueue;
@@ -35,11 +34,9 @@ void CANThread::run(){
             ProcessMessage(localQueue);
         }
 
-        msleep(10);  // важливо, щоб дати іншим потокам виконатись
+        msleep(10); // важливо, щоб дати іншим потокам виконатись
     }
 }
-
-
 
 // void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& messageQueue){
 
@@ -68,10 +65,8 @@ void CANThread::run(){
 //     }
 // }
 
-
-
-
-void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& queueCopy) {
+void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>> &queueCopy)
+{
     std::queue<std::vector<uint8_t>> localCopy = queueCopy;
 
     while (!localCopy.empty()) {
@@ -81,7 +76,7 @@ void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& queueCopy
         CanMessageGeneric canMessage(message);
         switch (canMessage.Message.TYPE) {
         case ParamType::NoneType:
-            LpsParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
+            LaserParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
             break;
         case ParamType::Float:
             canMessage.ParseFloat();
@@ -95,10 +90,8 @@ void CANThread::ProcessMessage(const std::queue<std::vector<uint8_t>>& queueCopy
     }
 }
 
-
-
-
-void CANThread::stop(){
+void CANThread::stop()
+{
     running = false;
     wait();
 }

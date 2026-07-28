@@ -1,26 +1,34 @@
 #pragma once
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
-template <typename T>
-class CircularBuffer {
+template<typename T>
+class CircularBuffer
+{
 public:
     CircularBuffer(size_t capacity)
-        : buffer(capacity), head(0), tail(0), full(false) {}
+        : buffer(capacity)
+        , head(0)
+        , tail(0)
+        , full(false)
+    {}
 
-    void push(const T& item) {
+    void push(const T &item)
+    {
         buffer[tail] = item;
         tail = (tail + 1) % buffer.size();
 
         if (full) {
-            head = (head + 1) % buffer.size();  // Overwrite oldest
+            head = (head + 1) % buffer.size(); // Overwrite oldest
         } else if (tail == head) {
             full = true;
         }
     }
 
-    bool pop(T& item) {
-        if (empty()) return false;
+    bool pop(T &item)
+    {
+        if (empty())
+            return false;
 
         item = buffer[head];
         head = (head + 1) % buffer.size();
@@ -28,25 +36,23 @@ public:
         return true;
     }
 
-    bool empty() const {
-        return (!full && (head == tail));
-    }
+    bool empty() const { return (!full && (head == tail)); }
 
-    bool isFull() const {
-        return full;
-    }
+    bool isFull() const { return full; }
 
-    size_t size() const {
-        if (full) return buffer.size();
-        if (tail >= head) return tail - head;
+    size_t size() const
+    {
+        if (full)
+            return buffer.size();
+        if (tail >= head)
+            return tail - head;
         return buffer.size() + tail - head;
     }
 
-    size_t capacity() const {
-        return buffer.size();
-    }
+    size_t capacity() const { return buffer.size(); }
 
-    void clear() {
+    void clear()
+    {
         head = tail = 0;
         full = false;
     }
@@ -57,4 +63,3 @@ private:
     size_t tail;
     bool full;
 };
-

@@ -26,6 +26,9 @@ public:
     }
     void setTrackingWorker(TrackingWorker* tw) {trackingWorker = tw;}
 
+    void setTrackingRoiSize(uint16_t roiSize);
+    uint16_t trackingRoiSize() const;
+
 signals:
     void clickedAt(QPoint pos);
     void held(QPointF deltaAngle);
@@ -75,6 +78,7 @@ private:
     TrackingWorker *trackingWorker;
     QPointF lastRoiCenter = QPointF(-1, -1);
     int roiTrackingSize = 30;
+    uint16_t m_trackingRoiSize = 80;
     void startRepeating();
     //QPointF scaleClick(const QPoint &clickPos);
 

@@ -4,12 +4,12 @@
 #include <QPainter>
 #include <QSettings>
 #include <QTimer>
+#include <scriptCommands.h>
 #include "canbus.h" // Підключаємо CanBus
 #include "cannelloniframe.h"
 #include "canthread.h"
 #include "scalehorizontal.h"
 #include "scalevertical.h"
-#include "scriptcommands.h"
 #include "structs.h"
 #include "ui_mainwindow.h"
 #include "biascalibration.h"
@@ -448,6 +448,20 @@ MainWindow::MainWindow(QWidget *parent)
     modeButtonGroup->addButton(ui->radioModeBody, static_cast<int>(ModePlatform::BODY));
     modeButtonGroup->addButton(ui->radioModeTracking, static_cast<int>(ModePlatform::TRACKING));
 
+    ui->comboRoiSize->clear();
+
+    ui->comboRoiSize->addItem("40", 40);
+    ui->comboRoiSize->addItem("60", 60);
+    ui->comboRoiSize->addItem("80", 80);
+    ui->comboRoiSize->addItem("100", 100);
+    ui->comboRoiSize->addItem("120", 120);
+    ui->comboRoiSize->addItem("160", 160);
+    ui->comboRoiSize->addItem("200", 200);
+    ui->comboRoiSize->addItem("240", 240);
+
+    ui->comboRoiSize->setCurrentText("80");
+    ui->videoLabel->setTrackingRoiSize(80);
+
     connect(modeButtonGroup, QOverload<int>::of(&QButtonGroup::idClicked),
             this, &MainWindow::onModeSelected);
 
@@ -476,6 +490,9 @@ MainWindow::MainWindow(QWidget *parent)
     // якщо клікнути по Video2, то йде перемикання відео (Switch video)
     connect(ui->videoLabel2, &ClickableLabel::pressed,
             this, &MainWindow::on_switch_vid_clicked);
+
+
+
 
     // connect(ui->step_input, QOverload<int>::of(&QComboBox::currentIndexChanged),
     //         [this](int index){
@@ -539,8 +556,39 @@ MainWindow::MainWindow(QWidget *parent)
     //connect(trackingWorker, &TrackingWorker::anglesCalculated, this, &MainWindow::handleAngles);
     connect(trackingWorker, &TrackingWorker::roiUpdated, this, &MainWindow::handleRoiUpdate);
 
+    //Вибір roiSize
+    connect(ui->comboRoiSize,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this,
+            [this](int index)
+            {
+                bool ok = false;
 
+                uint16_t roiSize =
+                    static_cast<uint16_t>(ui->comboRoiSize->itemData(index).toUInt(&ok));
 
+                // Якщо itemData не заданий у Designer, беремо текст ComboBox
+                if (!ok || roiSize == 0) {
+                    roiSize =
+                        static_cast<uint16_t>(ui->comboRoiSize->itemText(index).toUInt(&ok));
+                }
+
+                if (!ok || roiSize < 10 || roiSize > 1000) {
+                    qDebug() << "[PC ROI SIZE] invalid"
+                             << "index =" << index
+                             << "text =" << ui->comboRoiSize->itemText(index)
+                             << "data =" << ui->comboRoiSize->itemData(index);
+                    return;
+                }
+
+                // 1. Зберегти для наступного кліку
+                ui->videoLabel->setTrackingRoiSize(roiSize);
+
+                // 2. Одразу передати на плату, щоб активний квадратик змінився
+                ScriptCommands::GetInstance().SetTrackingRoiSize(roiSize);
+
+                qDebug() << "[PC ROI SIZE] selected and sent =" << roiSize;
+            });
 
     // Ініціалізація CanBus
     canBus = new CanBus(this);

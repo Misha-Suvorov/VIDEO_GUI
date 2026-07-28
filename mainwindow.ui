@@ -409,6 +409,9 @@
           <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <property name="leftMargin">
            <number>6</number>
           </property>
@@ -674,6 +677,35 @@
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>ROI:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboRoiSize">
+                  <property name="currentText">
+                   <string>80</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>40</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>60</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>80</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QPushButton" name="stop_track">
                   <property name="minimumSize">

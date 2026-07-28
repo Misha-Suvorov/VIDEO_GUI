@@ -304,6 +304,8 @@ private:
 
     bool normalizedPointFromClick(const QPoint &pos, const cv::Mat &frame, float &nx, float &ny);
     cv::Point framePointFromNormalized(float nx, float ny, const cv::Mat &frame);
+
+    void sendRoiSizeToBov(uint16_t roiSize);
 };
 
 #endif // MAINWINDOW_H

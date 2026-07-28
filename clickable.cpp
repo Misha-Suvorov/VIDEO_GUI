@@ -41,6 +41,23 @@ void ClickableLabel::setDebugLabel(QLabel *label)
     labelDebug = label;
 }
 
+void ClickableLabel::setTrackingRoiSize(uint16_t roiSize)
+{
+    if (roiSize < 10 || roiSize > 1000) {
+        qDebug() << "[ClickableLabel] invalid roiSize =" << roiSize;
+        return;
+    }
+
+    m_trackingRoiSize = roiSize;
+
+    qDebug() << "[ClickableLabel] roiSize set =" << m_trackingRoiSize;
+}
+
+uint16_t ClickableLabel::trackingRoiSize() const
+{
+    return m_trackingRoiSize;
+}
+
 // Викликається при натисканні кнопки миші
 void ClickableLabel::mousePressEvent(QMouseEvent *event)
 {
@@ -320,16 +337,22 @@ void ClickableLabel::processClick()
                  << "normalized =" << nx << ny
                  << "frame pixel =" << frameX << frameY;
 
-        ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
-
         //передаєм поле зору в градусах для того, щоб плата порахувала відхилення від центру
         //TODO: визначати яка камера активна зараз
         float fovH = settings->getConfig().fovVideo1.width;
         float fovV = settings->getConfig().fovVideo1.height;
         ScriptCommands::GetInstance().SetTrackingFOV(fovH, fovV);
 
-        //uint16_t roiSize = 80;
-        //ScriptCommands::GetInstance().SetTrackingRoiSize(roiSize);
+        // Передаємо ROI size з ComboBox
+        const uint16_t roiSize = m_trackingRoiSize;
+
+        ScriptCommands::GetInstance().SetTrackingRoiSize(roiSize);
+
+
+
+       // Передаємо координати точки
+        ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
+
 
         break;
     }

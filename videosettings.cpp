@@ -1,5 +1,5 @@
 #include "videosettings.h"
-
+#include <algorithm>
 
 
 VideoSettings::VideoSettings(QObject *parent)
@@ -71,48 +71,94 @@ void VideoSettings::update(const VideoConfig& config, bool isSwitched, bool isRo
 //     return { videoX, videoY };
 // }
 
-QPointF VideoSettings::mapToVideoCoordinates(const QPoint &clickPos, QSize labelSize, const VideoConfig *config)
+// QPointF VideoSettings::mapToVideoCoordinates(const QPoint &clickPos, QSize labelSize, const VideoConfig *config)
+// {
+//     if(config == nullptr) return { 0, 0 };
+//     double frameW = config->roi.width;
+//     double frameH = config->roi.height;
+
+//     double labelW = labelSize.width();
+//     double labelH = labelSize.height();
+
+//     double labelAspect = labelW / labelH;
+//     double frameAspect = frameW / frameH;
+
+//     int scaledImageW = labelW;
+//     int scaledImageH = labelH;
+
+//     //Так було без вираховування offset
+//     double scale = (labelAspect > frameAspect)
+//                        ? labelH / frameH
+//                        : labelW / frameW;
+
+
+//     double videoX = clickPos.x() / scale;
+//     double videoY = clickPos.y() / scale;
+
+
+//     /*
+
+//     if(labelAspect > frameAspect){
+//         scaledImageH = (int)(labelW / frameAspect);
+//     }
+//     else {
+//         scaledImageW = (int)(labelH * frameAspect);
+//     }
+
+//     // Вирахування відступів (якщо кадр не заповнює весь QLabel, ми маємо відступи ("рамку"))
+//     int offsetX = (labelW - scaledImageW) / 2;
+//     int offsetY = (labelH - scaledImageH) / 2;
+
+//     double videoX = (int)((clickPos.x() - offsetX) * frameW / scaledImageW);
+//     double videoY = (int)((clickPos.y() - offsetY) * frameH / scaledImageH) ;
+
+// */
+//     return { videoX, videoY };
+// }
+
+QPointF VideoSettings::mapToVideoCoordinates(
+    const QPoint &clickPos,
+    QSize labelSize,
+    const VideoConfig *config)
 {
-    if(config == nullptr) return { 0, 0 };
-    double frameW = config->roi.width;
-    double frameH = config->roi.height;
+    if (config == nullptr)
+        return {};
 
-    double labelW = labelSize.width();
-    double labelH = labelSize.height();
+    const double frameW = config->roi.width;
+    const double frameH = config->roi.height;
+    const double labelW = labelSize.width();
+    const double labelH = labelSize.height();
 
-    double labelAspect = labelW / labelH;
-    double frameAspect = frameW / frameH;
+    if (frameW <= 0.0 || frameH <= 0.0 ||
+        labelW <= 0.0 || labelH <= 0.0)
+        return {};
 
-    int scaledImageW = labelW;
-    int scaledImageH = labelH;
+    // Масштаб, з яким реальний кадр показаний у QLabel
+    const double scale = std::min(
+        labelW / frameW,
+        labelH / frameH
+        );
 
-    //Так було без вираховування offset
-    double scale = (labelAspect > frameAspect)
-                       ? labelH / frameH
-                       : labelW / frameW;
+    const double displayedW = frameW * scale;
+    const double displayedH = frameH * scale;
 
+    // Поля навколо центрованого зображення
+    const double offsetX = (labelW - displayedW) / 2.0;
+    const double offsetY = (labelH - displayedH) / 2.0;
 
-    double videoX = clickPos.x() / scale;
-    double videoY = clickPos.y() / scale;
-
-
-    /*
-
-    if(labelAspect > frameAspect){
-        scaledImageH = (int)(labelW / frameAspect);
+    // Клік поза реальною областю відео
+    if (clickPos.x() < offsetX ||
+        clickPos.x() >= offsetX + displayedW ||
+        clickPos.y() < offsetY ||
+        clickPos.y() >= offsetY + displayedH)
+    {
+        return {};
     }
-    else {
-        scaledImageW = (int)(labelH * frameAspect);
-    }
 
-    // Вирахування відступів (якщо кадр не заповнює весь QLabel, ми маємо відступи ("рамку"))
-    int offsetX = (labelW - scaledImageW) / 2;
-    int offsetY = (labelH - scaledImageH) / 2;
+    // Координата у пікселях реального кадру
+    const double videoX = (clickPos.x() - offsetX) / scale;
+    const double videoY = (clickPos.y() - offsetY) / scale;
 
-    double videoX = (int)((clickPos.x() - offsetX) * frameW / scaledImageW);
-    double videoY = (int)((clickPos.y() - offsetY) * frameH / scaledImageH) ;
-
-*/
-    return { videoX, videoY };
+    return QPointF(videoX, videoY);
 }
 

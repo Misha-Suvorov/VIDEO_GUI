@@ -83,6 +83,8 @@ public:
     QRadioButton *radioModeTracking;
     QGroupBox *groupBox_2;
     QHBoxLayout *horizontalLayout_10;
+    QLabel *label;
+    QComboBox *comboRoiSize;
     QPushButton *stop_track;
     QFrame *secondaryVideoFrame;
     QHBoxLayout *horizontalLayout_2;
@@ -440,6 +442,7 @@ public:
         controlRowFrame->setFrameShape(QFrame::Shape::StyledPanel);
         controlRowFrame->setFrameShadow(QFrame::Shadow::Raised);
         verticalLayout_2 = new QVBoxLayout(controlRowFrame);
+        verticalLayout_2->setSpacing(0);
         verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout_2->setContentsMargins(6, 0, 6, 0);
         statusRowFrame = new QFrame(controlRowFrame);
@@ -548,6 +551,19 @@ public:
         horizontalLayout_10 = new QHBoxLayout(groupBox_2);
         horizontalLayout_10->setObjectName("horizontalLayout_10");
         horizontalLayout_10->setContentsMargins(-1, 0, -1, 0);
+        label = new QLabel(groupBox_2);
+        label->setObjectName("label");
+
+        horizontalLayout_10->addWidget(label);
+
+        comboRoiSize = new QComboBox(groupBox_2);
+        comboRoiSize->addItem(QString());
+        comboRoiSize->addItem(QString());
+        comboRoiSize->addItem(QString());
+        comboRoiSize->setObjectName("comboRoiSize");
+
+        horizontalLayout_10->addWidget(comboRoiSize);
+
         stop_track = new QPushButton(groupBox_2);
         stop_track->setObjectName("stop_track");
         stop_track->setMinimumSize(QSize(0, 20));
@@ -1551,6 +1567,12 @@ public:
         radioModeBody->setText(QCoreApplication::translate("MainWindow", "BODY", nullptr));
         radioModeTracking->setText(QCoreApplication::translate("MainWindow", "TRACK", nullptr));
         groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "Tracking", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "ROI:", nullptr));
+        comboRoiSize->setItemText(0, QCoreApplication::translate("MainWindow", "40", nullptr));
+        comboRoiSize->setItemText(1, QCoreApplication::translate("MainWindow", "60", nullptr));
+        comboRoiSize->setItemText(2, QCoreApplication::translate("MainWindow", "80", nullptr));
+
+        comboRoiSize->setCurrentText(QCoreApplication::translate("MainWindow", "80", nullptr));
         stop_track->setText(QCoreApplication::translate("MainWindow", "Stop Track", nullptr));
         groupBoxVideo->setTitle(QCoreApplication::translate("MainWindow", "Video", nullptr));
         videoLabel2->setText(QString());

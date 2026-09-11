@@ -278,7 +278,8 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "on_btnLaserAdvanced_clicked",
         "on_stop_track_clicked",
         "on_btnLaserAdvanced_triggered",
-        "QAction*"
+        "QAction*",
+        "on_comboRoiSize_currentIndexChanged"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -388,6 +389,10 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void(QAction *)>(50, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { 0x80000000 | 51, 38 },
         }}),
+        // Slot 'on_comboRoiSize_currentIndexChanged'
+        QtMocHelpers::SlotData<void(int)>(52, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 23 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -452,6 +457,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 38: _t->on_btnLaserAdvanced_clicked(); break;
         case 39: _t->on_stop_track_clicked(); break;
         case 40: _t->on_btnLaserAdvanced_triggered((*reinterpret_cast<std::add_pointer_t<QAction*>>(_a[1]))); break;
+        case 41: _t->on_comboRoiSize_currentIndexChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     }
@@ -488,14 +494,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 41)
+        if (_id < 42)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 41;
+        _id -= 42;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 41)
+        if (_id < 42)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 41;
+        _id -= 42;
     }
     return _id;
 }

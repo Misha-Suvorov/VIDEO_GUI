@@ -186,6 +186,8 @@ private slots:
 
     void on_btnLaserAdvanced_triggered(QAction *arg1);
 
+    void on_comboRoiSize_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     VideoThread *videoThread1;

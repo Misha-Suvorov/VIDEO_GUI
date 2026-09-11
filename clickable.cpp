@@ -17,7 +17,7 @@
 
 ClickableLabel::ClickableLabel(QWidget *parent)
     : QLabel(parent)
-      //converter(cv::Size2f(1,1), cv::Size2f(1,1), cv::Point(0,0), 1.0f)
+//converter(cv::Size2f(1,1), cv::Size2f(1,1), cv::Point(0,0), 1.0f)
 {
     // Таймер для визначення "довгого натискання"
     holdTimer = new QTimer(this);
@@ -199,52 +199,52 @@ void ClickableLabel::processClick()
         break;
     }
 
-//     case TRACKING:{
-//         // Передати позицію на відео фреймі програмі-трекінгу
-//         lastRoiCenter = videoPos; //QPoint(x_original, y_original);
+        //     case TRACKING:{
+        //         // Передати позицію на відео фреймі програмі-трекінгу
+        //         lastRoiCenter = videoPos; //QPoint(x_original, y_original);
 
-//         ScriptCommands::GetInstance().SetTrackingDot(videoPos.x(), videoPos.y());
-// /*
-//         int frameW = settings->getConfig().roi.width;
-//         int frameH = settings->getConfig().roi.height;
-//         int x0 = std::clamp((int)(videoPos.x() - roiTrackingSize / 2), 0, frameW - roiTrackingSize);
-//         int y0 = std::clamp((int)(videoPos.y() - roiTrackingSize / 2), 0, frameH - roiTrackingSize);
+        //         ScriptCommands::GetInstance().SetTrackingDot(videoPos.x(), videoPos.y());
+        // /*
+        //         int frameW = settings->getConfig().roi.width;
+        //         int frameH = settings->getConfig().roi.height;
+        //         int x0 = std::clamp((int)(videoPos.x() - roiTrackingSize / 2), 0, frameW - roiTrackingSize);
+        //         int y0 = std::clamp((int)(videoPos.y() - roiTrackingSize / 2), 0, frameH - roiTrackingSize);
 
-//         cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
+        //         cv::Rect newRoi(x0, y0, roiTrackingSize, roiTrackingSize);
 
-//         trackingWorker->setTrackingROI(newRoi);
-//         qDebug("Click processed, ROI sent to TrackingWorker: x=%d y=%d w=%d h=%d",
-//                newRoi.x,
-//                newRoi.y,
-//                newRoi.width,
-//                newRoi.height);
-// */
-//         break;
-//     }
-    // case TRACKING:{
-    //     // Позиція кліку в координатах відеокадру
-    //     lastRoiCenter = videoPos;
+        //         trackingWorker->setTrackingROI(newRoi);
+        //         qDebug("Click processed, ROI sent to TrackingWorker: x=%d y=%d w=%d h=%d",
+        //                newRoi.x,
+        //                newRoi.y,
+        //                newRoi.width,
+        //                newRoi.height);
+        // */
+        //         break;
+        //     }
+        // case TRACKING:{
+        //     // Позиція кліку в координатах відеокадру
+        //     lastRoiCenter = videoPos;
 
-    //     const int frameW = settings->getConfig().roi.width;
-    //     const int frameH = settings->getConfig().roi.height;
+        //     const int frameW = settings->getConfig().roi.width;
+        //     const int frameH = settings->getConfig().roi.height;
 
-    //     if (frameW <= 0 || frameH <= 0) {
-    //         qDebug() << "Invalid frame size for normalized tracking:" << frameW << frameH;
-    //         break;
-    //     }
+        //     if (frameW <= 0 || frameH <= 0) {
+        //         qDebug() << "Invalid frame size for normalized tracking:" << frameW << frameH;
+        //         break;
+        //     }
 
-    //     const float nx = std::clamp(float(videoPos.x()) / float(frameW), 0.0f, 1.0f);
-    //     const float ny = std::clamp(float(videoPos.y()) / float(frameH), 0.0f, 1.0f);
+        //     const float nx = std::clamp(float(videoPos.x()) / float(frameW), 0.0f, 1.0f);
+        //     const float ny = std::clamp(float(videoPos.y()) / float(frameH), 0.0f, 1.0f);
 
 
-    //     qDebug() << "[TRACK dbg]"
-    //              << "videoPos =" << videoPos
-    //              << "cfg roi =" << settings->getConfig().roi.width << settings->getConfig().roi.height
-    //              << "normalized =" << nx << ny;
+        //     qDebug() << "[TRACK dbg]"
+        //              << "videoPos =" << videoPos
+        //              << "cfg roi =" << settings->getConfig().roi.width << settings->getConfig().roi.height
+        //              << "normalized =" << nx << ny;
 
-    //     ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
-    //     break;
-    // }
+        //     ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
+        //     break;
+        // }
 
     case TRACKING:
     {
@@ -350,13 +350,13 @@ void ClickableLabel::processClick()
 
 
 
-       // Передаємо координати точки
+        // Передаємо координати точки
         ScriptCommands::GetInstance().SetTrackingDotNormalized(nx, ny);
 
 
         break;
     }
-}
+    }
 }
 
 void ClickableLabel::keyPressEvent(QKeyEvent *event)
@@ -402,4 +402,3 @@ void ClickableLabel::keyPressEvent(QKeyEvent *event)
 
     QLabel::keyPressEvent(event); // якщо це інша клавіша
 }
-

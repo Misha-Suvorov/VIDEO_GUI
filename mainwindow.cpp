@@ -492,7 +492,13 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::on_switch_vid_clicked);
 
 
-
+    connect(ui->stop_track,
+            &QPushButton::clicked,
+            this,
+            [this]()
+            {
+                ScriptCommands::GetInstance().ResetTracking();
+            });
 
     // connect(ui->step_input, QOverload<int>::of(&QComboBox::currentIndexChanged),
     //         [this](int index){
@@ -1985,6 +1991,12 @@ void MainWindow::displayFrame(const QImage &image)
  }
 
  void MainWindow::on_btnLaserAdvanced_triggered(QAction *arg1)
+ {
+
+ }
+
+
+ void MainWindow::on_comboRoiSize_currentIndexChanged(int index)
  {
 
  }

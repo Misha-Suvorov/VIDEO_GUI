@@ -4,38 +4,55 @@
 #include "canmessagegeneric.h"
 #include "lpsparameters.h"
 
+
 CANParserWorker::CANParserWorker(QObject *parent)
     : QObject(parent)
 {}
 
-void CANParserWorker::enqueueMessage(const std::vector<uint8_t> &message)
+// void CANParserWorker::enqueueMessage(const std::vector<uint8_t> &message)
+// {
+//     QMutexLocker locker(&mutex);
+//     queue.enqueue(message);
+// }
+
+void CANParserWorker::enqueueMessage(
+    const std::vector<uint8_t> &message)
 {
     QMutexLocker locker(&mutex);
+
+    if (!running)
+        return;
+
     queue.enqueue(message);
+    messageAvailable.wakeOne();
 }
 
 void CANParserWorker::process()
 {
+    while (true) {
+        std::vector<uint8_t> message;
 
-    while (running)
-    {
-        mutex.lock();
-        if (queue.isEmpty()) {
-            mutex.unlock();
-            QThread::msleep(10);  // Щоб не грузити CPU
-            continue;
+        {
+            QMutexLocker locker(&mutex);
+
+            while (queue.isEmpty() && running)
+                messageAvailable.wait(&mutex);
+
+            if (!running)
+                break;
+
+            message = queue.dequeue();
         }
 
-        std::vector<uint8_t> message = queue.dequeue();
-        mutex.unlock();
-
-        // Тут розбір повідомлення:
         try {
-            // 🎯 Actual message processing:
-             CanMessageGeneric canMessage(message);
+            CanMessageGeneric canMessage(message);
+
             switch (canMessage.Message.TYPE) {
             case ParamType::NoneType:
-                //LpsParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
+                canMessage.ParseByte();
+                break;
+            case ParamType::ErrorType:
+                canMessage.ParseErrorType();
                 break;
             case ParamType::Float:
                 canMessage.ParseFloat();
@@ -47,10 +64,61 @@ void CANParserWorker::process()
                 break;
             }
 
-            //qDebug() << "Parsing CAN message in thread. Size:" << message.size();
             emit messageParsed();
+
         } catch (const std::exception &e) {
-            emit parseError(QString("Parser error: %1").arg(e.what()));
+            emit parseError(
+                QString("Parser error: %1").arg(e.what()));
         }
     }
+}
+
+// void CANParserWorker::process()
+// {
+//     while (running) {
+//         mutex.lock();
+//         if (queue.isEmpty()) {
+//             mutex.unlock();
+//             QThread::msleep(10); // Щоб не грузити CPU
+//             continue;
+//         }
+
+//         std::vector<uint8_t> message = queue.dequeue();
+//         mutex.unlock();
+
+//         // Тут розбір повідомлення:
+//         try {
+//             // 🎯 Actual message processing:
+//             CanMessageGeneric canMessage(message);
+//             switch (canMessage.Message.TYPE) {
+//             case ParamType::NoneType:
+//                 //LpsParameters::GetInstance().SetLaserError(canMessage.GetByteFromPayload());
+//                 canMessage.ParseByte();
+//                 break;
+//             case ParamType::ErrorType:
+//                 canMessage.ParseErrorType();
+//                 break;
+//             case ParamType::Float:
+//                 canMessage.ParseFloat();
+//                 break;
+//             case ParamType::ULong:
+//                 canMessage.ParseULong();
+//                 break;
+//             default:
+//                 break;
+//             }
+
+//             //qDebug() << "Parsing CAN message in thread. Size:" << message.size();
+//             emit messageParsed();
+//         } catch (const std::exception &e) {
+//             emit parseError(QString("Parser error: %1").arg(e.what()));
+//         }
+//     }
+// }
+
+void CANParserWorker::stop()
+{
+    QMutexLocker locker(&mutex);
+    running = false;
+    messageAvailable.wakeAll();
 }

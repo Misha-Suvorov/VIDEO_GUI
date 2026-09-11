@@ -7,7 +7,7 @@ void baseElement::setRect(cv::InputOutputArray img, cv::Rect2d rect)
     //rect = ScalingFactor::getScaledRect(img, rect);
 
     // Get the size of the window
-    cv::Size windowSize = { img.cols(), img.rows() };
+    cv::Size windowSize = {img.cols(), img.rows()};
 
     // Limit the rectangle coordinates to ensure it stays within the window bounds
     rect.x = std::max(0.0, std::min(rect.x, windowSize.width - rect.width));
@@ -20,16 +20,13 @@ void baseElement::setRect(cv::InputOutputArray img, cv::Rect2d rect)
     this->rect = rect;
 }
 
-
-void baseElement::setFontScale(cv::InputOutputArray img, double fontScale){
+void baseElement::setFontScale(cv::InputOutputArray img, double fontScale)
+{
     double averageScale = (scalingFactor::getScaleX(img) + scalingFactor::getScaleY(img)) / 2.0;
     fontScale *= averageScale;
-    if (fontScale >= 0.1 && fontScale <= 2.0)
-    {
+    if (fontScale >= 0.1 && fontScale <= 2.0) {
         this->fontScale = fontScale;
-    }
-    else
-    {
+    } else {
         this->fontScale = 1.0; // Default value
     }
 }

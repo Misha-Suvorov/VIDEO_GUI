@@ -258,10 +258,8 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "on_get_frequency_clicked",
         "on_get_stanag_clicked",
         "on_energy_1_clicked",
-        "on_energy_2_clicked",
         "on_energy_0_clicked",
         "on_energy_3_clicked",
-        "on_energy_4_clicked",
         "on_energy_5_clicked",
         "on_mode_input_currentIndexChanged",
         "on_step_input_currentTextChanged",
@@ -345,52 +343,48 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void()>(29, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_energy_1_clicked'
         QtMocHelpers::SlotData<void()>(30, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_energy_2_clicked'
-        QtMocHelpers::SlotData<void()>(31, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_energy_0_clicked'
-        QtMocHelpers::SlotData<void()>(32, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(31, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_energy_3_clicked'
-        QtMocHelpers::SlotData<void()>(33, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'on_energy_4_clicked'
-        QtMocHelpers::SlotData<void()>(34, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(32, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_energy_5_clicked'
-        QtMocHelpers::SlotData<void()>(35, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(33, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_mode_input_currentIndexChanged'
-        QtMocHelpers::SlotData<void(int)>(36, 2, QMC::AccessPrivate, QMetaType::Void, {{
+        QtMocHelpers::SlotData<void(int)>(34, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { QMetaType::Int, 23 },
         }}),
         // Slot 'on_step_input_currentTextChanged'
-        QtMocHelpers::SlotData<void(const QString &)>(37, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { QMetaType::QString, 38 },
+        QtMocHelpers::SlotData<void(const QString &)>(35, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::QString, 36 },
         }}),
         // Slot 'on_actionBias_calibration_triggered'
-        QtMocHelpers::SlotData<void()>(39, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(37, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionSet_program_0_triggered'
-        QtMocHelpers::SlotData<void()>(40, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(38, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionZero_set_H_triggered'
-        QtMocHelpers::SlotData<void()>(41, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(39, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionZero_set_V_triggered'
-        QtMocHelpers::SlotData<void()>(42, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(40, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionZero_reset_H_triggered'
-        QtMocHelpers::SlotData<void()>(43, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(41, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_actionZero_reset_V_triggered'
-        QtMocHelpers::SlotData<void()>(44, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(42, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_pushButton_clicked'
-        QtMocHelpers::SlotData<void()>(45, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(43, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_ext_radiation_b_clicked'
-        QtMocHelpers::SlotData<void()>(46, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(44, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_trackingButton_clicked'
-        QtMocHelpers::SlotData<void()>(47, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(45, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_btnLaserAdvanced_clicked'
-        QtMocHelpers::SlotData<void()>(48, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(46, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_stop_track_clicked'
-        QtMocHelpers::SlotData<void()>(49, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(47, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'on_btnLaserAdvanced_triggered'
-        QtMocHelpers::SlotData<void(QAction *)>(50, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { 0x80000000 | 51, 38 },
+        QtMocHelpers::SlotData<void(QAction *)>(48, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 49, 36 },
         }}),
         // Slot 'on_comboRoiSize_currentIndexChanged'
-        QtMocHelpers::SlotData<void(int)>(52, 2, QMC::AccessPrivate, QMetaType::Void, {{
+        QtMocHelpers::SlotData<void(int)>(50, 2, QMC::AccessPrivate, QMetaType::Void, {{
             { QMetaType::Int, 23 },
         }}),
     };
@@ -438,33 +432,31 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 19: _t->on_get_frequency_clicked(); break;
         case 20: _t->on_get_stanag_clicked(); break;
         case 21: _t->on_energy_1_clicked(); break;
-        case 22: _t->on_energy_2_clicked(); break;
-        case 23: _t->on_energy_0_clicked(); break;
-        case 24: _t->on_energy_3_clicked(); break;
-        case 25: _t->on_energy_4_clicked(); break;
-        case 26: _t->on_energy_5_clicked(); break;
-        case 27: _t->on_mode_input_currentIndexChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
-        case 28: _t->on_step_input_currentTextChanged((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
-        case 29: _t->on_actionBias_calibration_triggered(); break;
-        case 30: _t->on_actionSet_program_0_triggered(); break;
-        case 31: _t->on_actionZero_set_H_triggered(); break;
-        case 32: _t->on_actionZero_set_V_triggered(); break;
-        case 33: _t->on_actionZero_reset_H_triggered(); break;
-        case 34: _t->on_actionZero_reset_V_triggered(); break;
-        case 35: _t->on_pushButton_clicked(); break;
-        case 36: _t->on_ext_radiation_b_clicked(); break;
-        case 37: _t->on_trackingButton_clicked(); break;
-        case 38: _t->on_btnLaserAdvanced_clicked(); break;
-        case 39: _t->on_stop_track_clicked(); break;
-        case 40: _t->on_btnLaserAdvanced_triggered((*reinterpret_cast<std::add_pointer_t<QAction*>>(_a[1]))); break;
-        case 41: _t->on_comboRoiSize_currentIndexChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
+        case 22: _t->on_energy_0_clicked(); break;
+        case 23: _t->on_energy_3_clicked(); break;
+        case 24: _t->on_energy_5_clicked(); break;
+        case 25: _t->on_mode_input_currentIndexChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
+        case 26: _t->on_step_input_currentTextChanged((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1]))); break;
+        case 27: _t->on_actionBias_calibration_triggered(); break;
+        case 28: _t->on_actionSet_program_0_triggered(); break;
+        case 29: _t->on_actionZero_set_H_triggered(); break;
+        case 30: _t->on_actionZero_set_V_triggered(); break;
+        case 31: _t->on_actionZero_reset_H_triggered(); break;
+        case 32: _t->on_actionZero_reset_V_triggered(); break;
+        case 33: _t->on_pushButton_clicked(); break;
+        case 34: _t->on_ext_radiation_b_clicked(); break;
+        case 35: _t->on_trackingButton_clicked(); break;
+        case 36: _t->on_btnLaserAdvanced_clicked(); break;
+        case 37: _t->on_stop_track_clicked(); break;
+        case 38: _t->on_btnLaserAdvanced_triggered((*reinterpret_cast<std::add_pointer_t<QAction*>>(_a[1]))); break;
+        case 39: _t->on_comboRoiSize_currentIndexChanged((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 40:
+        case 38:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
@@ -494,14 +486,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 42)
+        if (_id < 40)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 42;
+        _id -= 40;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 42)
+        if (_id < 40)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 42;
+        _id -= 40;
     }
     return _id;
 }

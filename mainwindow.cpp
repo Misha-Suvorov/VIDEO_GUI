@@ -78,7 +78,13 @@ void VideoThread::cross(cv::Mat frame, cv::Scalar crossColor, int x, int y,
 void VideoThread::run()
 {
     running = true;
-    cap.open(gstPipeline, cv::CAP_GSTREAMER);
+
+    const std::vector<int> params = {
+        cv::CAP_PROP_OPEN_TIMEOUT_MSEC, 3000,
+        cv::CAP_PROP_READ_TIMEOUT_MSEC, 500
+    };
+
+    cap.open(gstPipeline, cv::CAP_GSTREAMER, params);
 
     if (!cap.isOpened()) {
         qDebug() << "Cannot open the stream";
@@ -91,8 +97,16 @@ void VideoThread::run()
     //double angle = 0; // Кут обертання у градусах
 
     cv::Mat frame;
-    while (running) {
-        cap >> frame;
+    while (running.load() && !isInterruptionRequested()) {
+        if (!cap.read(frame)) {
+            if (!running.load() || isInterruptionRequested())
+                break;
+
+            QThread::msleep(10);
+            continue;
+        }
+
+
         if (frame.empty())
             continue;
 
@@ -316,8 +330,11 @@ QImage VideoThread::matToQImage(const cv::Mat &mat)
 
 void VideoThread::stop()
 {
-    running = false;
-    wait();
+    running.store(false);
+    requestInterruption();
+
+    if (isRunning())
+        wait();
 }
 
 
@@ -630,7 +647,15 @@ MainWindow::MainWindow(QWidget *parent)
     parserThread = new QThread();
     parserWorker->moveToThread(parserThread);
 
-    connect(parserThread, &QThread::started, parserWorker, &CANParserWorker::process);
+    connect(parserThread,
+            &QThread::started,
+            parserWorker,
+            &CANParserWorker::process);
+
+    connect(parserThread,
+            &QThread::finished,
+            parserWorker,
+            &QObject::deleteLater);
     // connect(parserWorker, &CANParserWorker::messageParsed, this, []() {
     //     qDebug() << "Message parsed in worker.";
     // });
@@ -695,12 +720,22 @@ MainWindow::~MainWindow()
         delete canThread;
     }
 
+    if (parserWorker)
+        parserWorker->stop();  // викликаємо прямо, не через queued signal
 
+    if (parserThread) {
+        parserThread->quit();
+        parserThread->wait();
 
-    parserThread->quit();
-    parserThread->wait();
-    parserWorker->deleteLater();
-    parserThread->deleteLater();
+        delete parserThread;
+        parserThread = nullptr;
+        parserWorker = nullptr;
+    }
+
+    // parserThread->quit();
+    // parserThread->wait();
+    // parserWorker->deleteLater();
+    // parserThread->deleteLater();
 
     delete ui;
 }
@@ -1333,13 +1368,13 @@ void MainWindow::on_stop_b_2_clicked()
 {
     if (videoThread1) {
         videoThread1->stop();
-        videoThread1->deleteLater();
+        delete videoThread1;
         videoThread1 = nullptr;
     }
 
     if (videoThread2) {
         videoThread2->stop();
-        videoThread2->deleteLater();
+        delete videoThread2;
         videoThread2 = nullptr;
     }
 }
@@ -1465,9 +1500,9 @@ void MainWindow::on_laser_act_b_clicked()
     {
     case 0: ui->energy_0->setChecked(true); break;
     case 1: ui->energy_1->setChecked(true); break;
-    case 2: ui->energy_2->setChecked(true); break;
+    //case 2: ui->energy_2->setChecked(true); break;
     case 3: ui->energy_3->setChecked(true); break;
-    case 4: ui->energy_4->setChecked(true); break;
+    //case 4: ui->energy_4->setChecked(true); break;
     case 5: ui->energy_5->setChecked(true); break;
     default: break;
     }
@@ -1551,18 +1586,18 @@ void MainWindow::on_energy_1_clicked()
 {
     ScriptCommands::GetInstance().SetLaserEnergy(1);
 }
-void MainWindow::on_energy_2_clicked()
-{
-    ScriptCommands::GetInstance().SetLaserEnergy(2);
-}
+// void MainWindow::on_energy_2_clicked()
+// {
+//     ScriptCommands::GetInstance().SetLaserEnergy(2);
+// }
 void MainWindow::on_energy_3_clicked()
 {
     ScriptCommands::GetInstance().SetLaserEnergy(3);
 }
-void MainWindow::on_energy_4_clicked()
-{
-    ScriptCommands::GetInstance().SetLaserEnergy(4);
-}
+// void MainWindow::on_energy_4_clicked()
+// {
+//     ScriptCommands::GetInstance().SetLaserEnergy(4);
+// }
 void MainWindow::on_energy_5_clicked()
 {
     ScriptCommands::GetInstance().SetLaserEnergy(5);

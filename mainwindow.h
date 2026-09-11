@@ -68,7 +68,8 @@ public slots:
 
 
 private:
-    bool running;
+    //bool running;
+    std::atomic_bool running{false};
     cv::VideoCapture cap;
     std::string gstPipeline;
     float horizontMarkerValue = 0;
@@ -153,13 +154,13 @@ private slots:
 
     void on_energy_1_clicked();
 
-    void on_energy_2_clicked();
+    //void on_energy_2_clicked();
 
     void on_energy_0_clicked();
 
     void on_energy_3_clicked();
 
-    void on_energy_4_clicked();
+    //void on_energy_4_clicked();
 
     void on_energy_5_clicked();
 

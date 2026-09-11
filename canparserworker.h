@@ -6,6 +6,7 @@
 #include <QQueue>
 #include <QThread>
 #include <vector>
+#include <QWaitCondition>
 
 class CANParserWorker : public QObject
 {
@@ -15,6 +16,7 @@ public:
     explicit CANParserWorker(QObject *parent = nullptr);
 
     void enqueueMessage(const std::vector<uint8_t> &message);
+    void stop();
 
 signals:
     void messageParsed(/*можна передати структуру*/);
@@ -27,4 +29,7 @@ private:
     QQueue<std::vector<uint8_t>> queue;
     QMutex mutex;
     bool running = true;
+
+    QWaitCondition messageAvailable;
+
 };

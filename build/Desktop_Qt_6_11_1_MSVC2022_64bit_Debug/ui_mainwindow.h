@@ -122,7 +122,6 @@ public:
     QWidget *rowStanagWidget;
     QHBoxLayout *horizontalLayout_14;
     QLabel *label_stanag;
-    QLabel *label_first_digit_stanag;
     QComboBox *first_STANAG;
     QComboBox *second_STANAG;
     QComboBox *third_STANAG;
@@ -138,9 +137,7 @@ public:
     QLabel *label_energy;
     QRadioButton *energy_0;
     QRadioButton *energy_1;
-    QRadioButton *energy_2;
     QRadioButton *energy_3;
-    QRadioButton *energy_4;
     QRadioButton *energy_5;
     QGroupBox *groupLrfControl;
     QGridLayout *gridLayout_5;
@@ -582,8 +579,11 @@ public:
 
         secondaryVideoFrame = new QFrame(frame_2);
         secondaryVideoFrame->setObjectName("secondaryVideoFrame");
-        sizePolicy2.setHeightForWidth(secondaryVideoFrame->sizePolicy().hasHeightForWidth());
-        secondaryVideoFrame->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy4(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Maximum);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(secondaryVideoFrame->sizePolicy().hasHeightForWidth());
+        secondaryVideoFrame->setSizePolicy(sizePolicy4);
         secondaryVideoFrame->setMinimumSize(QSize(0, 0));
         secondaryVideoFrame->setMaximumSize(QSize(16777215, 16777215));
         secondaryVideoFrame->setFrameShape(QFrame::Shape::StyledPanel);
@@ -594,16 +594,21 @@ public:
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
         groupBoxVideo = new QGroupBox(secondaryVideoFrame);
         groupBoxVideo->setObjectName("groupBoxVideo");
+        QSizePolicy sizePolicy5(QSizePolicy::Policy::Maximum, QSizePolicy::Policy::Preferred);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(groupBoxVideo->sizePolicy().hasHeightForWidth());
+        groupBoxVideo->setSizePolicy(sizePolicy5);
         horizontalLayout_4 = new QHBoxLayout(groupBoxVideo);
         horizontalLayout_4->setObjectName("horizontalLayout_4");
         horizontalLayout_4->setContentsMargins(-1, 0, -1, 0);
         videoLabel2 = new ClickableLabel(groupBoxVideo);
         videoLabel2->setObjectName("videoLabel2");
-        QSizePolicy sizePolicy4(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Preferred);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(videoLabel2->sizePolicy().hasHeightForWidth());
-        videoLabel2->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy6(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(videoLabel2->sizePolicy().hasHeightForWidth());
+        videoLabel2->setSizePolicy(sizePolicy6);
         videoLabel2->setMinimumSize(QSize(240, 192));
         videoLabel2->setMaximumSize(QSize(400, 16777215));
         videoLabel2->setAlignment(Qt::AlignmentFlag::AlignCenter);
@@ -904,11 +909,11 @@ public:
         horizontalLayout_12->setContentsMargins(0, 0, 0, 0);
         pulseFreqLabel = new QLabel(rowFreqWidget);
         pulseFreqLabel->setObjectName("pulseFreqLabel");
-        QSizePolicy sizePolicy5(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Preferred);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(pulseFreqLabel->sizePolicy().hasHeightForWidth());
-        pulseFreqLabel->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy7(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Preferred);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(pulseFreqLabel->sizePolicy().hasHeightForWidth());
+        pulseFreqLabel->setSizePolicy(sizePolicy7);
         pulseFreqLabel->setMinimumSize(QSize(58, 0));
 
         horizontalLayout_12->addWidget(pulseFreqLabel);
@@ -932,29 +937,23 @@ public:
 
         rowStanagWidget = new QWidget(laserAdvancedFrame);
         rowStanagWidget->setObjectName("rowStanagWidget");
+        sizePolicy6.setHeightForWidth(rowStanagWidget->sizePolicy().hasHeightForWidth());
+        rowStanagWidget->setSizePolicy(sizePolicy6);
+        rowStanagWidget->setMinimumSize(QSize(0, 28));
         horizontalLayout_14 = new QHBoxLayout(rowStanagWidget);
-        horizontalLayout_14->setSpacing(4);
+        horizontalLayout_14->setSpacing(5);
         horizontalLayout_14->setObjectName("horizontalLayout_14");
         horizontalLayout_14->setContentsMargins(0, 0, 0, 0);
         label_stanag = new QLabel(rowStanagWidget);
         label_stanag->setObjectName("label_stanag");
-        sizePolicy5.setHeightForWidth(label_stanag->sizePolicy().hasHeightForWidth());
-        label_stanag->setSizePolicy(sizePolicy5);
-        label_stanag->setMinimumSize(QSize(58, 0));
+        sizePolicy7.setHeightForWidth(label_stanag->sizePolicy().hasHeightForWidth());
+        label_stanag->setSizePolicy(sizePolicy7);
+        label_stanag->setMinimumSize(QSize(55, 24));
+        QFont font4;
+        font4.setPointSize(8);
+        label_stanag->setFont(font4);
 
         horizontalLayout_14->addWidget(label_stanag);
-
-        label_first_digit_stanag = new QLabel(rowStanagWidget);
-        label_first_digit_stanag->setObjectName("label_first_digit_stanag");
-        QSizePolicy sizePolicy6(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Preferred);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(label_first_digit_stanag->sizePolicy().hasHeightForWidth());
-        label_first_digit_stanag->setSizePolicy(sizePolicy6);
-        label_first_digit_stanag->setMaximumSize(QSize(10, 16777215));
-        label_first_digit_stanag->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        horizontalLayout_14->addWidget(label_first_digit_stanag);
 
         first_STANAG = new QComboBox(rowStanagWidget);
         first_STANAG->addItem(QString());
@@ -966,8 +965,18 @@ public:
         first_STANAG->addItem(QString());
         first_STANAG->addItem(QString());
         first_STANAG->setObjectName("first_STANAG");
-        first_STANAG->setMinimumSize(QSize(30, 0));
-        first_STANAG->setMaximumSize(QSize(50, 16777215));
+        QSizePolicy sizePolicy8(QSizePolicy::Policy::MinimumExpanding, QSizePolicy::Policy::Fixed);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(first_STANAG->sizePolicy().hasHeightForWidth());
+        first_STANAG->setSizePolicy(sizePolicy8);
+        first_STANAG->setMinimumSize(QSize(48, 24));
+        first_STANAG->setMaximumSize(QSize(50, 28));
+        first_STANAG->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToContents);
+        first_STANAG->setMinimumContentsLength(1);
+        first_STANAG->setDuplicatesEnabled(false);
+        first_STANAG->setFrame(true);
+        first_STANAG->setModelColumn(0);
 
         horizontalLayout_14->addWidget(first_STANAG);
 
@@ -981,8 +990,12 @@ public:
         second_STANAG->addItem(QString());
         second_STANAG->addItem(QString());
         second_STANAG->setObjectName("second_STANAG");
-        second_STANAG->setMinimumSize(QSize(30, 0));
-        second_STANAG->setMaximumSize(QSize(50, 16777215));
+        sizePolicy8.setHeightForWidth(second_STANAG->sizePolicy().hasHeightForWidth());
+        second_STANAG->setSizePolicy(sizePolicy8);
+        second_STANAG->setMinimumSize(QSize(48, 24));
+        second_STANAG->setMaximumSize(QSize(50, 28));
+        second_STANAG->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToContents);
+        second_STANAG->setMinimumContentsLength(1);
 
         horizontalLayout_14->addWidget(second_STANAG);
 
@@ -996,8 +1009,12 @@ public:
         third_STANAG->addItem(QString());
         third_STANAG->addItem(QString());
         third_STANAG->setObjectName("third_STANAG");
-        third_STANAG->setMinimumSize(QSize(30, 0));
-        third_STANAG->setMaximumSize(QSize(50, 16777215));
+        sizePolicy8.setHeightForWidth(third_STANAG->sizePolicy().hasHeightForWidth());
+        third_STANAG->setSizePolicy(sizePolicy8);
+        third_STANAG->setMinimumSize(QSize(48, 24));
+        third_STANAG->setMaximumSize(QSize(50, 28));
+        third_STANAG->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToContents);
+        third_STANAG->setMinimumContentsLength(1);
 
         horizontalLayout_14->addWidget(third_STANAG);
 
@@ -1046,27 +1063,27 @@ public:
         horizontalLayout_15->setContentsMargins(0, 0, 0, 0);
         label_period = new QLabel(rowPeriodWidget);
         label_period->setObjectName("label_period");
-        sizePolicy5.setHeightForWidth(label_period->sizePolicy().hasHeightForWidth());
-        label_period->setSizePolicy(sizePolicy5);
+        sizePolicy7.setHeightForWidth(label_period->sizePolicy().hasHeightForWidth());
+        label_period->setSizePolicy(sizePolicy7);
         label_period->setMinimumSize(QSize(58, 0));
 
         horizontalLayout_15->addWidget(label_period);
 
         period_out = new QLineEdit(rowPeriodWidget);
         period_out->setObjectName("period_out");
-        QSizePolicy sizePolicy7(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Fixed);
-        sizePolicy7.setHorizontalStretch(0);
-        sizePolicy7.setVerticalStretch(0);
-        sizePolicy7.setHeightForWidth(period_out->sizePolicy().hasHeightForWidth());
-        period_out->setSizePolicy(sizePolicy7);
+        QSizePolicy sizePolicy9(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Fixed);
+        sizePolicy9.setHorizontalStretch(0);
+        sizePolicy9.setVerticalStretch(0);
+        sizePolicy9.setHeightForWidth(period_out->sizePolicy().hasHeightForWidth());
+        period_out->setSizePolicy(sizePolicy9);
         period_out->setMinimumSize(QSize(52, 0));
 
         horizontalLayout_15->addWidget(period_out);
 
         frequency_out = new QLineEdit(rowPeriodWidget);
         frequency_out->setObjectName("frequency_out");
-        sizePolicy7.setHeightForWidth(frequency_out->sizePolicy().hasHeightForWidth());
-        frequency_out->setSizePolicy(sizePolicy7);
+        sizePolicy9.setHeightForWidth(frequency_out->sizePolicy().hasHeightForWidth());
+        frequency_out->setSizePolicy(sizePolicy9);
         frequency_out->setMinimumSize(QSize(52, 0));
 
         horizontalLayout_15->addWidget(frequency_out);
@@ -1116,8 +1133,8 @@ public:
         horizontalLayout_16->setContentsMargins(0, 0, 0, 0);
         label_energy = new QLabel(rowPwrWidget);
         label_energy->setObjectName("label_energy");
-        sizePolicy5.setHeightForWidth(label_energy->sizePolicy().hasHeightForWidth());
-        label_energy->setSizePolicy(sizePolicy5);
+        sizePolicy7.setHeightForWidth(label_energy->sizePolicy().hasHeightForWidth());
+        label_energy->setSizePolicy(sizePolicy7);
         label_energy->setMinimumSize(QSize(58, 0));
 
         horizontalLayout_16->addWidget(label_energy);
@@ -1132,20 +1149,10 @@ public:
 
         horizontalLayout_16->addWidget(energy_1);
 
-        energy_2 = new QRadioButton(rowPwrWidget);
-        energy_2->setObjectName("energy_2");
-
-        horizontalLayout_16->addWidget(energy_2);
-
         energy_3 = new QRadioButton(rowPwrWidget);
         energy_3->setObjectName("energy_3");
 
         horizontalLayout_16->addWidget(energy_3);
-
-        energy_4 = new QRadioButton(rowPwrWidget);
-        energy_4->setObjectName("energy_4");
-
-        horizontalLayout_16->addWidget(energy_4);
 
         energy_5 = new QRadioButton(rowPwrWidget);
         energy_5->setObjectName("energy_5");
@@ -1182,8 +1189,11 @@ public:
 
         start_range_b = new QPushButton(groupLrfControl);
         start_range_b->setObjectName("start_range_b");
-        sizePolicy6.setHeightForWidth(start_range_b->sizePolicy().hasHeightForWidth());
-        start_range_b->setSizePolicy(sizePolicy6);
+        QSizePolicy sizePolicy10(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Preferred);
+        sizePolicy10.setHorizontalStretch(0);
+        sizePolicy10.setVerticalStretch(0);
+        sizePolicy10.setHeightForWidth(start_range_b->sizePolicy().hasHeightForWidth());
+        start_range_b->setSizePolicy(sizePolicy10);
         start_range_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
@@ -1219,10 +1229,10 @@ public:
         range_out->setObjectName("range_out");
         sizePolicy3.setHeightForWidth(range_out->sizePolicy().hasHeightForWidth());
         range_out->setSizePolicy(sizePolicy3);
-        QFont font4;
-        font4.setPointSize(11);
-        font4.setBold(true);
-        range_out->setFont(font4);
+        QFont font5;
+        font5.setPointSize(11);
+        font5.setBold(true);
+        range_out->setFont(font5);
 
         gridLayout_5->addWidget(range_out, 2, 1, 1, 1);
 
@@ -1233,8 +1243,8 @@ public:
 
         break_range_b = new QPushButton(groupLrfControl);
         break_range_b->setObjectName("break_range_b");
-        sizePolicy6.setHeightForWidth(break_range_b->sizePolicy().hasHeightForWidth());
-        break_range_b->setSizePolicy(sizePolicy6);
+        sizePolicy10.setHeightForWidth(break_range_b->sizePolicy().hasHeightForWidth());
+        break_range_b->setSizePolicy(sizePolicy10);
         break_range_b->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: none; /* \320\224\320\265\321\204\320\276\320\273\321\202\320\275\320\270\320\271 \320\272\320\276\320\273\321\226\321\200 */\n"
 "    border: none;\n"
@@ -1309,13 +1319,18 @@ public:
 
         groupPlatformControl = new QGroupBox(laserControlFrame);
         groupPlatformControl->setObjectName("groupPlatformControl");
+        sizePolicy9.setHeightForWidth(groupPlatformControl->sizePolicy().hasHeightForWidth());
+        groupPlatformControl->setSizePolicy(sizePolicy9);
         groupPlatformControl->setMinimumSize(QSize(0, 100));
+        groupPlatformControl->setMaximumSize(QSize(16777215, 110));
         verticalLayout_9 = new QVBoxLayout(groupPlatformControl);
         verticalLayout_9->setSpacing(4);
         verticalLayout_9->setObjectName("verticalLayout_9");
         verticalLayout_9->setContentsMargins(6, 6, 6, 6);
         padsRowFrame = new QFrame(groupPlatformControl);
         padsRowFrame->setObjectName("padsRowFrame");
+        sizePolicy6.setHeightForWidth(padsRowFrame->sizePolicy().hasHeightForWidth());
+        padsRowFrame->setSizePolicy(sizePolicy6);
         padsRowFrame->setMinimumSize(QSize(0, 50));
         padsRowFrame->setFrameShape(QFrame::Shape::StyledPanel);
         padsRowFrame->setFrameShadow(QFrame::Shadow::Raised);
@@ -1397,10 +1412,10 @@ public:
         gridLayout_9->setContentsMargins(0, 0, 0, 0);
         labelDot = new QLabel(stepPadFrame);
         labelDot->setObjectName("labelDot");
-        QFont font5;
-        font5.setPointSize(14);
-        font5.setBold(true);
-        labelDot->setFont(font5);
+        QFont font6;
+        font6.setPointSize(14);
+        font6.setBold(true);
+        labelDot->setFont(font6);
         labelDot->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         gridLayout_9->addWidget(labelDot, 2, 1, 1, 1);
@@ -1420,8 +1435,8 @@ public:
 
         up_b = new QPushButton(stepPadFrame);
         up_b->setObjectName("up_b");
-        sizePolicy5.setHeightForWidth(up_b->sizePolicy().hasHeightForWidth());
-        up_b->setSizePolicy(sizePolicy5);
+        sizePolicy7.setHeightForWidth(up_b->sizePolicy().hasHeightForWidth());
+        up_b->setSizePolicy(sizePolicy7);
         up_b->setMinimumSize(QSize(24, 24));
         up_b->setMaximumSize(QSize(28, 28));
         up_b->setSizeIncrement(QSize(0, 0));
@@ -1486,10 +1501,10 @@ public:
         zero_b->setSizePolicy(sizePolicy3);
         zero_b->setMinimumSize(QSize(0, 0));
         zero_b->setMaximumSize(QSize(16777215, 16777215));
-        QFont font6;
-        font6.setPointSize(10);
-        font6.setBold(false);
-        zero_b->setFont(font6);
+        QFont font7;
+        font7.setPointSize(10);
+        font7.setBold(false);
+        zero_b->setFont(font7);
         zero_b->setLayoutDirection(Qt::LayoutDirection::LeftToRight);
 
         gridLayout_3->addWidget(zero_b, 1, 1, 1, 2);
@@ -1572,7 +1587,7 @@ public:
         comboRoiSize->setItemText(1, QCoreApplication::translate("MainWindow", "60", nullptr));
         comboRoiSize->setItemText(2, QCoreApplication::translate("MainWindow", "80", nullptr));
 
-        comboRoiSize->setCurrentText(QCoreApplication::translate("MainWindow", "80", nullptr));
+        comboRoiSize->setCurrentText(QCoreApplication::translate("MainWindow", "40", nullptr));
         stop_track->setText(QCoreApplication::translate("MainWindow", "Stop Track", nullptr));
         groupBoxVideo->setTitle(QCoreApplication::translate("MainWindow", "Video", nullptr));
         videoLabel2->setText(QString());
@@ -1599,8 +1614,7 @@ public:
         frequency_mode->setItemText(6, QCoreApplication::translate("MainWindow", "0,5 HZ", nullptr));
         frequency_mode->setItemText(7, QCoreApplication::translate("MainWindow", "0,2 HZ", nullptr));
 
-        label_stanag->setText(QCoreApplication::translate("MainWindow", "STANAG", nullptr));
-        label_first_digit_stanag->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
+        label_stanag->setText(QCoreApplication::translate("MainWindow", "STANAG: 1", nullptr));
         first_STANAG->setItemText(0, QCoreApplication::translate("MainWindow", "1", nullptr));
         first_STANAG->setItemText(1, QCoreApplication::translate("MainWindow", "2", nullptr));
         first_STANAG->setItemText(2, QCoreApplication::translate("MainWindow", "3", nullptr));
@@ -1634,9 +1648,7 @@ public:
         label_energy->setText(QCoreApplication::translate("MainWindow", "Pwr", nullptr));
         energy_0->setText(QCoreApplication::translate("MainWindow", "0", nullptr));
         energy_1->setText(QCoreApplication::translate("MainWindow", "1", nullptr));
-        energy_2->setText(QCoreApplication::translate("MainWindow", "2", nullptr));
         energy_3->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
-        energy_4->setText(QCoreApplication::translate("MainWindow", "4", nullptr));
         energy_5->setText(QCoreApplication::translate("MainWindow", "5", nullptr));
         groupLrfControl->setTitle(QCoreApplication::translate("MainWindow", "Rangefinder Control", nullptr));
         comboMeasurementMode->setItemText(0, QCoreApplication::translate("MainWindow", "SMM", nullptr));

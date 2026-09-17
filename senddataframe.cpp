@@ -112,6 +112,15 @@ bool SendDataFrame::isTrackingFrame(
          */
         return true;
 
+    case 0x05:
+        /*
+     * Вибір активної камери трекінгу:
+     *
+     * 00 05 0A 00 00 00 00 01 - Video1
+     * 00 05 0A 00 00 00 00 02 - Video2
+     */
+        return true;
+
     default:
 
         return false;

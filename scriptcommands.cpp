@@ -366,3 +366,40 @@ void ScriptCommands::SetPlatformZero()
     });
 }
 
+/**
+ * @brief Вибрати камеру, на якій працюватиме трекінг.
+ *
+ * cameraId:
+ * 1 - Video1, широке поле зору, /dev/video9
+ * 2 - Video2, вузьке поле зору, /dev/video8
+ */
+void ScriptCommands::SetTrackingCamera(uint8_t cameraId)
+{
+    if (cameraId != 1 && cameraId != 2) {
+        qWarning() << "[TRACK CAMERA] invalid cameraId =" << cameraId;
+        return;
+    }
+
+    // CAN 0x198
+    // Parameter ID = 0x05
+    // Type = UChar = 0x0A
+    // Значення камери знаходиться у byte 7.
+    const std::vector<uint8_t> payload = {
+        0x00,
+        0x05,
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        cameraId
+    };
+
+    SendDataFrame::getInstance().AddCanFrame(
+        0x198,
+        0x08,
+        payload
+        );
+
+    qDebug() << "[TRACK CAMERA] selected =" << cameraId;
+}

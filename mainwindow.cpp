@@ -97,6 +97,9 @@ void VideoThread::run()
     //double angle = 0; // Кут обертання у градусах
 
     cv::Mat frame;
+    int lastReportedWidth = -1;
+    int lastReportedHeight = -1;
+
     while (running.load() && !isInterruptionRequested()) {
         if (!cap.read(frame)) {
             if (!running.load() || isInterruptionRequested())
@@ -188,7 +191,22 @@ void VideoThread::run()
         //QImage image(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
         emit frameReady(matToQImage(frame));
 
-        emit frameSizeAvailable(frame.cols, frame.rows, videoConfig); // передаємо розміри кадра для кліка мішкою
+        //emit frameSizeAvailable(frame.cols, frame.rows, videoConfig); // передаємо розміри кадра для кліка мішкою
+
+        // Передаємо розмір тільки при першому кадрі
+        // або якщо роздільна здатність змінилася.
+        if (frame.cols != lastReportedWidth ||
+            frame.rows != lastReportedHeight) {
+
+            lastReportedWidth = frame.cols;
+            lastReportedHeight = frame.rows;
+
+            emit frameSizeAvailable(
+                frame.cols,
+                frame.rows,
+                videoConfig
+                );
+        }
 
         emit frameReadyForTracking(frame);
         //emit frameProcessed(matToQImage(frame));
@@ -509,13 +527,13 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::on_switch_vid_clicked);
 
 
-    connect(ui->stop_track,
-            &QPushButton::clicked,
-            this,
-            [this]()
-            {
-                ScriptCommands::GetInstance().ResetTracking();
-            });
+    // connect(ui->stop_track,
+    //         &QPushButton::clicked,
+    //         this,
+    //         [this]()
+    //         {
+    //             ScriptCommands::GetInstance().ResetTracking();
+    //         });
 
     // connect(ui->step_input, QOverload<int>::of(&QComboBox::currentIndexChanged),
     //         [this](int index){
@@ -1401,6 +1419,10 @@ void MainWindow::on_switch_vid_clicked()
     //static bool isSwitched = false;
     isSwitched = !isSwitched;
 
+    // При переході на іншу камеру старий CSRT-трекер
+    // не можна продовжувати використовувати.
+    ScriptCommands::GetInstance().ResetTracking();
+
     disconnect(videoThread1, &VideoThread::frameReady, this, nullptr);
     disconnect(videoThread2, &VideoThread::frameReady, this, nullptr);
 
@@ -1414,7 +1436,51 @@ void MainWindow::on_switch_vid_clicked()
 
     // Передаємо в ClickableLabel:
     //ui->videoLabel->setFOV(isSwitched, videoThread1->isRotated);
-    videoThread1->isSwitched = isSwitched; // флаг для малювання ВПЗ на ШПЗ (переключили - не малюємо)
+    //videoThread1->isSwitched = isSwitched;
+
+    // флаг для малювання ВПЗ на ШПЗ (переключили - не малюємо)
+    videoThread1->isSwitched = isSwitched;
+
+    // Оновлюємо VideoSettings, щоб ClickableLabel використовував
+    // характеристики тієї камери, яка зараз у великому вікні.
+    VideoConfig config = videoSettings.getConfig();
+
+    videoSettings.update(
+        config,
+        isSwitched,
+        videoThread1->isRotated
+        );
+
+    ui->videoLabel->setVideoSettings(&videoSettings);
+
+    if (trackingWorker != nullptr) {
+        trackingWorker->setVideoSettings(&videoSettings);
+    }
+
+    // Повідомляємо платі, яка камера тепер є активною.
+    const uint8_t cameraId = isSwitched ? 2 : 1;
+
+    const float fovH = isSwitched
+                           ? config.fovVideo2.width
+                           : config.fovVideo1.width;
+
+    const float fovV = isSwitched
+                           ? config.fovVideo2.height
+                           : config.fovVideo1.height;
+
+    ScriptCommands::GetInstance().SetTrackingCamera(cameraId);
+
+    if (fovH > 0.0f && fovV > 0.0f) {
+        ScriptCommands::GetInstance().SetTrackingFOV(fovH, fovV);
+    } else {
+        qWarning() << "[VIDEO SWITCH] FOV is not initialized:"
+                   << fovH << fovV;
+    }
+
+    qDebug() << "[VIDEO SWITCH]"
+             << "camera =" << cameraId
+             << "narrow =" << isSwitched
+             << "FOV =" << fovH << "x" << fovV;
 }
 
 /**

@@ -30,6 +30,7 @@ public:
     void SetTrackingRoiSize(uint16_t value);
 
     void SetPlatformZero();
+    void SetTrackingCamera(uint8_t cameraId);
 };
 
 #endif // SCRIPTCOMMANDS_H

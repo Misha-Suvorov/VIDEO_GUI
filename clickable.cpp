@@ -79,10 +79,22 @@ void ClickableLabel::mousePressEvent(QMouseEvent *event)
 
 
 
-            lastDeltaAngle = settings->getConverter().pixelToAngle(videoPos);  //mapClickToAngle(event->pos());
+            // lastDeltaAngle = settings->getConverter().pixelToAngle(videoPos);  //mapClickToAngle(event->pos());
 
-            if (!lastDeltaAngle.isNull()) {
-                holdTimer->start(); // запускаємо відлік до події hold
+            // if (!lastDeltaAngle.isNull()) {
+            //     holdTimer->start(); // запускаємо відлік до події hold
+            // }
+
+            lastDeltaAngle =
+                settings->getConverter().pixelToAngle(videoPos);
+
+            const auto mode =
+                LpsParameters::GetInstance().GetModePlatform();
+
+            // У TRACKING координати передаються нормалізовано,
+            // тому lastDeltaAngle для запуску кліку не потрібен.
+            if (mode == TRACKING || !lastDeltaAngle.isNull()) {
+                holdTimer->start();
             }
 
             QLabel::mousePressEvent(event);
@@ -339,9 +351,47 @@ void ClickableLabel::processClick()
 
         //передаєм поле зору в градусах для того, щоб плата порахувала відхилення від центру
         //TODO: визначати яка камера активна зараз
-        float fovH = settings->getConfig().fovVideo1.width;
-        float fovV = settings->getConfig().fovVideo1.height;
+        // float fovH = settings->getConfig().fovVideo1.width;
+        // float fovV = settings->getConfig().fovVideo1.height;
+        // ScriptCommands::GetInstance().SetTrackingFOV(fovH, fovV);
+
+
+        // Визначаємо камеру, яка зараз показана у великому вікні.
+        //
+        // isSwitched == false:
+        //   Video1, широке поле зору.
+        //
+        // isSwitched == true:
+        //   Video2, вузьке поле зору.
+        const bool narrowCameraActive = settings->isSwitched;
+        const uint8_t cameraId = narrowCameraActive ? 2 : 1;
+
+        const VideoConfig &config = settings->getConfig();
+
+        const float fovH = narrowCameraActive
+                               ? config.fovVideo2.width
+                               : config.fovVideo1.width;
+
+        const float fovV = narrowCameraActive
+                               ? config.fovVideo2.height
+                               : config.fovVideo1.height;
+
+        if (fovH <= 0.0f || fovV <= 0.0f) {
+            qWarning() << "[TRACK click] invalid FOV:"
+                       << "camera =" << cameraId
+                       << "fovH =" << fovH
+                       << "fovV =" << fovV;
+            break;
+        }
+
+        // Спочатку передаємо камеру і її параметри.
+        // Координати точки будуть передані останніми.
+        ScriptCommands::GetInstance().SetTrackingCamera(cameraId);
         ScriptCommands::GetInstance().SetTrackingFOV(fovH, fovV);
+
+        qDebug() << "[TRACK click]"
+                 << "camera =" << cameraId
+                 << "FOV =" << fovH << "x" << fovV;
 
         // Передаємо ROI size з ComboBox
         const uint16_t roiSize = m_trackingRoiSize;

@@ -2,8 +2,10 @@
 #include <iostream>
 #include <stdexcept>
 
-CannelloniFrame::CannelloniFrame(const QByteArray& data) {
-    std::vector<uint8_t> bytes(data.begin(), data.end()); // Конвертація QByteArray у std::vector<uint8_t>
+CannelloniFrame::CannelloniFrame(const QByteArray &data)
+{
+    std::vector<uint8_t> bytes(data.begin(),
+                               data.end()); // Конвертація QByteArray у std::vector<uint8_t>
     if (bytes.size() < 5) {
         throw std::invalid_argument("Invalid CannelloniFrame: Too short");
     }
@@ -16,12 +18,11 @@ CannelloniFrame::CannelloniFrame(const QByteArray& data) {
     ParseCANMessages(bytes);
 }
 
-void CannelloniFrame::ParseCANMessages(const std::vector<uint8_t>& bytes)
+void CannelloniFrame::ParseCANMessages(const std::vector<uint8_t> &bytes)
 {
     size_t offset = 5;
 
-    for (int i = 0; i < Count && offset + 6 <= bytes.size(); i++)
-    {
+    for (int i = 0; i < Count && offset + 6 <= bytes.size(); i++) {
         CANMessage msg;
         size_t messageSize = 5;
         if (offset + messageSize > bytes.size()) {
@@ -36,7 +37,9 @@ void CannelloniFrame::ParseCANMessages(const std::vector<uint8_t>& bytes)
             throw std::runtime_error("Invalid CAN message length");
         }
 
-        msg.raw_data.insert(msg.raw_data.end(), bytes.begin() + offset, bytes.begin() + offset + messageSize);
+        msg.raw_data.insert(msg.raw_data.end(),
+                            bytes.begin() + offset,
+                            bytes.begin() + offset + messageSize);
         offset += messageSize;
 
         messageQueue.push(msg.raw_data);
@@ -44,9 +47,10 @@ void CannelloniFrame::ParseCANMessages(const std::vector<uint8_t>& bytes)
     }
 }
 
-void CannelloniFrame::PrintCANMessages() const {
+void CannelloniFrame::PrintCANMessages() const
+{
     std::cout << "Extracted CAN Messages:\n";
-    for (const auto& msg : messages) {
+    for (const auto &msg : messages) {
         for (size_t i = 0; i < msg.raw_data.size(); ++i) {
             std::cout << std::hex << static_cast<int>(msg.raw_data[i]) << " ";
         }

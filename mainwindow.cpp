@@ -304,36 +304,23 @@ cv::Mat VideoThread::processVideoWithConfig(cv::Mat frame)
 //}
 
 
-// QImage VideoThread::matToQImage(const cv::Mat &mat)
-// {
-//     cv::Mat temp;
-//     temp = mat;
-//     //cv::cvtColor(mat, temp, cv::COLOR_BGR2RGB);
-//     QImage image((uchar *) temp.data, temp.cols, temp.rows, temp.step, QImage::Format_RGB888);
-//     return image.copy();
-// }
-
+//
 QImage VideoThread::matToQImage(const cv::Mat &mat)
 {
     if (mat.empty())
         return QImage();
 
-    cv::Mat rgb;
-
-    if (mat.channels() == 3) {
-        // OpenCV/GStreamer дає BGR, а Qt QImage хоче RGB
-        cv::cvtColor(mat, rgb, cv::COLOR_BGR2RGB);
-
-        QImage image(rgb.data,
-                     rgb.cols,
-                     rgb.rows,
-                     static_cast<int>(rgb.step),
-                     QImage::Format_RGB888);
+    if (mat.type() == CV_8UC3) {
+        QImage image(mat.data,
+                     mat.cols,
+                     mat.rows,
+                     static_cast<int>(mat.step),
+                     QImage::Format_BGR888);
 
         return image.copy();
     }
 
-    if (mat.channels() == 1) {
+    if (mat.type() == CV_8UC1) {
         QImage image(mat.data,
                      mat.cols,
                      mat.rows,
@@ -857,20 +844,39 @@ void MainWindow::onMeasureModeChanged(int index)
     }
 }
 
+// void MainWindow::displayFrame1(const QImage &image)
+// {
+//     if (!image.isNull()) {
+//         QPixmap rotatedPixmap = QPixmap::fromImage(image).transformed(QTransform().rotate(
+//                                                                           rotationAngle),
+//                                                                       Qt::SmoothTransformation);
+//         //ui->videoLabel->setPixmap(rotatedPixmap.scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+
+//          ui->videoLabel->setPixmap(
+//              QPixmap::fromImage(image)
+//                  .transformed(QTransform().rotate(rotationAngle), Qt::SmoothTransformation)
+//                  .scaled(ui->videoLabel->size(), Qt::KeepAspectRatio , Qt::SmoothTransformation)
+//              );
+//     }
+// }
+
 void MainWindow::displayFrame1(const QImage &image)
 {
-    if (!image.isNull()) {
-        QPixmap rotatedPixmap = QPixmap::fromImage(image).transformed(QTransform().rotate(
-                                                                          rotationAngle),
-                                                                      Qt::SmoothTransformation);
-        //ui->videoLabel->setPixmap(rotatedPixmap.scaled(ui->videoLabel->size(), Qt::KeepAspectRatio));
+    if (image.isNull())
+        return;
 
-         ui->videoLabel->setPixmap(
-             QPixmap::fromImage(image)
-                 .transformed(QTransform().rotate(rotationAngle), Qt::SmoothTransformation)
-                 .scaled(ui->videoLabel->size(), Qt::KeepAspectRatio , Qt::SmoothTransformation)
-             );
+    QPixmap pixmap = QPixmap::fromImage(image);
+
+    if (rotationAngle != 0) {
+        pixmap = pixmap.transformed(
+            QTransform().rotate(rotationAngle),
+            Qt::FastTransformation);
     }
+
+    ui->videoLabel->setPixmap(
+        pixmap.scaled(ui->videoLabel->size(),
+                      Qt::KeepAspectRatio,
+                      Qt::FastTransformation));
 }
 
 void MainWindow::displayFrame2(const QImage &image)
@@ -1360,8 +1366,22 @@ void MainWindow::on_start_b_clicked()
         "appsink sync=false drop=true max-buffers=1"
         );
  */
-     videoThread1->setPipeline("udpsrc port=5601 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! "
-                               "videoconvert ! video/x-raw, format=BGR ! appsink sync=false");
+     // videoThread1->setPipeline("udpsrc port=5601 ! tsparse ! tsdemux ! h264parse ! avdec_h264 ! "
+     //                           "videoconvert ! video/x-raw, format=BGR ! appsink sync=false");
+
+    // videoThread1->setPipeline(
+    //     "udpsrc port=5601 buffer-size=4194304 ! "
+    //     "tsparse ! tsdemux ! h264parse ! avdec_h264 ! "
+    //     "videoconvert ! video/x-raw,format=BGR ! "
+    //     "appsink sync=false drop=true max-buffers=1"
+    //     );
+
+    videoThread1->setPipeline(
+        "udpsrc port=5601 buffer-size=4194304 ! "
+        "tsparse ! tsdemux ! h264parse ! avdec_h264 ! "
+        "videoconvert ! video/x-raw,format=BGR ! "
+        "appsink sync=false drop=true max-buffers=1"
+        );
 
     connect(videoThread1, &VideoThread::frameReady, this, &MainWindow::displayFrame1);
     videoThread1->start();

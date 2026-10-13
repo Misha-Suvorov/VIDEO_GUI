@@ -1,46 +1,174 @@
 #include "PixelToAngleConverter.h"
+#include "lpsparameters.h"
+#include "qdebug.h"
 
-PixelToAngleConverter::PixelToAngleConverter(int width, int height, double fovX_deg, double fovY_deg)
-    : imageWidth(width), imageHeight(height), fovX(fovX_deg), fovY(fovY_deg)
+PixelToAngleConverter::PixelToAngleConverter(cv::Size2f roiSize, cv::Size2f fov, cv::Point opticalCenter, float nonlinearFactor)
+    : roiSize(roiSize)
+    , fov(fov)
+    , opticalCenter(opticalCenter)
+    , nonlinearFactor(nonlinearFactor)
 {
+    roi.x = 0; roi.y = 0; roi.width = roiSize.width; roi.height = roiSize.height;
     updateScaling();
 }
 
 void PixelToAngleConverter::updateScaling()
 {
-    if (imageWidth > 0) {
-        degPerPixelX = fovX / static_cast<double>(imageWidth);
-    }
-
-    if (imageHeight > 0) {
-        degPerPixelY = fovY / static_cast<double>(imageHeight);
-    }
+    if (roi.width > 0)  degPerPixelX = fov.width / static_cast<double>(roi.width); //0.56/720=0.00077
+    if (roi.height > 0)  degPerPixelY = fov.height / static_cast<double>(roi.height);//0.416/576=0.00072
 }
 
-QPointF PixelToAngleConverter::pixelToAngle(QPoint pixelPoint) const
+QPointF PixelToAngleConverter::pixelToAngle(QPointF p) const
 {
-    double centerX = imageWidth / 2.0;
-    double centerY = imageHeight / 2.0;
+    // Центр активної зони
+    const double cx = opticalCenter.x; //roiX + roiW / 2.0;
+    const double cy = opticalCenter.y; //roiY + roiH / 2.0;
 
-    double deltaX = pixelPoint.x() - centerX;
-    double deltaY = pixelPoint.y() - centerY;
+    const double dx = p.x() - cx;
+    const double dy = p.y() - cy;
 
-    double angleX = deltaX * degPerPixelX;
-    double angleY = -deltaY * degPerPixelY; // minus because Y grows down
+    const double angleX = dx * degPerPixelX;
+    const double angleY = -dy * degPerPixelY; // вісь Y вниз
 
     return { angleX, angleY };
 }
 
-void PixelToAngleConverter::setImageSize(int width, int height)
+QPointF PixelToAngleConverter::calculateVoltage(QPointF p, float maxVoltage, bool isRotated) const
 {
-    imageWidth = width;
-    imageHeight = height;
+    float scaleH = maxVoltage / static_cast<double>(roi.width);
+    float scaleV = maxVoltage / static_cast<double>(roi.height);
+
+    const double cx = opticalCenter.x;
+    const double cy = opticalCenter.y;
+
+    const double dx = p.x() - cx;
+    const double dy = p.y() - cy;
+
+    float vH = dx * scaleH;
+    //vH -= maxVoltage/2;
+
+    float vV = dy * scaleV;
+    //vV -= maxVoltage/2;
+
+    vH = std::clamp((isRotated)? vH:-vH, -maxVoltage/2, maxVoltage/2); // Х перевертаємо
+    vV = std::clamp((isRotated)? vV:-vV, -maxVoltage/2, maxVoltage/2); // Y перевертаємо
+    qDebug() << "Held movement: vH=" << vH << " vV=" << vV;
+
+    return { vH, vV };
+}
+
+QPointF PixelToAngleConverter::calculateVoltageNonlinear(QPointF p, float maxVoltage, bool isRotated) const
+{
+    float scaleH = maxVoltage / static_cast<double>(roi.width);
+    float scaleV = maxVoltage / static_cast<double>(roi.height);
+
+    const double cx = opticalCenter.x;
+    const double cy = opticalCenter.y;
+
+    const double dx = p.x() - cx;
+    const double dy = p.y() - cy;
+
+
+    // Кубічна
+    auto nonlinear = [](float value, float max, float koef) {
+        float norm = value / (max/2); // нормалізуємо [-1..1]
+        norm = std::clamp(norm, -1.0f, 1.0f);
+        // кубічна залежність
+        float shaped = norm * norm * norm;
+        return shaped * (max/koef);
+    };
+
+    // S-подібна крива
+    // auto nonlinear = [](float value, float max) {
+    //     float norm = value / (max/2);
+    //     norm = std::clamp(norm, -1.0f, 1.0f);
+    //     float shaped = std::tanh(norm * 2.0f); // коефіцієнт 2.0 = "крутість" кривої
+    //     return shaped * (max/2);
+    // };
+
+    float vH = nonlinear(dx * scaleH, maxVoltage, nonlinearFactor);
+    float vV = nonlinear(dy * scaleV, maxVoltage, nonlinearFactor);
+
+    vH = std::clamp((isRotated)? vH:-vH, -maxVoltage/2, maxVoltage/2); // Х перевертаємо
+    vV = std::clamp((isRotated)? vV:-vV, -maxVoltage/2, maxVoltage/2); // Y перевертаємо
+    qDebug() << "Held movement: vH=" << vH << " vV=" << vV;
+
+    return { vH, vV };
+}
+
+// клацання мишкою в одній із чотирьох областей має викликати рух платформи (ліворуч/праворуч/вгору/вниз) на величину, яка зчитується з текстового поля
+QPointF PixelToAngleConverter::movePlatformInInertModeByStep(QPointF p, bool isRotated, float step) const
+{
+    float vH = 0;
+    float vV = 0;
+
+    // Центр зображення
+    const double cx = opticalCenter.x;
+    const double cy = opticalCenter.y;
+
+    // Координати кліку
+    int x = p.x();
+    int y = p.y();
+
+    // Визначаємо область
+    if (x < cx && abs(x - cx) > abs(y - cy)) {
+        vH = (isRotated)? -step : step; // ліва область
+    }
+    else if (x > cx && abs(x - cx) > abs(y - cy)) {
+        vH = (isRotated)? step : -step; // права область
+    }
+    else if (y < cy && abs(y - cy) > abs(x - cx)) {
+        vV = (isRotated)? -step : step; // верхня область
+    }
+    else if (y > cy && abs(y - cy) > abs(x - cx)) {
+        vV = (isRotated)? step : -step; // нижня область
+    }
+
+    return { vH, vV };
+}
+
+
+void PixelToAngleConverter::setRoiSize(const cv::Size2f& s)
+{
+    roiSize = s;
+    roi.x = 0.f; roi.y = 0.f;
+    roi.width  = roiSize.width;
+    roi.height = roiSize.height;
     updateScaling();
 }
 
-void PixelToAngleConverter::setFOV(double fovX_deg, double fovY_deg)
+void PixelToAngleConverter::setFov(const cv::Size2f& f)
 {
-    fovX = fovX_deg;
-    fovY = fovY_deg;
+    fov = f;
     updateScaling();
 }
+
+void PixelToAngleConverter::setOpticalCenter(const cv::Point& c)
+{
+    opticalCenter = c;
+    updateScaling();
+}
+
+void PixelToAngleConverter::setNonlinearFactor(float k)
+{
+    nonlinearFactor = k;
+    updateScaling();
+}
+
+void PixelToAngleConverter::setParams(const cv::Size2f& s,
+                                      const cv::Size2f& f,
+                                      const cv::Point&  c,
+                                      float             k)
+{
+    roiSize = s;
+    fov = f;
+    opticalCenter = c;
+    nonlinearFactor = k;
+
+    roi.x = 0.f; roi.y = 0.f;
+    roi.width  = roiSize.width;
+    roi.height = roiSize.height;
+
+    updateScaling();
+}
+

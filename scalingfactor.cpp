@@ -1,7 +1,7 @@
 #include "scalingfactor.h"
 
 //scalingFactor::scalingFactor() {}
-void scalingFactor::calculateScalingFactors(const cv::InputArray& img, cv::Rect2d rect)
+void scalingFactor::calculateScalingFactors(const cv::InputArray &img, cv::Rect2d rect)
 {
     // Scaled rectangle size
     scaledWidth = getScaledWidth(img, rect.width);
@@ -11,7 +11,7 @@ void scalingFactor::calculateScalingFactors(const cv::InputArray& img, cv::Rect2
     calculateScalingFactors(img, cv::Point(rect.x, rect.y));
 }
 
-void scalingFactor::calculateScalingFactors(const cv::InputArray& img, cv::Point point)
+void scalingFactor::calculateScalingFactors(const cv::InputArray &img, cv::Point point)
 {
     // Scaled position
     cv::Point pt = getScaledPoint(img, point);
@@ -19,7 +19,7 @@ void scalingFactor::calculateScalingFactors(const cv::InputArray& img, cv::Point
     posY = pt.y;
 }
 
-double scalingFactor::getScaledWidth(const cv::InputArray& img, int width)
+double scalingFactor::getScaledWidth(const cv::InputArray &img, int width)
 {
     double w;
     w = width * getScaleX(img);
@@ -27,7 +27,7 @@ double scalingFactor::getScaledWidth(const cv::InputArray& img, int width)
     return w;
 }
 
-double scalingFactor::getScaledHeight(const cv::InputArray& img, int height)
+double scalingFactor::getScaledHeight(const cv::InputArray &img, int height)
 {
     double h;
     h = height * getScaleY(img);
@@ -35,7 +35,7 @@ double scalingFactor::getScaledHeight(const cv::InputArray& img, int height)
     return h;
 }
 
-cv::Point scalingFactor::getScaledPoint(const cv::InputArray& img, cv::Point pt)
+cv::Point scalingFactor::getScaledPoint(const cv::InputArray &img, cv::Point pt)
 {
     cv::Point ptScaled;
     cv::Size size;
@@ -43,14 +43,18 @@ cv::Point scalingFactor::getScaledPoint(const cv::InputArray& img, cv::Point pt)
     ptScaled.x = pt.x * getScaleX(img);
     ptScaled.y = pt.y * getScaleY(img);
 
-    ptScaled.x = std::max(0.0, std::min(static_cast<double>(ptScaled.x), //static_cast<double>(img.cols() - scaledWidth)));
-                                        static_cast<double>(img.cols())));
-    ptScaled.y = std::max(0.0, std::min(static_cast<double>(ptScaled.y), //static_cast<double>(img.rows() - scaledHeight)));
-                                        static_cast<double>(img.rows())));
+    ptScaled.x = std::max(0.0,
+                          std::min(static_cast<double>(
+                                       ptScaled.x), //static_cast<double>(img.cols() - scaledWidth)));
+                                   static_cast<double>(img.cols())));
+    ptScaled.y = std::max(0.0,
+                          std::min(static_cast<double>(
+                                       ptScaled.y), //static_cast<double>(img.rows() - scaledHeight)));
+                                   static_cast<double>(img.rows())));
     return ptScaled;
 }
 
-cv::Rect2d scalingFactor::getScaledRect(const cv::InputArray& img, cv::Rect2d rect)
+cv::Rect2d scalingFactor::getScaledRect(const cv::InputArray &img, cv::Rect2d rect)
 {
     cv::Rect2d rectScaled;
     cv::Point pt;

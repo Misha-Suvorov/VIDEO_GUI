@@ -1,10 +1,9 @@
 #ifndef BASECANMESSAGE_H
 #define BASECANMESSAGE_H
 
-#include <vector>
-#include <cstring>
 #include <cstdint>
-
+#include <cstring>
+#include <vector>
 
 class BaseCanMessage
 {
@@ -15,14 +14,12 @@ public:
     uint8_t ParamID;
     uint8_t Priority;
     //uint8_t Payload[8];
-    std::vector<uint8_t>* Payload;
+    std::vector<uint8_t> *Payload;
 
-    BaseCanMessage(const std::vector<uint8_t>& bytes);
+    BaseCanMessage(const std::vector<uint8_t> &bytes);
 
 protected:
     void ParseAddress();
-
-
 };
 
 #endif // BASECANMESSAGE_H

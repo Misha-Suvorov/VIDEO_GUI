@@ -1,10 +1,10 @@
 #ifndef CANBUS_H
 #define CANBUS_H
 
-#include <QObject>
-#include <QUdpSocket>
 #include <QByteArray>
+#include <QObject>
 #include <QString>
+#include <QUdpSocket>
 
 class CanBus : public QObject
 {
@@ -18,12 +18,10 @@ public:
     void stopReceiving();
 
     // Зробити метод публічним
-    QString toHexString(const QByteArray &data);  // Перетворення байтового масиву в формат hex
+    QString toHexString(const QByteArray &data); // Перетворення байтового масиву в формат hex
 
 signals:
-    void packetReceived(const QByteArray &data);  // Сигнал для повідомлення про отриманий пакет
-
-
+    void packetReceived(const QByteArray &data); // Сигнал для повідомлення про отриманий пакет
 
 private:
     QUdpSocket *udpSocket;
